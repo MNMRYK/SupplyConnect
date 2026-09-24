@@ -1,0 +1,1967 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logística y Almacén (SGA) - SupplyConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary)">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
+        <h2>StockControl</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-item active" data-target="dashboard-almacen" onclick="activateNav(this)">Panel de Almacén (SGA)</a>
+        <a class="nav-item" data-target="recepcion" onclick="activateNav(this)">
+          Muelle de Entradas <span style="margin-left: auto; background-color: var(--primary); color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; font-weight: 700;">1</span>
+        </a>
+        <a class="nav-item" data-target="inventario" onclick="activateNav(this)">Stock e Inventario Maestro</a>
+        <a class="nav-item" data-target="picking" onclick="activateNav(this)">Picking y Packing (Salidas)</a>
+        <a class="nav-item" data-target="agencias" onclick="activateNav(this)">Gestión de Agencias</a>
+        <a class="nav-item" data-target="comunicaciones" onclick="activateNav(this)">
+          Com. Internas <span style="margin-left: auto; background-color: #e53e3e; color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; font-weight: 700;">1</span>
+        </a>
+        
+        <div style="height: 1px; background-color: var(--border-color); margin: 24px 24px 16px 24px;"></div>
+        
+        <a class="nav-item" data-target="mi-perfil" onclick="activateNav(this)">Mi Perfil</a>
+        <a class="nav-item" data-target="configuracion-sga" onclick="activateNav(this)">Configuración y Hardware</a>
+        <a class="nav-item" style="color: var(--alert-text); margin-top: auto;" href="index.html">Cerrar Sesión</a>
+      </nav>
+    </aside>
+
+    <div class="main-content">
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1 id="topbar-title-text">Panel de Almacén (SGA)</h1>
+        </div>
+        <div class="user-profile">
+          <div class="notification-bell" onclick="toggleNotificaciones()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <div class="notification-dot"></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; margin-left: 8px;">
+            <div class="avatar" style="background-color: #319795;">AN</div>
+            <div class="user-info">
+              <span class="user-name">Ana Navarro</span>
+              <span class="user-role">Jefa de Logística y Almacén</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard-container">
+        
+        <!-- VISTA: DASHBOARD ALMACÉN -->
+        <section id="dashboard-almacen" class="view-section active">
+          <div class="dashboard-grid">
+            
+            <!-- KPIs (Fila 1) -->
+            <div class="kpi-container col-span-12">
+              <div class="kpi-card">
+                <div class="kpi-title">Ocupación del Almacén</div>
+                <div class="kpi-value">84%</div>
+                <div class="kpi-trend neutral">Pasillos A, B y C operativos</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-title">Camiones en Muelle Hoy</div>
+                <div class="kpi-value">6</div>
+                <div class="kpi-trend positive">3 Descargas / 3 Envíos</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-title">Palets en Cuarentena (Calidad)</div>
+                <div class="kpi-value" style="color: var(--warning-text);">2</div>
+                <div class="kpi-trend negative">Pendiente validación Juan M.</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-title">Tareas de Picking Hoy</div>
+                <div class="kpi-value">18</div>
+                <div class="kpi-trend positive">14 Completadas</div>
+              </div>
+            </div>
+
+            <!-- Mapa de Stock en Tiempo Real (Fila 2 - Izquierda) -->
+            <div class="card col-span-8">
+              <div class="card-header"><h3 class="card-title">Mapa de Ocupación por Zonas (SGA Real-Time)</h3></div>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 10px;">
+                <div style="background-color: #f8fafc; border: 1px solid var(--border-color); padding: 16px; border-radius: 8px;">
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
+                    <strong>Zona A (Granza y Plásticos)</strong>
+                    <span class="tag tag-success" style="white-space: nowrap;">92% Lleno</span>
+                  </div>
+                  <p style="font-size: 0.75rem; color: var(--text-muted);">Estanterías 1 a 15. Alta ocupación de PE/PET.</p>
+                </div>
+                
+                <div style="background-color: #f8fafc; border: 1px solid var(--border-color); padding: 16px; border-radius: 8px;">
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
+                    <strong>Zona B (Bobinas Textil)</strong>
+                    <span class="tag tag-warning" style="background: #fffaf0; color: #dd6b20; border-color: #fbd38d; white-space: nowrap;">78% Lleno</span>
+                  </div>
+                  <p style="font-size: 0.75rem; color: var(--text-muted);">Pasillos centrales. Esperando llegada de hilo rojo.</p>
+                </div>
+                
+                <div style="background-color: #f8fafc; border: 1px solid var(--border-color); padding: 16px; border-radius: 8px;">
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
+                    <strong>Zona C (Embalaje y Cajas)</strong>
+                    <span class="tag tag-success" style="white-space: nowrap;">45% Lleno</span>
+                  </div>
+                  <p style="font-size: 0.75rem; color: var(--text-muted);">Zona de palets americanos y cartón doble canal.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Alerta de Enlaces (Fila 2 - Derecha) -->
+            <div class="card col-span-4">
+              <div class="card-header"><h3 class="card-title">Avisos Interservicios</h3></div>
+              <div class="alert-box" style="background-color: #ebf8ff; border-color: #bee3f8; margin-bottom: 12px;">
+                <div class="alert-icon" style="color: #2b6cb0;">ℹ️</div>
+                <div class="alert-content">
+                  <p style="color: #2b6cb0; font-weight: 600;">Ventas solicita salida urgente</p>
+                  <span style="color: #4a5568; font-size: 0.8rem;">El pedido #OV-5023 de Embalajes Levante está listo en Muelle 1 para despachar.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Últimos Movimientos (Fila 3 - Izquierda) -->
+            <div class="card col-span-8">
+              <div class="card-header"><h3 class="card-title">Últimos Movimientos de Stock (Trazabilidad)</h3></div>
+              <div class="table-container">
+                <table style="width: 100%; font-size: 0.85rem;">
+                  <thead style="background-color: #f8fafc; border-bottom: 2px solid var(--border-color);">
+                    <tr>
+                      <th style="padding: 10px; text-align: left;">Hora</th>
+                      <th style="padding: 10px; text-align: center;">Tipo</th>
+                      <th style="padding: 10px; text-align: left;">Referencia / SKU</th>
+                      <th style="padding: 10px; text-align: left;">Ubicación</th>
+                      <th style="padding: 10px; text-align: left;">Operario / PDA</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 10px; color: var(--text-muted);">Hace 10 min</td>
+                      <td style="padding: 10px; text-align: center;"><span class="tag tag-info" style="font-size: 0.7rem;">IN (Entrada)</span></td>
+                      <td style="padding: 10px; font-weight: 500;">MP-2200 (Granza PET) - 2 Palets</td>
+                      <td style="padding: 10px;">Zona A - Est. 12</td>
+                      <td style="padding: 10px; color: var(--text-muted);">Term. 04 (Mario)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 10px; color: var(--text-muted);">Hace 45 min</td>
+                      <td style="padding: 10px; text-align: center;"><span class="tag tag-success" style="font-size: 0.7rem; background-color: #e6fffa; color: #234e52; border-color: #81e6d9;">OUT (Salida)</span></td>
+                      <td style="padding: 10px; font-weight: 500;">PT-8830 (Cajas) - 10 Palets</td>
+                      <td style="padding: 10px;">Muelle 1 (Carga)</td>
+                      <td style="padding: 10px; color: var(--text-muted);">Term. 02 (Luis)</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 10px; color: var(--text-muted);">Hace 2 horas</td>
+                      <td style="padding: 10px; text-align: center;"><span class="tag tag-warning" style="font-size: 0.7rem;">MOV (Interno)</span></td>
+                      <td style="padding: 10px; font-weight: 500;">MP-1045 (Hilo Azul) - 1 Palet</td>
+                      <td style="padding: 10px;">Zona B → Producción</td>
+                      <td style="padding: 10px; color: var(--text-muted);">Term. 04 (Mario)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Agenda de Muelles (Fila 3 - Derecha) -->
+            <div class="card col-span-4">
+              <div class="card-header"><h3 class="card-title">Agenda de Muelles (Próximas llegadas)</h3></div>
+              <ul class="score-list" style="margin-top: 10px;">
+                <li class="score-item" style="padding: 10px 0;">
+                  <div class="score-info">
+                    <h4 style="font-size: 0.9rem; margin: 0;">TransAlicante (4521-GHJ)</h4>
+                    <p style="font-size: 0.75rem; color: var(--alert-text);">Llegada con retraso - Prioridad Alta</p>
+                  </div>
+                  <div style="font-weight: 600; font-size: 0.85rem; text-align: right;">
+                    ETA: 13:30h<br>
+                    <span style="font-size: 0.7rem; color: var(--text-muted);">PO-9008 (Hilo Rojo)</span>
+                  </div>
+                </li>
+                <li class="score-item" style="padding: 10px 0; border-bottom: none;">
+                  <div class="score-info">
+                    <h4 style="font-size: 0.9rem; margin: 0;">Logística Sur (8812-BBC)</h4>
+                    <p style="font-size: 0.75rem; color: var(--text-muted);">En ruta - Descarga rutinaria</p>
+                  </div>
+                  <div style="font-weight: 600; font-size: 0.85rem; text-align: right;">
+                    ETA: 16:00h<br>
+                    <span style="font-size: 0.7rem; color: var(--text-muted);">PO-9011 (Consumibles)</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- VISTA: MUELLE DE ENTRADAS (Conectado con Compras / PO) -->
+        <section id="recepcion" class="view-section">
+          
+          <!-- KPIs del Muelle -->
+          <div class="kpi-container col-span-12" style="margin-bottom: 24px;">
+            <div class="kpi-card">
+              <div class="kpi-title">Camiones en Espera</div>
+              <div class="kpi-value">2</div>
+              <div class="kpi-trend neutral">Parking Exterior</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Descargas en Curso</div>
+              <div class="kpi-value">1</div>
+              <div class="kpi-trend positive">Muelle 2 ocupado</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Mercancía Recibida (Hoy)</div>
+              <div class="kpi-value">14 Palets</div>
+              <div class="kpi-trend positive">Todo OK - Sin incidencias</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <h3 class="card-title">Recepción de Mercancías (Órdenes de Compra - SRM)</h3>
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <div class="search-box">
+                  <input type="text" placeholder="Buscar por Matrícula, PO o Proveedor..." style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md); min-width: 250px;" />
+                </div>
+                <button class="btn btn-primary" onclick="openModal('registrarCamionModal')">+ Registrar Entrada Camión</button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                <thead style="background-color: #f8fafc; border-bottom: 2px solid var(--border-color);">
+                  <tr>
+                    <th style="padding: 12px; text-align: left;">Referencia PO</th>
+                    <th style="padding: 12px; text-align: left;">Proveedor</th>
+                    <th style="padding: 12px; text-align: left;">Llegada Prevista</th>
+                    <th style="padding: 12px; text-align: left;">Mercancía Esperada</th>
+                    <th style="padding: 12px; text-align: center;">Matrícula / Transportista</th>
+                    <th style="padding: 12px; text-align: center;">Estado Muelle</th>
+                    <th style="padding: 12px; text-align: right;">Acciones SGA</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Camión Retrasado -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px; font-weight: 600; color: var(--primary);">#PO-9008</td>
+                    <td style="padding: 12px; font-weight: 500;">Hilaturas Alcoyanas</td>
+                    <td style="padding: 12px; color: var(--alert-text); font-weight: 500;">Hoy - 13:30h</td>
+                    <td style="padding: 12px; color: var(--text-muted);">
+                      Bobinas Poliéster (Base) - 200kg<br>
+                      <span style="font-size: 0.75rem; color: #718096;">Destino Previsto: Zona B</span>
+                    </td>
+                    <td style="padding: 12px; text-align: center;">4521-GHJ (TransAlicante)</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-warning" style="background: #fffaf0; color: #dd6b20; border-color: #fbd38d;">En Tránsito (Retrasado)</span></td>
+                    <td style="padding: 12px; text-align: right; vertical-align: middle;">
+                      <button class="btn btn-outline"  onclick="openModal('avisarDescargaModal')">Avisar Descarga</button>
+                    </td>
+                  </tr>
+                  
+                  <!-- Camión en Muelle Listo para Escanear -->
+                  <tr style="border-bottom: 1px solid var(--border-color); background-color: #f0fff4;">
+                    <td style="padding: 12px; font-weight: 600; color: var(--primary);">#PO-9010</td>
+                    <td style="padding: 12px; font-weight: 500;">Plásticos Paco SL</td>
+                    <td style="padding: 12px; color: var(--success-text); font-weight: 500;">Hoy - 10:15h (En Muelle)</td>
+                    <td style="padding: 12px; color: var(--text-muted);">
+                      Granza PE Inyección (1500kg)<br>
+                      <span style="font-size: 0.75rem; color: #718096;">Destino Previsto: Zona A</span>
+                    </td>
+                    <td style="padding: 12px; text-align: center; font-weight: 600;">8812-BBC (Logística Sur)</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-success">En Muelle 2 (Descargando)</span></td>
+                    <td style="padding: 12px; text-align: right; vertical-align: middle;">
+                      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                        <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem; border-color: #e53e3e; color: #e53e3e;" onclick="showToast('Marcado con incidencia de calidad', 'error')">⚠️ Incidencia</button>
+                        <button class="btn btn-primary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="openModal('escanearStockModal')">Escanear y Meter en Stock</button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Camión en Parking Esperando -->
+                  <tr>
+                    <td style="padding: 12px; font-weight: 600; color: var(--primary);">#PO-9012</td>
+                    <td style="padding: 12px; font-weight: 500;">Suministros Industriales SA</td>
+                    <td style="padding: 12px; color: var(--text-main); font-weight: 500;">Hoy - 14:00h</td>
+                    <td style="padding: 12px; color: var(--text-muted);">
+                      Palets Europeos Vacíos (100 Ud)<br>
+                      <span style="font-size: 0.75rem; color: #718096;">Destino Previsto: Zona C</span>
+                    </td>
+                    <td style="padding: 12px; text-align: center;">9011-KLM (Autónomo)</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-neutral">En Parking (Esperando)</span></td>
+                    <td style="padding: 12px; text-align: right; vertical-align: middle;">
+                      <button class="btn btn-outline" onclick="openModal('asignarMuelleModal')">Asignar Muelle</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VISTA: STOCK E INVENTARIO MAESTRO -->
+        <section id="inventario" class="view-section">
+          <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <h3 class="card-title">Control de Inventario y Maestro de Artículos</h3>
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <div class="search-box">
+                  <input type="text" placeholder="Buscar por SKU, lote o nombre..." style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md); min-width: 250px;" />
+                </div>
+                <button class="btn btn-outline" onclick="openModal('ajusteStockModal')">± Ajuste de Stock</button>
+                <button class="btn btn-primary" onclick="openModal('nuevoArticuloModal')">+ Nuevo Artículo (SKU)</button>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                <thead style="background-color: #f8fafc; border-bottom: 2px solid var(--border-color);">
+                  <tr>
+                    <th style="padding: 12px; text-align: left;">SKU / Referencia</th>
+                    <th style="padding: 12px; text-align: left;">Descripción del Artículo</th>
+                    <th style="padding: 12px; text-align: left;">Tipo</th>
+                    <th style="padding: 12px; text-align: right;">Stock Actual</th>
+                    <th style="padding: 12px; text-align: center;">Ubicación Principal</th>
+                    <th style="padding: 12px; text-align: center;">Estado</th>
+                    <th style="padding: 12px; text-align: right;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Producto Terminado -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px; font-weight: 600; color: var(--text-main);">PT-8830</td>
+                    <td style="padding: 12px; font-weight: 500;">Cajas Doble Canal (Palet 120x80)</td>
+                    <td style="padding: 12px;"><span class="tag tag-success">Prod. Terminado</span></td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600;">14 Palets</td>
+                    <td style="padding: 12px; text-align: center;">Zona C - Estantería 04</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-success" style="background-color: #e6fffa; color: #234e52; border-color: #81e6d9;">Óptimo</span></td>
+                    <td style="padding: 12px; text-align: right;">
+                      <button class="btn btn-outline"  onclick="activateNav({ classList: { add: () => {} }, getAttribute: () => 'ficha-producto', innerText: 'Ficha SKU: MP-1045' })">Ficha Completa</button>
+                    </td>
+                  </tr>
+
+                  <!-- Materia Prima (Problema de la demo) -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px; font-weight: 600; color: var(--text-main);">MP-1045</td>
+                    <td style="padding: 12px; font-weight: 500;">Hilo Poliéster Rojo (Bobinas 10kg)</td>
+                    <td style="padding: 12px;"><span class="tag tag-info">Materia Prima</span></td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600; color: var(--alert-text);">0 Kg</td>
+                    <td style="padding: 12px; text-align: center;">Zona B - Pasillo Central</td>
+                    <td style="padding: 12px; text-align: center;">
+                      <span class="tag tag-warning" style="background-color: #fff5f5; color: #c53030; border-color: #feb2b2;">Rotura de Stock</span>
+                    </td>
+                    <td style="padding: 12px; text-align: right;">
+                      <button class="btn btn-outline"  onclick="openModal('fichaArticuloModal')">Ficha Completa</button>
+                    </td>
+                  </tr>
+
+                  <!-- Nuevos Artículos de Prueba -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px; font-weight: 600; color: var(--text-main);">MP-1046</td>
+                    <td style="padding: 12px; font-weight: 500;">Hilo Poliéster Azul Navy (Bobinas 10kg)</td>
+                    <td style="padding: 12px;"><span class="tag tag-info">Materia Prima</span></td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600;">850 Kg</td>
+                    <td style="padding: 12px; text-align: center;">Zona B - Pasillo Central</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-success" style="background-color: #e6fffa; color: #234e52; border-color: #81e6d9;">Óptimo</span></td>
+                    <td style="padding: 12px; text-align: right;">
+                      <button class="btn btn-outline"  onclick="openModal('fichaArticuloModal')">Ficha Completa</button>
+                    </td>
+                  </tr>
+                  
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px; font-weight: 600; color: var(--text-main);">EMB-0012</td>
+                    <td style="padding: 12px; font-weight: 500;">Film Estirable Transparente (Rollo 2kg)</td>
+                    <td style="padding: 12px;"><span class="tag tag-neutral">Consumible</span></td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600; color: #dd6b20;">12 Rollos</td>
+                    <td style="padding: 12px; text-align: center;">Zona C - Estantería 01</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-warning" style="background: #fffaf0; color: #dd6b20; border-color: #fbd38d;">Bajo Mínimo</span></td>
+                    <td style="padding: 12px; text-align: right;">
+                      <button class="btn btn-outline"  onclick="openModal('fichaArticuloModal')">Ficha Completa</button>
+                    </td>
+                  </tr>
+
+                  <!-- Materia Prima General -->
+                  <tr>
+                    <td style="padding: 12px; font-weight: 600; color: var(--text-main);">MP-2200</td>
+                    <td style="padding: 12px; font-weight: 500;">Granza PET Transparente (Sacos 25kg)</td>
+                    <td style="padding: 12px;"><span class="tag tag-info">Materia Prima</span></td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600;">3.450 Kg</td>
+                    <td style="padding: 12px; text-align: center;">Zona A - Estantería 12</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-success" style="background-color: #e6fffa; color: #234e52; border-color: #81e6d9;">Óptimo</span></td>
+                    <td style="padding: 12px; text-align: right;">
+                      <button class="btn btn-outline"  onclick="openModal('fichaArticuloModal')">Ficha Completa</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VISTA: FICHA COMPLETA DEL PRODUCTO (SKU) -->
+        <section id="ficha-producto" class="view-section">
+          <!-- Cabecera de Ficha -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+            <div style="display: flex; gap: 20px; align-items: center;">
+              <button class="btn btn-outline" onclick="document.querySelector('[data-target=\'inventario\']').click()" style="padding: 6px 12px">← Volver</button>
+              <div>
+                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                  <h2 style="font-size: 1.8rem; color: var(--text-main); margin: 0;">MP-1045</h2>
+                  <span class="tag tag-info" style="font-size: 0.75rem;">Materia Prima</span>
+                  <span class="tag tag-warning" style="background-color: #fff5f5; color: #c53030; border-color: #feb2b2; font-size: 0.75rem;">Rotura de Stock</span>
+                </div>
+                <p style="margin: 0; color: var(--text-muted); font-size: 1.1rem; font-weight: 500;">Hilo Poliéster Rojo (Bobinas 10kg)</p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <button class="btn btn-outline" onclick="showToast('Habilitando edición de atributos...', 'info')">Editar Datos Maestros</button>
+              <button class="btn btn-primary" onclick="openModal('ajusteStockModal')">± Ajuste de Stock</button>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <!-- COLUMNA IZQUIERDA: Datos Logísticos y Stock (8 columnas) -->
+            <div class="col-span-8" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Tarjetas de Stock y Reposición -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="card" style="border: 1px solid var(--border-color); box-shadow: none;">
+                  <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; margin-top: 0;">Estado de Inventario</h4>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span style="font-size: 0.95rem;">Stock Físico (Almacén):</span>
+                    <strong style="font-size: 1.4rem; color: #c53030;">0 Kg</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span style="font-size: 0.9rem; color: var(--text-muted);">Reservado (Producción/Ventas):</span>
+                    <span style="font-size: 0.9rem; font-weight: 600;">200 Kg</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px dashed var(--border-color);">
+                    <span style="font-size: 0.9rem; color: var(--text-muted);">Stock Disponible (Libre):</span>
+                    <strong style="font-size: 1.1rem; color: #c53030;">-200 Kg</strong>
+                  </div>
+                </div>
+
+                <div class="card" style="border: 1px solid var(--border-color); box-shadow: none;">
+                  <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; margin-top: 0;">Reglas de Reposición (SRM)</h4>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span style="font-size: 0.9rem;">Stock Mínimo (Alerta):</span>
+                    <span style="font-size: 0.9rem; font-weight: 600;">500 Kg</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span style="font-size: 0.9rem;">Punto de Pedido Auto:</span>
+                    <span style="font-size: 0.9rem; font-weight: 600;">600 Kg</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px dashed var(--border-color);">
+                    <span style="font-size: 0.9rem; color: var(--primary);">Entradas Programadas:</span>
+                    <span style="font-size: 0.9rem; font-weight: 600; color: var(--primary);">PO-9008 (200Kg - Hoy)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Especificaciones Técnicas y Logísticas -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Especificaciones Logísticas</h3></div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 0.85rem;">
+                  <div>
+                    <span style="display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Unidad de Medida Base</span>
+                    <strong style="font-size: 1rem;">Kilogramos (Kg)</strong>
+                  </div>
+                  <div>
+                    <span style="display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Formato / Envase Primario</span>
+                    <strong style="font-size: 1rem;">Bobina Individual (10 Kg)</strong>
+                  </div>
+                  <div>
+                    <span style="display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Conversión a Palet</span>
+                    <strong style="font-size: 1rem;">1 Palet = 50 Bobinas (500 Kg)</strong>
+                  </div>
+                  <div>
+                    <span style="display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Dimensiones del Palet</span>
+                    <strong style="font-size: 1rem;">120 x 80 x 140 cm (Europeo)</strong>
+                  </div>
+                  <div style="grid-column: span 2; border-top: 1px solid var(--border-color); padding-top: 12px; margin-top: 4px;">
+                    <span style="display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Proveedor Homologado (SRM)</span>
+                    <strong style="font-size: 1rem; color: var(--primary);">Hilaturas Alcoyanas S.L.</strong> (Tiempo de entrega medio: 4 días)
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- COLUMNA DERECHA: Código de barras y Acciones (4 columnas) -->
+            <div class="col-span-4" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Etiqueta e Identificación -->
+              <div class="card" style="text-align: center; border: 1px dashed var(--border-color); background-color: #fafbfc;">
+                <span style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Código EAN-13 / GTIN</span>
+                <div style="font-family: 'Courier New', Courier, monospace; font-size: 3rem; letter-spacing: -2px; font-weight: 900; line-height: 1; margin-bottom: 8px;">
+                  |||| || ||| |||| ||
+                </div>
+                <span style="display: block; font-size: 1rem; font-family: monospace; font-weight: 600; margin-bottom: 16px;">8412345678901</span>
+                
+                <span style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; border-top: 1px solid var(--border-color); padding-top: 16px;">Ubicación Predeterminada</span>
+                <strong style="display: block; font-size: 1.1rem; color: var(--text-main);">Zona B - Pasillo Central</strong>
+                
+                <button class="btn btn-outline" style="width: 100%; margin-top: 20px; font-size: 0.85rem;" onclick="showToast('Enviando etiqueta a impresora Zebra...', 'info')">🖨️ Imprimir Etiqueta de Palet</button>
+              </div>
+
+              <!-- Menú de Acciones Secundarias -->
+              <div class="card" style="padding: 16px;">
+                <h3 class="card-title" style="margin-bottom: 16px; font-size: 0.95rem;">Operaciones de Control</h3>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                  <button class="btn btn-outline" style="justify-content: flex-start;" onclick="openModal('historialMovimientosModal')">📊 Ver Historial de Movimientos</button>
+                  <button class="btn btn-outline" style="justify-content: flex-start; border-color: #e53e3e; color: #c53030;" onclick="openModal('archivarArticuloModal')">🗑️ Dar de Baja (Archivar SKU)</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- VISTA: PICKING Y PACKING (Conectado con Ventas / OV) -->
+        <section id="picking" class="view-section">
+          
+          <!-- KPIs de Salidas -->
+          <div class="kpi-container col-span-12" style="margin-bottom: 24px;">
+            <div class="kpi-card">
+              <div class="kpi-title">Salidas Programadas Hoy</div>
+              <div class="kpi-value">12 Rutas</div>
+              <div class="kpi-trend positive">8 Completadas</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Órdenes en Picking (Activas)</div>
+              <div class="kpi-value" style="color: var(--primary);">4</div>
+              <div class="kpi-trend neutral">Operarios: Luis y Mario</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Riesgo de Retraso en Salida</div>
+              <div class="kpi-value" style="color: var(--warning-text);">1</div>
+              <div class="kpi-trend negative">Falta material (OV-5021)</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <h3 class="card-title">Tareas de Picking y Expediciones (Órdenes de Venta)</h3>
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <div class="search-box">
+                  <input type="text" placeholder="Buscar por OV, Cliente o Agencia..." style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md); min-width: 250px;" />
+                </div>
+                <button class="btn btn-outline" onclick="showToast('Imprimiendo hojas de ruta consolidadas...', 'info')">Imprimir Rutas</button>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                <thead style="background-color: #f8fafc; border-bottom: 2px solid var(--border-color);">
+                  <tr>
+                    <th style="padding: 12px; text-align: left;">Nº Orden (Ventas)</th>
+                    <th style="padding: 12px; text-align: left;">Cliente Final</th>
+                    <th style="padding: 12px; text-align: left;">Ruta / Agencia</th>
+                    <th style="padding: 12px; text-align: center;">Bultos (Volumen)</th>
+                    <th style="padding: 12px; text-align: center;">Estado SGA</th>
+                    <th style="padding: 12px; text-align: right;">Acción Operario</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Pedido Listo para salir -->
+                  <tr style="border-bottom: 1px solid var(--border-color); background-color: #f0fff4;">
+                    <td style="padding: 12px; font-weight: 600; color: var(--primary);">#OV-5023</td>
+                    <td style="padding: 12px; font-weight: 500;">Embalajes Levante</td>
+                    <td style="padding: 12px; color: var(--text-muted);">
+                      TransAlicante<br>
+                      <span style="font-size: 0.75rem; color: #718096;">Recogida: 16:00h</span>
+                    </td>
+                    <td style="padding: 12px; text-align: center; font-weight: 600;">10 Palets</td>
+                    <td style="padding: 12px; text-align: center;">
+                      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                        <span class="tag tag-success">Listo en Muelle 1</span>
+                        <span style="font-size: 0.7rem; color: var(--text-muted);">Ubic: Salida 1A</span>
+                      </div>
+                    </td>
+                    <td style="padding: 12px; text-align: right; vertical-align: middle;">
+                      <button class="btn btn-outline" onclick="openModal('cerrarExpedicionModal')">Cerrar Expedición</button>
+                    </td>
+                  </tr>
+                  
+                  <!-- Pedido en proceso de Picking -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px; font-weight: 600; color: var(--primary);">#OV-5024</td>
+                    <td style="padding: 12px; font-weight: 500;">Confecciones Aitana</td>
+                    <td style="padding: 12px; color: var(--text-muted);">
+                      Logística Sur<br>
+                      <span style="font-size: 0.75rem; color: #718096;">Recogida: 18:30h</span>
+                    </td>
+                    <td style="padding: 12px; text-align: center; font-weight: 600;">5 Palets + 2 Cajas</td>
+                    <td style="padding: 12px; text-align: center;">
+                      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                        <span class="tag tag-info">En Proceso (Picking)</span>
+                        <span style="font-size: 0.7rem; color: var(--primary); font-weight: 600;">Luis: 3/7 bultos</span>
+                      </div>
+                    </td>
+                    <td style="padding: 12px; text-align: right; vertical-align: middle;">
+                      <button class="btn btn-primary" onclick="openModal('completarPickingModal')">Completar Picking</button>
+                    </td>
+                  </tr>
+
+                  <!-- Pedido Bloqueado por falta de Stock (Conectado con Ventas) -->
+                  <tr>
+                    <td style="padding: 12px; font-weight: 600; color: var(--primary);">#OV-5021</td>
+                    <td style="padding: 12px; font-weight: 500;">ModaTextil Sur</td>
+                    <td style="padding: 12px; color: var(--text-muted);">
+                      Agencia Local<br>
+                      <span style="font-size: 0.75rem; color: var(--alert-text); font-weight: 600;">Retrasado</span>
+                    </td>
+                    <td style="padding: 12px; text-align: center; font-weight: 600;">12 Palets</td>
+                    <td style="padding: 12px; text-align: center;">
+                      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                        <span class="tag tag-warning" style="background-color: #fff5f5; color: #c53030; border-color: #feb2b2;">Pausado: Falta Hilo</span>
+                        <span style="font-size: 0.7rem; color: var(--text-muted);">A la espera de Producción</span>
+                      </div>
+                    </td>
+                    <td style="padding: 12px; text-align: right; vertical-align: middle;">
+                      <button class="btn btn-outline" onclick="showToast('Notificando a Ventas que la incidencia persiste...', 'info')">Notificar Ventas</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VISTA: GESTIÓN DE AGENCIAS Y TRANSPORTE -->
+        <section id="agencias" class="view-section">
+          
+          <!-- KPIs de Transporte -->
+          <div class="kpi-container col-span-12" style="margin-bottom: 24px;">
+            <div class="kpi-card">
+              <div class="kpi-title">Agencias Homologadas</div>
+              <div class="kpi-value">8</div>
+              <div class="kpi-trend neutral">2 Flota propia / 6 Externas</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Puntualidad Media (SLA)</div>
+              <div class="kpi-value" style="color: var(--success-text);">94%</div>
+              <div class="kpi-trend positive">En entregas locales (Levante)</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Incidencias Activas</div>
+              <div class="kpi-value" style="color: var(--warning-text);">1</div>
+              <div class="kpi-trend negative">Retraso reportado hoy</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <h3 class="card-title">Directorio de Transportistas Autorizados</h3>
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <div class="search-box">
+                  <input type="text" placeholder="Buscar agencia o matrícula..." style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md); min-width: 250px;" />
+                </div>
+                <button class="btn btn-primary" onclick="openModal('nuevaAgenciaModal')">+ Alta Nueva Agencia</button>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                <thead style="background-color: #f8fafc; border-bottom: 2px solid var(--border-color);">
+                  <tr>
+                    <th style="padding: 12px; text-align: left;">Nombre de Agencia</th>
+                    <th style="padding: 12px; text-align: left;">Zona de Cobertura</th>
+                    <th style="padding: 12px; text-align: center;">Tipo de Flota</th>
+                    <th style="padding: 12px; text-align: center;">Rating (SLA)</th>
+                    <th style="padding: 12px; text-align: center;">Estado Legal</th>
+                    <th style="padding: 12px; text-align: right;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px; font-weight: 600; color: var(--text-main);">TransAlicante Express</td>
+                    <td style="padding: 12px; color: var(--text-muted);">Com. Valenciana y Murcia</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-info">Externa (Subcontrata)</span></td>
+                    <td style="padding: 12px; text-align: center; color: var(--success-text); font-weight: 600;">96% (Excelente)</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-success">Seguro en vigor</span></td>
+                    <td style="padding: 12px; text-align: right;">
+                      <button class="btn btn-outline" onclick="activateNav({ classList: { add: () => {} }, getAttribute: () => 'ficha-agencia', innerText: 'Ficha Agencia: TransAlicante' })">Ver Ficha</button>
+                    </td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px; font-weight: 600; color: var(--text-main);">Logística Sur Nacional</td>
+                    <td style="padding: 12px; color: var(--text-muted);">Península Ibérica (Nacional)</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-info">Externa (Subcontrata)</span></td>
+                    <td style="padding: 12px; text-align: center; color: #dd6b20; font-weight: 600;">82% (Regular)</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-success">Seguro en vigor</span></td>
+                    <td style="padding: 12px; text-align: right;">
+                      <button class="btn btn-outline" onclick="activateNav({ classList: { add: () => {} }, getAttribute: () => 'ficha-agencia', innerText: 'Ficha Agencia: Logística Sur' })">Ver Ficha</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px; font-weight: 600; color: var(--text-main);">Flota Interna Alcoyana</td>
+                    <td style="padding: 12px; color: var(--text-muted);">Alcoy, Cocentaina, Muro</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-success" style="background-color: #e6fffa; color: #234e52; border-color: #81e6d9;">Flota Propia</span></td>
+                    <td style="padding: 12px; text-align: center; color: var(--success-text); font-weight: 600;">99% (Excelente)</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-success">ITV / Seguros OK</span></td>
+                    <td style="padding: 12px; text-align: right;">
+                      <button class="btn btn-outline" onclick="activateNav({ classList: { add: () => {} }, getAttribute: () => 'ficha-agencia', innerText: 'Ficha Agencia: Flota Interna' })">Ver Ficha</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VISTA: FICHA COMPLETA DE LA AGENCIA -->
+        <section id="ficha-agencia" class="view-section">
+          <!-- Cabecera de Ficha -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+            <div style="display: flex; gap: 20px; align-items: center;">
+              <button class="btn btn-outline" onclick="document.querySelector('[data-target=\'agencias\']').click()" style="padding: 6px 12px">← Volver</button>
+              <div>
+                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                  <h2 style="font-size: 1.8rem; color: var(--text-main); margin: 0;">TransAlicante Express</h2>
+                  <span class="tag tag-info" style="font-size: 0.75rem;">Externa</span>
+                  <span class="tag tag-success" style="font-size: 0.75rem;">Homologada</span>
+                </div>
+                <p style="margin: 0; color: var(--text-muted); font-size: 1.1rem; font-weight: 500;">Operador Logístico - Zona Levante</p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <button class="btn btn-outline" style="border-color: var(--warning-text); color: var(--warning-text);" onclick="openModal('incidenciaAgenciaModal')">⚠️ Reportar Incidencia</button>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <!-- COLUMNA IZQUIERDA: Contacto, Conductores y Albaranes (8 columnas) -->
+            <div class="col-span-8" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="card">
+                  <h3 class="card-title" style="font-size: 0.95rem; margin-bottom: 12px;">Datos Administrativos</h3>
+                  <div style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
+                    <div><span style="color: var(--text-muted);">CIF/NIF:</span> B-03888999</div>
+                    <div><span style="color: var(--text-muted);">Sede Base:</span> Polígono Las Atalayas (Alicante)</div>
+                    <div><span style="color: var(--text-muted);">Contacto Tráfico:</span> Pedro Soler (600 11 22 33)</div>
+                    <div><span style="color: var(--text-muted);">Email Cargas:</span> trafico@transalicante.com</div>
+                    <button class="btn btn-outline" style="margin-top: 12px; font-size: 0.8rem; width: 100%;" onclick="openModal('editarAgenciaModal')">Editar Datos de Agencia</button>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h3 class="card-title" style="font-size: 0.95rem; margin: 0;">Flota y Conductores Habituales</h3>
+                    <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.7rem;" onclick="openModal('nuevoConductorModal')">+ Añadir</button>
+                  </div>
+                  
+                  <div style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Conductor 1 -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                      <div>
+                        <strong style="display: block;">Camión Lona 24T <span style="font-weight: normal; color: var(--text-muted);">(Tractora: 4521-GHJ / Remolque: R-1122-BBC)</span></strong>
+                        <span style="display: flex; align-items: center; gap: 8px; margin-top: 4px; color: var(--text-main);">
+                          Cond: Manuel Torres 
+                          <button class="btn btn-outline" style="padding: 2px 6px; font-size: 0.7rem;" onclick="showToast('Llamando a +34 600 555 111...', 'info')">600 555 111</button>
+                        </span>
+                      </div>
+                      <span class="tag tag-success">Acceso a Planta OK</span>
+                    </div>
+                    
+                    <!-- Conductor 2 -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-top: 1px dashed var(--border-color); padding-top: 8px;">
+                      <div>
+                        <strong style="display: block;">Furgón Carrozado <span style="font-weight: normal; color: var(--text-muted);">(9912-LKJ)</span></strong>
+                        <span style="display: flex; align-items: center; gap: 8px; margin-top: 4px; color: var(--text-main);">
+                          Cond: Javi G.
+                          <button class="btn btn-outline" style="padding: 2px 6px; font-size: 0.7rem;" onclick="showToast('Llamando a +34 600 555 222...', 'info')">600 555 222</button>
+                        </span>
+                      </div>
+                      <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                        <span class="tag tag-warning" style="background-color: #fff5f5; color: #c53030; border-color: #feb2b2;">Aviso: Falta EPI</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bloque de Notas Internas (Nuevo) -->
+              <div class="card" style="background-color: #fffaf0; border: 1px solid #fbd38d;">
+                <h3 class="card-title" style="font-size: 0.95rem; margin-bottom: 8px; color: #dd6b20;">Notas Internas (Solo Almacén)</h3>
+                <p style="font-size: 0.85rem; color: #744210; margin-bottom: 12px; margin-top: 0;">
+                  "Aviso de seguridad (10/09/2026): El conductor Javi (9912-LKJ) vino ayer sin botas de seguridad. Se le ha dado un aviso. A la próxima no se le permite bajar al muelle." - Ana N.
+                </p>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" placeholder="Añadir nueva observación interna..." style="flex-grow: 1; padding: 6px; border: 1px solid #fbd38d; border-radius: 4px; font-size: 0.8rem; background-color: white;" />
+                  <button class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem; background-color: #dd6b20; border-color: #dd6b20;" onclick="showToast('Nota interna guardada', 'success')">Añadir Nota</button>
+                </div>
+              </div>
+
+              <!-- Registro de Albaranes Firmados -->
+              <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                  <h3 class="card-title">Últimos Albaranes (Proof of Delivery)</h3>
+                </div>
+                <div class="table-container">
+                  <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                    <thead style="background-color: #f8fafc; border-bottom: 2px solid var(--border-color);">
+                      <tr>
+                        <th style="padding: 10px; text-align: left;">Fecha Salida</th>
+                        <th style="padding: 10px; text-align: left;">Nº Albarán</th>
+                        <th style="padding: 10px; text-align: left;">Orden Venta</th>
+                        <th style="padding: 10px; text-align: center;">Firma Conductor</th>
+                        <th style="padding: 10px; text-align: right;">Documento</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style="border-bottom: 1px solid #edf2f7;">
+                        <td style="padding: 10px;">Hoy, 10:30h</td>
+                        <td style="padding: 10px; font-weight: 500;">ALB-26-880</td>
+                        <td style="padding: 10px; color: var(--text-muted);">OV-4890</td>
+                        <td style="padding: 10px; text-align: center;"><span style="color: var(--success-text);">Firmado (Manuel)</span></td>
+                        <td style="padding: 10px; text-align: right;"><button class="btn btn-outline" style="padding: 2px 6px; font-size: 0.75rem;" onclick="showToast('Descargando PDF firmado...', 'info')">Ver PDF</button></td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 10px;">Ayer, 18:00h</td>
+                        <td style="padding: 10px; font-weight: 500;">ALB-26-875</td>
+                        <td style="padding: 10px; color: var(--text-muted);">OV-4882</td>
+                        <td style="padding: 10px; text-align: center;"><span style="color: var(--success-text);">Firmado (Javi)</span></td>
+                        <td style="padding: 10px; text-align: right;"><button class="btn btn-outline" style="padding: 2px 6px; font-size: 0.75rem;" onclick="showToast('Descargando PDF firmado...', 'info')">Ver PDF</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- COLUMNA DERECHA: KPIs, Seguros y Acciones (4 columnas) -->
+            <div class="col-span-4" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Rendimiento (SLA) -->
+              <div class="card" style="background-color: #fafbfc; border: 1px dashed var(--border-color);">
+                <h3 class="card-title" style="margin-bottom: 16px; font-size: 0.95rem;">Rendimiento del Transportista</h3>
+                <div style="text-align: center; margin-bottom: 16px;">
+                  <span style="display: block; font-size: 3rem; font-weight: 700; color: var(--success-text); line-height: 1;">96%</span>
+                  <span style="font-size: 0.8rem; color: var(--text-muted);">Puntualidad en Muelles (Últimos 30 días)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; border-top: 1px solid var(--border-color); padding-top: 12px;">
+                  <span style="color: var(--text-muted);">Incidencias leves:</span> <strong>2</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                  <span style="color: var(--text-muted);">Mercancía dañada:</span> <strong>0</strong>
+                </div>
+              </div>
+
+              <!-- Control de Seguros y Legal (Esencial en SGA) -->
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px; font-size: 0.95rem;">Documentación Legal</h3>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; display: flex; flex-direction: column; gap: 12px;">
+                  <li style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Seguro LOTT (Mercancías)</span>
+                    <span class="tag tag-success" style="font-size: 0.65rem;">Válido hasta 2027</span>
+                  </li>
+                  <li style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Certificado Corriente de Pago (SS)</span>
+                    <span class="tag tag-success" style="font-size: 0.65rem;">Actualizado (Sep)</span>
+                  </li>
+                  <li style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Prevención Riesgos Laborales</span>
+                    <span class="tag tag-success" style="font-size: 0.65rem;">Al día</span>
+                  </li>
+                </ul>
+                <button class="btn btn-outline" style="width: 100%; margin-top: 16px; font-size: 0.8rem;" onclick="showToast('Abriendo gestor documental...', 'info')">Subir Nuevos Documentos</button>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- VISTA: COMUNICACIONES INTERNAS -->
+        <section id="comunicaciones" class="view-section">
+          <div class="card" style="padding: 0; overflow: hidden; display: flex; height: calc(100vh - 160px); min-height: 550px;">
+            <div style="width: 320px; border-right: 1px solid var(--border-color); background-color: #f8fafc;">
+              <div style="padding: 16px; border-bottom: 1px solid var(--border-color);">
+                <input type="text" placeholder="Buscar chat interno..." style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.85rem;" />
+              </div>
+              <div style="padding: 8px 16px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; background-color: #edf2f7;">Coordinación Ventas y Compras</div>
+              <div style="padding: 12px 16px; display: flex; gap: 12px; align-items: center; background-color: #ebf8ff; border-left: 4px solid var(--primary); cursor: pointer;">
+                <div class="avatar" style="width: 36px; height: 36px; font-size: 0.85rem; background-color: #805ad5;">LB</div>
+                <div style="flex-grow: 1; overflow: hidden;">
+                  <div style="display: flex; justify-content: space-between;"><strong style="font-size: 0.85rem;">Laura Beltrán (Ventas)</strong><span style="font-size: 0.7rem; color: var(--text-muted);">10:15</span></div>
+                  <p style="font-size: 0.75rem; color: var(--text-muted);">Ana, ¿el palet de Embalajes Levante está...</p>
+                </div>
+              </div>
+            </div>
+            
+            <div style="flex-grow: 1; display: flex; flex-direction: column; background-color: white;">
+              <div style="padding: 16px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div class="avatar" style="width: 40px; height: 40px; background-color: #805ad5;">LB</div>
+                  <div><h4 style="font-size: 1rem; margin: 0;">Laura Beltrán <span style="font-weight: normal; font-size: 0.8rem; color: var(--text-muted);">(Directora de Ventas)</span></h4></div>
+                </div>
+              </div>
+              
+              <div style="flex-grow: 1; padding: 24px; overflow-y: auto; background-color: #fafbfc; display: flex; flex-direction: column; gap: 16px;">
+                <div style="display: flex; gap: 12px; max-width: 70%;">
+                  <div class="avatar" style="width: 32px; height: 32px; font-size: 0.75rem; background-color: #805ad5;">LB</div>
+                  <div style="background-color: white; border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 0 12px 12px 12px; font-size: 0.85rem;">
+                    Ana, ¿me confirmas si el pedido de Embalajes Levante ya está en el Muelle 1 para que pueda avisar al transportista?
+                  </div>
+                </div>
+                
+                <div style="display: flex; gap: 12px; max-width: 70%; align-self: flex-end; flex-direction: row-reverse;">
+                  <div class="avatar" style="width: 32px; height: 32px; font-size: 0.75rem; background-color: #319795;">AN</div>
+                  <div style="background-color: #f0fff4; border: 1px solid #9ae6b4; color: #234e52; padding: 12px 16px; border-radius: 12px 0 12px 12px; font-size: 0.85rem;">
+                    ¡Hola Laura! Sí, los 10 palets están bajados al Muelle 1 desde primera hora. TransAlicante Express puede pasar cuando quiera a cargar.
+                  </div>
+                </div>
+              </div>
+              
+              <div style="padding: 16px 24px; border-top: 1px solid var(--border-color); display: flex; gap: 12px;">
+                <input type="text" placeholder="Escribe a Ventas..." style="flex-grow: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.85rem;" />
+                <button class="btn btn-primary" onclick="showToast('Mensaje interno enviado', 'success')">Enviar</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VISTA: MI PERFIL (ALMACÉN / SGA) -->
+        <section id="mi-perfil" class="view-section">
+          <div class="dashboard-grid">
+            
+            <!-- Columna Izquierda (8) -->
+            <div class="col-span-8" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Tarjeta de Identificación y Avatar -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Identificación de Usuario</h3></div>
+                <div style="display: flex; gap: 24px; align-items: flex-start;">
+                  <!-- Zona de Avatar -->
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                    <div style="width: 100px; height: 100px; background-color: #319795; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 600; box-shadow: var(--shadow-md);">
+                      AN
+                    </div>
+                    <button class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 12px;" onclick="showToast('Abriendo explorador de archivos...', 'info')">Cambiar Foto</button>
+                    <span style="font-size: 0.7rem; color: var(--text-muted);">JPG o PNG. Máx 2MB.</span>
+                  </div>
+                  
+                  <!-- Datos Personales -->
+                  <div style="flex-grow: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group" style="margin: 0;">
+                      <label>Nombre Completo</label>
+                      <input type="text" value="Ana Navarro" />
+                    </div>
+                    <div class="form-group" style="margin: 0;">
+                      <label>Teléfono Directo / Walkie</label>
+                      <input type="tel" value="+34 600 222 555 (Canal 1)" />
+                    </div>
+                    <div class="form-group" style="grid-column: span 2; margin: 0;">
+                      <label>Correo Electrónico Corporativo</label>
+                      <input type="email" value="a.navarro@fabrica-alcoy.es" />
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-color); text-align: right;">
+                  <button class="btn btn-primary" style="background-color: #319795; border-color: #319795;" onclick="showToast('Datos personales actualizados correctamente', 'success')">Guardar Datos Personales</button>
+                </div>
+              </div>
+
+              <!-- Preferencias de Notificaciones -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Preferencias de Alertas de Planta</h3></div>
+                <div style="display: flex; flex-direction: column; gap: 16px; font-size: 0.85rem;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+                    <div>
+                      <strong style="color: var(--text-main);">Gestión de Muelles y Camiones</strong>
+                      <p style="color: var(--text-muted); margin-top: 4px;">Avisar cuando un transportista reporte un retraso o llegue a la barrera.</p>
+                    </div>
+                    <div style="display: flex; gap: 16px;">
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> PDA/App</label>
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox"> Email</label>
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+                    <div>
+                      <strong style="color: var(--text-main);">Roturas de Stock (Inventario Crítico)</strong>
+                      <p style="color: var(--text-muted); margin-top: 4px;">Notificar inmediatamente si un artículo baja del Stock de Seguridad.</p>
+                    </div>
+                    <div style="display: flex; gap: 16px;">
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> PDA/App</label>
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> Email</label>
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                      <strong style="color: var(--text-main);">Urgencias de Producción / Ventas</strong>
+                      <p style="color: var(--text-muted); margin-top: 4px;">Recibir alertas prioritarias cuando Ventas marque una salida como "Urgente".</p>
+                    </div>
+                    <div style="display: flex; gap: 16px;">
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> PDA/App</label>
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> SMS</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Columna Derecha (4) -->
+            <div class="col-span-4" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Rol y Permisos (Toque Industrial) -->
+              <div class="card" style="background-color: #e6fffa; border: 1px solid #81e6d9;">
+                <div class="card-header" style="margin-bottom: 12px;"><h3 class="card-title" style="color: #234e52;">Rol y Permisos (SGA)</h3></div>
+                <div style="font-size: 0.85rem;">
+                  <div style="margin-bottom: 12px;">
+                    <span style="color: var(--text-muted); display: block; font-size: 0.75rem; text-transform: uppercase;">Nivel de Acceso</span>
+                    <span style="font-weight: 600; color: var(--text-main);">Jefatura de Almacén (Admin Planta)</span>
+                  </div>
+                  <div style="margin-bottom: 12px;">
+                    <span style="color: var(--text-muted); display: block; font-size: 0.75rem; text-transform: uppercase;">Ajustes de Inventario Manuales</span>
+                    <span style="font-weight: 700; color: #319795; font-size: 1.1rem;">Autorizado sin límite</span>
+                  </div>
+                  <div>
+                    <span style="color: var(--text-muted); display: block; font-size: 0.75rem; margin-bottom: 5px; text-transform: uppercase;">Autoridad sobre Cuarentenas</span>
+                    <span class="tag tag-success" style="background-color: #319795; color: white;">Puede bloquear lotes (Calidad)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Preferencias de Dispositivo -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Preferencias de PDA</h3></div>
+                <div class="form-group">
+                  <label>Modo de Escáner por Defecto</label>
+                  <select>
+                    <option selected>Láser 1D/2D continuo</option>
+                    <option>Cámara del dispositivo</option>
+                    <option>RFID Largo Alcance</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Tema del Terminal (Planta)</label>
+                  <select>
+                    <option selected>Modo Claro (Día)</option>
+                    <option>Modo Oscuro (Noche)</option>
+                    <option>Alto Contraste (Exteriores)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Seguridad -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Seguridad</h3></div>
+                <div class="form-group">
+                  <label>PIN de Terminal (4 dígitos)</label>
+                  <input type="password" placeholder="••••" maxlength="4" style="text-align: center; font-size: 1.2rem; letter-spacing: 4px;" />
+                </div>
+                <button class="btn btn-outline" style="width: 100%; margin-top: 12px; color: #319795; border-color: #319795;" onclick="showToast('PIN de PDA modificado con éxito', 'success')">Actualizar PIN de Planta</button>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- VISTA: CONFIGURACIÓN Y HARDWARE (SGA) -->
+        <section id="configuracion-sga" class="view-section">
+          <div class="dashboard-grid">
+            
+            <!-- Columna Izquierda: Hardware e IoT (8 columnas) -->
+            <div class="col-span-8" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Gestión de Terminales y PDAs -->
+              <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                  <h3 class="card-title">Gestión de Dispositivos Móviles (MDM)</h3>
+                  <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;" onclick="openModal('vincularPDAModal')">Vincular PDA</button>
+                </div>
+                <div style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 12px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                    <div><strong>Terminal 01 (PDA Android)</strong><br><span style="color: var(--text-muted);">Asignado: Carretilla Muelle 1</span></div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                      <span style="font-size: 0.75rem; color: #3182ce;">Batería: 85%</span>
+                      <span class="tag tag-success">Conectado (WiFi Nave)</span>
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                    <div><strong>Terminal 02 (PDA Android)</strong><br><span style="color: var(--text-muted);">Asignado: Zona de Picking B</span></div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                      <span style="font-size: 0.75rem; color: #dd6b20;">Batería: 15%</span>
+                      <span class="tag tag-success">Conectado (WiFi Nave)</span>
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div><strong>Tablet de Firmas (Pads)</strong><br><span style="color: var(--text-muted);">Ubicación: Garita de Seguridad</span></div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                      <span class="tag tag-neutral">Apagado / Desconectado</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Integración con Maquinaria (IoT) -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Sensores e IoT (Conexión Industrial)</h3></div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Sincronización directa del SGA con el hardware de planta para automatizar la captura de datos.</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+                    <div style="padding-right: 20px;">
+                      <strong style="font-size: 0.9rem;">Báscula de Palets (Muelle 1)</strong>
+                      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Captura el peso exacto automáticamente al cerrar una expedición de Ventas.</p>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" checked onclick="showToast('Conexión con báscula COM3 establecida', 'info')">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="padding-right: 20px;">
+                      <strong style="font-size: 0.9rem;">Impresoras de Etiquetas (Zebra ZT411)</strong>
+                      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Impresión automática de etiquetas EAN-13 al confirmar la recepción en Compras.</p>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" checked onclick="showToast('Servidor de impresión IP: 192.168.1.55 activo', 'info')">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Columna Derecha: ERP Core (4 columnas) -->
+            <div class="col-span-4" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Integración ERP Core -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Sincronización Core (Finanzas)</h3></div>
+                <div style="background-color: #f0fff4; border: 1px solid #9ae6b4; padding: 12px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                  <div>
+                    <h4 style="color: #276749; margin: 0 0 4px 0; font-size: 0.9rem;">Motor ERP Activo</h4>
+                    <p style="font-size: 0.8rem; color: #2f855a; margin: 0;">Sincronizado con módulo Contable</p>
+                  </div>
+                  <div style="font-size: 1.5rem;">🟢</div>
+                </div>
+
+                <div style="font-size: 0.85rem; margin-bottom: 16px;">
+                  <strong style="display: block; margin-bottom: 8px;">Frecuencia de volcado de inventario:</strong>
+                  <select style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid var(--border-color);">
+                    <option>Tiempo Real (Impacto continuo)</option>
+                    <option selected>Cierre de Turno (Cada 8 horas)</option>
+                    <option>Cierre de Día (23:59h)</option>
+                  </select>
+                </div>
+                
+                <div style="background-color: #fffaf0; padding: 12px; border-left: 4px solid #dd6b20; font-size: 0.8rem;">
+                  <strong>Nota:</strong> Los ajustes de stock manuales requieren la aprobación posterior de Finanzas para cuadrar el libro mayor.
+                </div>
+              </div>
+
+              <!-- Backup y Diagnóstico -->
+              <div class="card" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                <div class="card-header" style="margin-bottom: 8px;"><h3 class="card-title">Diagnóstico de Planta</h3></div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">Herramientas para técnicos de sistemas y mantenimiento.</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <button class="btn btn-outline" style="font-size: 0.8rem; text-align: left; justify-content: flex-start;" onclick="openModal('testRedModal')">Test de Red (Ping PDAs)</button>
+                  <button class="btn btn-outline" style="font-size: 0.8rem; text-align: left; justify-content: flex-start;" onclick="openModal('calibrarZebraModal')">Calibrar Impresoras Zebra</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- Modales y Scripts -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="notification-drawer" id="notifDrawer">
+      <div class="drawer-header"><h3>Notificaciones Almacén</h3><button class="drawer-close" onclick="toggleNotificaciones()">&times;</button></div>
+      <div class="drawer-body" style="padding: 20px; color: var(--text-muted);">No hay alertas nuevas.</div>
+    </div>
+
+    <!-- Modal Recepción -->
+    <div class="modal-overlay" id="recibirMercanciaModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Entrada en Stock (SGA)</h3>
+          <button class="modal-close" onclick="closeModal('recibirMercanciaModal')">&times;</button>
+        </div>
+        <div class="form-group">
+          <label>Ubicación de Destino en Almacén</label>
+          <select><option>Zona A - Pasillo 3, Estantería B</option><option>Zona B - Pasillo Central</option><option>Zona C - Muelle de Tránsito</option></select>
+        </div>
+        <div class="form-group">
+          <label>Número de Palets / Bultos Contados</label>
+          <input type="number" value="5" />
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('recibirMercanciaModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('recibirMercanciaModal'); showToast('Mercancía escaneada e incorporada al stock general.', 'success')">Confirmar y Actualizar Stock</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Registrar Entrada Camión -->
+    <div class="modal-overlay" id="registrarCamionModal">
+      <div class="modal-content" style="max-width: 550px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Registrar Entrada de Camión</h3>
+          <button class="modal-close" onclick="closeModal('registrarCamionModal')">&times;</button>
+        </div>
+        
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Registra el camión cuando llegue a la barrera de seguridad para asignarle muelle o parking.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label>Fecha de Llegada</label>
+            <input type="date" value="2026-09-23" />
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label>Hora de Llegada</label>
+            <input type="time" value="13:00" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Matrícula (Tractora / Remolque)</label>
+          <input type="text" placeholder="Ej: 1234-ABC" style="text-transform: uppercase;" />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label>Transportista / Agencia</label>
+            <input type="text" placeholder="Ej: DHL, Seur, Autónomo..." />
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label>Teléfono del Conductor</label>
+            <input type="tel" placeholder="+34 600..." />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Número de Orden de Compra (PO) asociada</label>
+          <select>
+            <option value="">Selecciona PO esperada...</option>
+            <option>#PO-9015 - Envases Plásticos S.L.</option>
+            <option>#PO-9016 - Químicas del Vinalopó</option>
+            <option>Sin PO (Entrega no programada)</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Acción Inmediata</label>
+          <select>
+            <option>Enviar a Parking Exterior (Esperar)</option>
+            <option>Asignar Muelle 1 (Libre)</option>
+            <option>Asignar Muelle 2 (Ocupado)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('registrarCamionModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('registrarCamionModal'); showToast('Camión registrado y notificado en los paneles exteriores.', 'success')">Registrar Llegada</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Avisar Descarga (Para camiones en tránsito) -->
+    <div class="modal-overlay" id="avisarDescargaModal">
+      <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Planificar Descarga</h3>
+          <button class="modal-close" onclick="closeModal('avisarDescargaModal')">&times;</button>
+        </div>
+        
+        <div style="background-color: #fffaf0; padding: 12px; border-radius: 6px; border: 1px solid #fbd38d; margin-bottom: 20px; font-size: 0.85rem; color: #dd6b20;">
+          El camión <strong>4521-GHJ</strong> con la orden <strong>#PO-9008</strong> está retrasado.
+        </div>
+
+        <div class="form-group">
+          <label>Nueva Hora Estimada de Llegada (ETA)</label>
+          <input type="time" />
+        </div>
+        <div class="form-group">
+          <label>Muelle Reservado</label>
+          <select>
+            <option>Muelle 1 (Prioridad Alta)</option>
+            <option>Muelle 2</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" checked /> Notificar a los carretilleros del turno
+          </label>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('avisarDescargaModal')">Cerrar</button>
+          <button class="btn btn-primary" onclick="closeModal('avisarDescargaModal'); showToast('Planificación de descarga actualizada.', 'success')">Guardar Planificación</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Escanear y Meter en Stock (Vitaminado) -->
+    <div class="modal-overlay" id="escanearStockModal">
+      <div class="modal-content" style="max-width: 700px;">
+        <div class="modal-header">
+          <h3 style="color: var(--success-text);">Entrada en Stock (SGA) - #PO-9010</h3>
+          <button class="modal-close" onclick="closeModal('escanearStockModal')">&times;</button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <!-- Columna Izquierda: Datos Físicos -->
+          <div>
+            <h4 style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-main);">Verificación Física</h4>
+            <div class="form-group">
+              <label>Artículo Recibido</label>
+              <input type="text" value="Granza PE Inyección (1500kg)" disabled style="background-color: #f8fafc;" />
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <div class="form-group" style="flex-grow: 1;">
+                <label>Palets/Bultos OK</label>
+                <input type="number" value="15" />
+              </div>
+              <div class="form-group" style="flex-grow: 1;">
+                <label>Bultos Dañados</label>
+                <input type="number" value="0" style="border-color: #feb2b2; background-color: #fff5f5;" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Ubicación de Destino (PDA Sugerida)</label>
+              <select>
+                <option selected>Zona A - Pasillo 3, Est. B (Recomendada)</option>
+                <option>Zona A - Pasillo 4 (Alternativa)</option>
+                <option>Zona C - Cuarentena (Si hay daños)</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Columna Derecha: Documentación -->
+          <div>
+            <h4 style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-main);">Documentación y Calidad</h4>
+            <div class="form-group">
+              <label>Nº Albarán del Transportista</label>
+              <input type="text" placeholder="Ej: ALB-9988-TR" />
+            </div>
+            <div class="form-group">
+              <label>Foto del Albarán Firmado</label>
+              <button class="btn btn-outline" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                📷 Capturar con PDA
+              </button>
+              <span style="display: block; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; text-align: center;">Obligatorio para conciliar en Finanzas</span>
+            </div>
+            <div class="form-group">
+              <label>Estado de Control de Calidad</label>
+              <select style="border-color: #9ae6b4; background-color: #f0fff4; color: #276749; font-weight: 600;">
+                <option selected>Apto para Producción (Verde)</option>
+                <option style="color: #dd6b20;">Retenido para Análisis (Naranja)</option>
+                <option style="color: #c53030;">Rechazado - Devolver (Rojo)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('escanearStockModal')">Cancelar</button>
+          <button class="btn btn-primary" style="background-color: var(--success-text); border-color: var(--success-text);" onclick="closeModal('escanearStockModal'); showToast('Mercancía validada e incorporada al stock general. Finanzas notificado.', 'success')">✅ Validar y Generar Etiquetas</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Asignar Muelle -->
+    <div class="modal-overlay" id="asignarMuelleModal">
+      <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Asignar Muelle de Carga/Descarga</h3>
+          <button class="modal-close" onclick="closeModal('asignarMuelleModal')">&times;</button>
+        </div>
+        
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">El camión <strong>9011-KLM (Autónomo)</strong> está en el parking esperando asignación.</p>
+
+        <div class="form-group">
+          <label>Muelle Disponible</label>
+          <select>
+            <option>Muelle 1 (Libre - Recomendado)</option>
+            <option>Muelle 3 (Libre)</option>
+            <option disabled>Muelle 2 (Ocupado)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Enviar aviso al transportista (SMS/App)</label>
+          <select>
+            <option>Sí, notificar inmediatamente</option>
+            <option>No, se le avisará por megafonía</option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('asignarMuelleModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('asignarMuelleModal'); showToast('Muelle 1 asignado. Notificación enviada al conductor.', 'success')">Confirmar Asignación</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Nuevo Artículo (Inventario) -->
+    <div class="modal-overlay" id="nuevoArticuloModal">
+      <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Alta de Nuevo Artículo (SKU)</h3>
+          <button class="modal-close" onclick="closeModal('nuevoArticuloModal')">&times;</button>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <div class="form-group" style="margin: 0;">
+            <label>Código SKU / Referencia</label>
+            <input type="text" placeholder="Ej: MP-9988" />
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label>Tipo de Artículo</label>
+            <select>
+              <option>Materia Prima</option>
+              <option>Producto Terminado</option>
+              <option>Embalaje / Consumible</option>
+              <option>Repuesto de Maquinaria</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Descripción completa</label>
+          <input type="text" placeholder="Ej: Bobina de hilo de algodón peinado azul..." />
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+          <div class="form-group" style="margin: 0;">
+            <label>Unidad de Medida</label>
+            <select>
+              <option>Kilogramos (Kg)</option>
+              <option>Unidades (Ud)</option>
+              <option>Palets</option>
+              <option>Litros (L)</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label>Stock Inicial</label>
+            <input type="number" value="0" />
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label>Stock Mínimo (Alerta)</label>
+            <input type="number" value="10" />
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('nuevoArticuloModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('nuevoArticuloModal'); showToast('Artículo creado y sincronizado con ERP Base.', 'success')">Guardar Artículo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Ajuste Manual de Stock -->
+    <div class="modal-overlay" id="ajusteStockModal">
+      <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Ajuste Manual de Inventario</h3>
+          <button class="modal-close" onclick="closeModal('ajusteStockModal')">&times;</button>
+        </div>
+        <div style="background-color: #f8fafc; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 0.85rem; text-align: center;">
+          Artículo: <strong>MP-1045 (Hilo Poliéster Rojo)</strong><br>
+          Stock Físico Actual: <strong style="color: #c53030;">0 Kg</strong>
+        </div>
+        <div class="form-group">
+          <label>Motivo del Ajuste (Obligatorio para Finanzas)</label>
+          <select>
+            <option>Recuento de Inventario (Regularización)</option>
+            <option>Merma / Rotura en almacén</option>
+            <option>Muestra entregada a Comercial</option>
+            <option>Entrada sin Albarán previo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Cantidad a Sumar (+) o Restar (-)</label>
+          <input type="number" placeholder="Ej: -50 o +100" />
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('ajusteStockModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('ajusteStockModal'); showToast('Ajuste de inventario aplicado y registrado.', 'success')">Aplicar Ajuste</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Historial de Movimientos -->
+    <div class="modal-overlay" id="historialMovimientosModal">
+      <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main);">Kardex / Historial: MP-1045</h3>
+          <button class="modal-close" onclick="closeModal('historialMovimientosModal')">&times;</button>
+        </div>
+        <div style="max-height: 400px; overflow-y: auto;">
+          <table style="width: 100%; font-size: 0.8rem; border-collapse: collapse;">
+            <thead style="background-color: #f8fafc; border-bottom: 1px solid var(--border-color); position: sticky; top: 0;">
+              <tr>
+                <th style="padding: 8px; text-align: left;">Fecha / Hora</th>
+                <th style="padding: 8px; text-align: left;">Operación</th>
+                <th style="padding: 8px; text-align: right;">Cant.</th>
+                <th style="padding: 8px; text-align: left;">Referencia</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid #edf2f7;">
+                <td style="padding: 8px;">Ayer 18:30</td>
+                <td style="padding: 8px;"><span class="tag tag-success" style="font-size: 0.65rem;">OUT (Producción)</span></td>
+                <td style="padding: 8px; text-align: right; color: #c53030; font-weight: 600;">-200 Kg</td>
+                <td style="padding: 8px; color: var(--text-muted);">Orden Fab. OF-4412</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #edf2f7;">
+                <td style="padding: 8px;">Hace 3 días</td>
+                <td style="padding: 8px;"><span class="tag tag-info" style="font-size: 0.65rem;">IN (Compra)</span></td>
+                <td style="padding: 8px; text-align: right; color: #2f855a; font-weight: 600;">+200 Kg</td>
+                <td style="padding: 8px; color: var(--text-muted);">PO-8990 (Hilaturas)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #edf2f7;">
+                <td style="padding: 8px;">Hace 5 días</td>
+                <td style="padding: 8px;"><span class="tag tag-warning" style="font-size: 0.65rem;">AJUSTE (Merma)</span></td>
+                <td style="padding: 8px; text-align: right; color: #c53030; font-weight: 600;">-10 Kg</td>
+                <td style="padding: 8px; color: var(--text-muted);">Rotura bobina Pasillo B</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Dar de Baja (Archivar) -->
+    <div class="modal-overlay" id="archivarArticuloModal">
+      <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-header">
+          <h3 style="color: #c53030;">Archivar Artículo (SKU)</h3>
+          <button class="modal-close" onclick="closeModal('archivarArticuloModal')">&times;</button>
+        </div>
+        <p style="font-size: 0.85rem; margin-bottom: 16px;">Vas a dar de baja el artículo <strong>MP-1045</strong>. Esto evitará que se puedan hacer nuevas compras o ventas de este producto.</p>
+        <div style="background-color: #fff5f5; border-left: 4px solid #c53030; padding: 12px; margin-bottom: 20px; font-size: 0.85rem;">
+          <strong>Atención:</strong> El sistema ha detectado que este SKU pertenece a 1 o más recetas de producción activas. Debes sustituirlo en el módulo de Producción antes de poder archivarlo definitivamente.
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+          <button class="btn btn-outline" onclick="closeModal('archivarArticuloModal')">Cancelar</button>
+          <button class="btn btn-primary" style="background-color: #c53030; opacity: 0.5; cursor: not-allowed;" disabled>Archivar SKU</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Completar Picking (Preparación de Pedido) -->
+    <div class="modal-overlay" id="completarPickingModal">
+      <div class="modal-content" style="max-width: 650px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Validación de Picking - #OV-5024</h3>
+          <button class="modal-close" onclick="closeModal('completarPickingModal')">&times;</button>
+        </div>
+        
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Verifica mediante pistola láser (PDA) que todos los bultos extraídos de las estanterías corresponden al pedido.</p>
+
+        <div style="border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; margin-bottom: 20px;">
+          <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+            <thead style="background-color: #f8fafc; border-bottom: 1px solid var(--border-color);">
+              <tr>
+                <th style="padding: 10px; text-align: left;">Artículo (SKU)</th>
+                <th style="padding: 10px; text-align: center;">Requerido</th>
+                <th style="padding: 10px; text-align: center;">Escaneado (PDA)</th>
+                <th style="padding: 10px; text-align: center;">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid #edf2f7;">
+                <td style="padding: 10px; font-weight: 500;">PT-8830 (Cajas Doble Canal)</td>
+                <td style="padding: 10px; text-align: center;">5 Palets</td>
+                <td style="padding: 10px; text-align: center; font-weight: 600;">5 Palets</td>
+                <td style="padding: 10px; text-align: center;">✅ OK</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; font-weight: 500;">EMB-0012 (Film Estirable)</td>
+                <td style="padding: 10px; text-align: center;">2 Cajas</td>
+                <td style="padding: 10px; text-align: center; color: var(--alert-text); font-weight: 600;">0 Cajas</td>
+                <td style="padding: 10px; text-align: center;"><button class="btn btn-outline" style="padding: 2px 6px; font-size: 0.7rem;">Escanear Ahora</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="form-group">
+          <label>Muelle de destino para consolidar</label>
+          <select>
+            <option>Muelle 1</option>
+            <option>Muelle 2</option>
+            <option>Zona de Tránsito (Envíos de tarde)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('completarPickingModal')">Pausar Tarea</button>
+          <button class="btn btn-primary" onclick="closeModal('completarPickingModal'); showToast('Picking marcado como finalizado y movido a Muelle.', 'success')">Finalizar Picking (Paletizar)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Cerrar Expedición (Firma de Albarán y Salida) -->
+    <div class="modal-overlay" id="cerrarExpedicionModal">
+      <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+          <h3 style="color: var(--success-text);">Cerrar Expedición y Salida - #OV-5023</h3>
+          <button class="modal-close" onclick="closeModal('cerrarExpedicionModal')">&times;</button>
+        </div>
+        
+        <div style="background-color: #f0fff4; padding: 12px; border-radius: 6px; border: 1px solid #9ae6b4; margin-bottom: 20px; font-size: 0.85rem; color: #276749;">
+          Mercancía cargada en el camión. Se descontarán <strong>10 Palets</strong> del stock de forma definitiva y se notificará a Ventas y Finanzas.
+        </div>
+
+        <div class="form-group">
+          <label>Matrícula Real del Transportista</label>
+          <input type="text" value="4521-GHJ" />
+        </div>
+        <div class="form-group">
+          <label>Nombre del Conductor</label>
+          <input type="text" placeholder="Ej: Manuel Pérez..." />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+          <button class="btn btn-outline" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px; height: auto;" onclick="showToast('Imprimiendo Albarán Logístico...', 'info')">
+            <span style="font-size: 1.5rem;">🖨️</span>
+            <span>Imprimir Albarán</span>
+          </button>
+          <button class="btn btn-outline" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px; height: auto;" onclick="showToast('Abriendo pad de firmas en tablet...', 'info')">
+            <span style="font-size: 1.5rem;">✍️</span>
+            <span>Firma Transportista</span>
+          </button>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('cerrarExpedicionModal')">Cancelar</button>
+          <button class="btn btn-primary" style="background-color: var(--success-text); border-color: var(--success-text);" onclick="closeModal('cerrarExpedicionModal'); showToast('Camión despachado. Stock actualizado y Ventas notificado.', 'success')">📦 Dar Salida a Mercancía</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Alta Nueva Agencia -->
+    <div class="modal-overlay" id="nuevaAgenciaModal">
+      <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Alta de Operador Logístico</h3>
+          <button class="modal-close" onclick="closeModal('nuevaAgenciaModal')">&times;</button>
+        </div>
+        
+        <div class="form-group">
+          <label>Nombre Fiscal o Comercial</label>
+          <input type="text" placeholder="Ej: Transportes y Logística..." />
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label>CIF / NIF</label>
+            <input type="text" />
+          </div>
+          <div class="form-group">
+            <label>Teléfono Tráfico / Base</label>
+            <input type="tel" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Zona de Cobertura Habitual</label>
+          <select>
+            <option>Local / Regional (Comunidad Valenciana)</option>
+            <option>Nacional (Península)</option>
+            <option>Internacional (Exportación)</option>
+          </select>
+        </div>
+        
+        <div style="background-color: #fffaf0; padding: 12px; border-left: 4px solid #dd6b20; margin-top: 16px; font-size: 0.8rem;">
+          Al guardar, Finanzas deberá validar la documentación legal (Seguros, SS) antes de que la agencia pueda recibir asignaciones de muelle.
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('nuevaAgenciaModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('nuevaAgenciaModal'); showToast('Agencia registrada. Pendiente de validación de Finanzas.', 'success')">Guardar Agencia</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Reportar Incidencia de Transporte -->
+    <div class="modal-overlay" id="incidenciaAgenciaModal">
+      <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+          <h3 style="color: var(--warning-text);">Reportar Incidencia Logística</h3>
+          <button class="modal-close" onclick="closeModal('incidenciaAgenciaModal')">&times;</button>
+        </div>
+        
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Esto penalizará el SLA (Puntualidad/Calidad) de <strong>TransAlicante Express</strong> en el ERP.</p>
+
+        <div class="form-group">
+          <label>Tipo de Incidencia</label>
+          <select>
+            <option>Retraso grave en llegada a muelle</option>
+            <option>Mercancía dañada durante el transporte</option>
+            <option>Comportamiento inadecuado del conductor</option>
+            <option>Falta de equipamiento (EPIs) en fábrica</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Vehículo / Conductor implicado (Opcional)</label>
+          <select>
+            <option value="">Seleccionar de la flota habitual...</option>
+            <option>4521-GHJ (Manuel)</option>
+            <option>9912-LKJ (Javi)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Detalles de la incidencia</label>
+          <textarea rows="3" placeholder="Describe lo ocurrido..."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('incidenciaAgenciaModal')">Cancelar</button>
+          <button class="btn btn-primary" style="background-color: var(--warning-text); border-color: var(--warning-text);" onclick="closeModal('incidenciaAgenciaModal'); showToast('Incidencia registrada en el historial del transportista.', 'success')">Registrar Incidencia</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Editar Datos de Agencia -->
+    <div class="modal-overlay" id="editarAgenciaModal">
+      <div class="modal-content" style="max-width: 550px;">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main);">Editar Ficha: TransAlicante Express</h3>
+          <button class="modal-close" onclick="closeModal('editarAgenciaModal')">&times;</button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <div class="form-group" style="margin: 0;">
+            <label>Nombre Fiscal o Comercial</label>
+            <input type="text" value="TransAlicante Express S.L." />
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label>CIF / NIF</label>
+            <input type="text" value="B-03888999" />
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Sede Base (Dirección principal)</label>
+          <input type="text" value="Polígono Las Atalayas, Nave 45 (Alicante)" />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <div class="form-group" style="margin: 0;">
+            <label>Contacto de Tráfico (Nombre)</label>
+            <input type="text" value="Pedro Soler" />
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label>Teléfono Tráfico / Base</label>
+            <input type="tel" value="600 11 22 33" />
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Email Cargas / Avisos</label>
+          <input type="email" value="trafico@transalicante.com" />
+        </div>
+
+        <div class="form-group">
+          <label>Estado de Homologación</label>
+          <select>
+            <option selected>Homologada (Activa)</option>
+            <option>Bloqueada temporalmente (Falta documentación)</option>
+            <option style="color: #c53030;">Dada de baja (Lista Negra)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('editarAgenciaModal')">Cancelar Cambios</button>
+          <button class="btn btn-primary" onclick="closeModal('editarAgenciaModal'); showToast('Datos de la agencia actualizados.', 'success')">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Añadir Conductor / Vehículo -->
+    <div class="modal-overlay" id="nuevoConductorModal">
+      <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Alta de Vehículo y Conductor</h3>
+          <button class="modal-close" onclick="closeModal('nuevoConductorModal')">&times;</button>
+        </div>
+        
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Añade un nuevo conductor habitual a la flota de <strong>TransAlicante Express</strong> para agilizar sus accesos en garita.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label>Nombre del Conductor</label>
+            <input type="text" placeholder="Ej: Antonio García" />
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label>Teléfono Móvil (Directo)</label>
+            <input type="tel" placeholder="+34 600..." />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label>Matrícula (Tractora/Furgón)</label>
+            <input type="text" placeholder="Ej: 1122-BBB" style="text-transform: uppercase;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label>Matrícula Remolque (Opcional)</label>
+            <input type="text" placeholder="Ej: R-3344-CCC" style="text-transform: uppercase;" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de Vehículo</label>
+          <select>
+            <option>Camión Lona (Tautliner)</option>
+            <option>Furgón Carrozado</option>
+            <option>Camión Rígido Frigorífico</option>
+            <option>Furgoneta Pequeña / Paquetería</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Estado de Acceso a Planta (PRL)</label>
+          <select>
+            <option selected>Acceso OK (EPIs y documentación en regla)</option>
+            <option style="color: #dd6b20;">Aviso: Pendiente Charla de Seguridad Muelle</option>
+            <option style="color: #c53030;">Bloqueado: No apto para entrar a planta</option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('nuevoConductorModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('nuevoConductorModal'); showToast('Conductor y vehículo añadidos a la flota habitual.', 'success')">Guardar Vehículo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Vincular PDA / Terminal -->
+    <div class="modal-overlay" id="vincularPDAModal">
+      <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Vincular Nuevo Terminal (MDM)</h3>
+          <button class="modal-close" onclick="closeModal('vincularPDAModal')">&times;</button>
+        </div>
+        
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Acerca el terminal PDA o escanea el código QR de sincronización para enrazarlo con el SGA de planta.</p>
+
+        <div class="form-group">
+          <label>Identificador del Dispositivo</label>
+          <input type="text" placeholder="Ej: PDA-Zebra-TC26-04" />
+        </div>
+        <div class="form-group">
+          <label>Asignar a Zona / Operario</label>
+          <select>
+            <option>Carretilla Muelle 1 y 2</option>
+            <option>Zona de Picking (Pasillos A-C)</option>
+            <option>Control de Calidad (Entradas)</option>
+            <option>Garita de Seguridad</option>
+          </select>
+        </div>
+
+        <div style="background-color: #f0fff4; padding: 12px; border-radius: 6px; border: 1px solid #9ae6b4; text-align: center; margin-top: 16px;">
+          <span style="font-size: 0.85rem; color: #276749; font-weight: 500;">📡 Buscando dispositivos Bluetooth cercanos... (Modo Emparejamiento Activo)</span>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('vincularPDAModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('vincularPDAModal'); showToast('Terminal enlazado correctamente con la red de planta.', 'success')">Vincular Terminal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Test de Red (Ping PDAs) -->
+    <div class="modal-overlay" id="testRedModal">
+      <div class="modal-content" style="max-width: 550px;">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main);">Diagnóstico de Red - Terminales PDA</h3>
+          <button class="modal-close" onclick="closeModal('testRedModal')">&times;</button>
+        </div>
+        
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Comprobando la latencia y cobertura WiFi de los dispositivos conectados en la nave industrial.</p>
+
+        <div style="background-color: #1a202c; color: #68d391; font-family: monospace; font-size: 0.8rem; padding: 16px; border-radius: 6px; height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;">
+          <div>[13:30:02] Iniciando barrido ICMP en red 192.168.1.0/24...</div>
+          <div>[13:30:02] Terminal 01 (192.168.1.45) -> Responde (Latencia: 4ms) - OK</div>
+          <div>[13:30:03] Terminal 02 (192.168.1.46) -> Responde (Latencia: 12ms) - OK</div>
+          <div>[13:30:03] Tablet Garita (192.168.1.50) -> Sin respuesta (Time Out)</div>
+          <div>[13:30:04] Servidor Impresión Zebra (192.168.1.55) -> Responde (Latencia: 2ms) - OK</div>
+          <div style="color: #63b3ed;">[13:30:04] Diagnóstico finalizado: 3 dispositivos operativos, 1 inactivo.</div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('testRedModal')">Cerrar</button>
+          <button class="btn btn-primary" onclick="showToast('Reintentando conexión con Tablet Garita...', 'info')">Reintentar Barrido</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Calibrar Impresoras Zebra -->
+    <div class="modal-overlay" id="calibrarZebraModal">
+      <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Calibración de Impresoras (Zebra ZT411)</h3>
+          <button class="modal-close" onclick="closeModal('calibrarZebraModal')">&times;</button>
+        </div>
+        
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Envía un comando de calibración al cabezal térmico para alinear el corte automático de etiquetas.</p>
+
+        <div class="form-group">
+          <label>Impresora Seleccionada</label>
+          <select>
+            <option>Zebra ZT411 - Muelle de Entradas (IP: 192.168.1.55)</option>
+            <option>Zebra ZD220 - Zona de Picking y Expediciones</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Tipo de Calibración</label>
+          <select>
+            <option>Calibración de Sensor de Brecha (Gap)</option>
+            <option>Test de Cabezal (Comprobar píxeles muertos)</option>
+            <option>Restablecer valores de fábrica</option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('calibrarZebraModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('calibrarZebraModal'); showToast('Comando ZPL enviado. Impresora calibrada con éxito.', 'success')">Ejecutar Calibración</button>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      function activateNav(clickedElement) {
+        document.querySelectorAll(".nav-item").forEach(item => item.classList.remove("active"));
+        clickedElement.classList.add("active");
+        
+        const targetId = clickedElement.getAttribute("data-target");
+        document.querySelectorAll(".view-section").forEach(section => section.classList.remove("active"));
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) targetSection.classList.add("active");
+        
+        let cleanText = clickedElement.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '').replace(/[0-9]/g, '').trin?.() || clickedElement.innerText;
+        document.getElementById("topbar-title-text").textContent = cleanText;
+      }
+      function toggleNotificaciones() { document.getElementById('notifDrawer').classList.toggle('active'); }
+      function openModal(id) { document.getElementById(id).classList.add('active'); }
+      function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+      function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️');
+        toast.innerHTML = `<span style="font-size: 1.2rem;">${icon}</span> <p style="font-weight: 500; font-size: 0.9rem; margin:0;">${message}</p>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
+      }
+    </script>
+  </body>
+</html>

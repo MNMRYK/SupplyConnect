@@ -1,0 +1,1660 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portal de Ventas y CRM - Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="ventas.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <!-- Icon placeholder -->
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          style="color: var(--primary)"
+        >
+          <path
+            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+          ></path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
+        <h2>ClientConnect</h2>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a class="nav-item active" data-target="dashboard" onclick="activateNav(this)">Dashboard Comercial</a>
+        <a class="nav-item" data-target="ordenes" onclick="activateNav(this)">Órdenes de Venta</a>
+        <a class="nav-item" data-target="clientes" onclick="activateNav(this)">Directorio Clientes (CRM)</a>
+        <a class="nav-item" data-target="inbox-comercial" onclick="activateNav(this)">
+          Inbox Comercial <span style="margin-left: auto; background-color: var(--primary); color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; font-weight: 700;">1</span>
+        </a>
+        <a class="nav-item" data-target="comunicaciones" onclick="activateNav(this)">
+          Com. Internas <span style="margin-left: auto; background-color: #e53e3e; color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; font-weight: 700;">2</span>
+        </a>
+        <a class="nav-item" data-target="facturacion" onclick="activateNav(this)">Facturación y Cobros</a>
+        
+        <div style="height: 1px; background-color: var(--border-color); margin: 24px 24px 16px 24px;"></div>
+        
+        <a class="nav-item" data-target="mi-perfil" onclick="activateNav(this)">Mi Perfil</a>
+        <a class="nav-item" data-target="configuracion-crm" onclick="activateNav(this)">Configuración CRM</a>
+        <a class="nav-item" style="color: var(--alert-text); margin-top: auto;" href="index.html">Cerrar Sesión</a>
+      </nav>
+    </aside>
+
+    <div class="main-content">
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1 id="topbar-title-text">Dashboard Comercial</h1>
+        </div>
+        <div class="user-profile">
+          <div class="notification-bell" onclick="toggleNotificaciones()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <div class="notification-dot"></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; margin-left: 8px;">
+            <div class="avatar avatar-purple">LB</div>
+            <div class="user-info">
+              <span class="user-name">Laura Beltrán</span>
+              <span class="user-role">Directora de Ventas</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard-container">
+        
+        <!-- VISTA: DASHBOARD -->
+        <section id="dashboard" class="view-section active">
+          <div class="dashboard-grid">
+            
+            <!-- KPIs -->
+            <div class="kpi-container col-span-12">
+              <div class="kpi-card">
+                <div class="kpi-title">Ventas Mes Actual</div>
+                <div class="kpi-value">185.400 €</div>
+                <div class="kpi-trend positive">↑ 12% vs mes anterior</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-title">Pedidos en Producción</div>
+                <div class="kpi-value">24</div>
+                <div class="kpi-trend neutral">En plazo de entrega</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-title">Riesgo de Retraso</div>
+                <div class="kpi-value" style="color: var(--warning-text);">2</div>
+                <div class="kpi-trend negative">Falta materia prima (Compras)</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-title">Conversión de Presupuestos</div>
+                <div class="kpi-value">68%</div>
+                <div class="kpi-trend positive">↑ 5% Tasa de éxito</div>
+              </div>
+            </div>
+
+            <!-- Alertas de Operaciones -->
+            <div class="card col-span-12">
+              <div class="card-header"><h3 class="card-title">Alertas de Operaciones (Conectado con Compras/SRM)</h3></div>
+              <div class="alert-box" style="background-color: #fffaf0; border-color: #fbd38d; margin-bottom: 0;">
+                <div class="alert-icon" style="color: #dd6b20;">⚠️</div>
+                <div class="alert-content">
+                  <p style="color: #dd6b20; font-weight: 600;">Posible retraso en Orden de Venta #OV-5021 (Cliente: ModaTextil Sur)</p>
+                  <span style="color: #718096; font-size: 0.85rem;">El departamento de Compras reporta un retraso en el lote de Hilo de Poliéster necesario para este pedido. Contactar con cliente preventivamente.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Últimas Órdenes de Venta -->
+            <div class="card col-span-8">
+              <div class="card-header">
+                <h3 class="card-title">Últimas Órdenes de Venta</h3>
+                <button class="btn btn-outline" style="font-size: 0.875rem; padding: 8px 16px;" onclick="document.querySelector('[data-target=\'ordenes\']').click()">Ver todas</button>
+              </div>
+              <div class="table-container">
+                <table style="width: 100%; font-size: 0.85rem;">
+                  <thead style="background-color: #f8fafc; border-bottom: 2px solid var(--border-color);">
+                    <tr>
+                      <th style="padding: 12px; text-align: left;">Orden</th>
+                      <th style="padding: 12px; text-align: left;">Cliente</th>
+                      <th style="padding: 12px; text-align: right;">Importe</th>
+                      <th style="padding: 12px; text-align: center;">Entrega Est.</th>
+                      <th style="padding: 12px; text-align: center;">Estado Producción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 12px; font-weight: 600; color: var(--primary);">#OV-5024</td>
+                      <td style="padding: 12px;">Confecciones Aitana</td>
+                      <td style="padding: 12px; text-align: right; font-weight: 600;">12.450 €</td>
+                      <td style="padding: 12px; text-align: center;">25 Oct</td>
+                      <td style="padding: 12px; text-align: center;"><span class="tag tag-info">En Telares (Línea 2)</span></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 12px; font-weight: 600; color: var(--primary);">#OV-5023</td>
+                      <td style="padding: 12px;">Embalajes Levante</td>
+                      <td style="padding: 12px; text-align: right; font-weight: 600;">3.200 €</td>
+                      <td style="padding: 12px; text-align: center;">18 Oct</td>
+                      <td style="padding: 12px; text-align: center;"><span class="tag tag-success">Terminado (En Muelle)</span></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 12px; font-weight: 600; color: var(--primary);">#OV-5021</td>
+                      <td style="padding: 12px;">ModaTextil Sur</td>
+                      <td style="padding: 12px; text-align: right; font-weight: 600;">8.900 €</td>
+                      <td style="padding: 12px; text-align: center; color: var(--alert-text);">16 Oct</td>
+                      <td style="padding: 12px; text-align: center;"><span class="tag tag-warning" style="background-color: #fffaf0; color: #dd6b20; border: 1px solid #fbd38d;">Pausado (Falta Hilo)</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 12px; font-weight: 600; color: var(--primary);">#OV-5020</td>
+                      <td style="padding: 12px;">Plásticos Industriales SA</td>
+                      <td style="padding: 12px; text-align: right; font-weight: 600;">21.000 €</td>
+                      <td style="padding: 12px; text-align: center;">20 Oct</td>
+                      <td style="padding: 12px; text-align: center;"><span class="tag tag-neutral">Pendiente Programación</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Columna Derecha -->
+            <div class="col-span-4" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Rendimiento (Funnel CSS) -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Rendimiento (Mes en curso)</h3></div>
+                <div class="chart-container">
+                  <div class="chart-row">
+                    <span class="chart-label" style="width: 120px;">Presupuestos</span>
+                    <div class="chart-bar-bg">
+                      <div class="chart-bar-fill" style="width: 100%; background-color: #e2e8f0;"></div>
+                    </div>
+                    <span class="chart-value">45</span>
+                  </div>
+                  <div class="chart-row">
+                    <span class="chart-label" style="width: 120px;">Negociación</span>
+                    <div class="chart-bar-bg">
+                      <div class="chart-bar-fill" style="width: 65%; background-color: #ecc94b;"></div>
+                    </div>
+                    <span class="chart-value">29</span>
+                  </div>
+                  <div class="chart-row">
+                    <span class="chart-label" style="width: 120px;">Cerrados (Éxito)</span>
+                    <div class="chart-bar-bg">
+                      <div class="chart-bar-fill" style="width: 45%; background-color: #48bb78;"></div>
+                    </div>
+                    <span class="chart-value">20</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Top Clientes -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Top Clientes Activos</h3></div>
+                <ul class="score-list">
+                  <li class="score-item" style="padding: 8px 0;">
+                    <div class="score-info">
+                      <h4 style="font-size: 0.9rem;">ModaTextil Sur</h4>
+                      <p style="font-size: 0.75rem;">Textil y Confección</p>
+                    </div>
+                    <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;">45.200 €</div>
+                  </li>
+                  <li class="score-item" style="padding: 8px 0;">
+                    <div class="score-info">
+                      <h4 style="font-size: 0.9rem;">Plásticos Industriales SA</h4>
+                      <p style="font-size: 0.75rem;">Envases y Transformación</p>
+                    </div>
+                    <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;">38.900 €</div>
+                  </li>
+                  <li class="score-item" style="padding: 8px 0; border: none;">
+                    <div class="score-info">
+                      <h4 style="font-size: 0.9rem;">Confecciones Aitana</h4>
+                      <p style="font-size: 0.75rem;">Textil Hogar</p>
+                    </div>
+                    <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;">29.150 €</div>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- VISTA: INBOX COMERCIAL -->
+        <section id="inbox-comercial" class="view-section">
+          <div class="card chat-card">
+            
+            <!-- Col 1: Lista de Chats -->
+            <div class="chat-sidebar">
+              <div class="chat-search-header">
+                <input type="text" placeholder="Buscar cliente o mensaje..." />
+              </div>
+              
+              <div class="chat-tabs">
+                <span class="tag tag-success" style="cursor: pointer;">Míos (Laura)</span>
+                <span class="tag tag-neutral" style="cursor: pointer;">Modo Cobertura</span>
+              </div>
+
+              <div class="chat-list">
+                <!-- Chat 1 (Laura) -->
+                <div class="chat-item active">
+                  <div class="chat-icon">📱</div>
+                  <div class="chat-item-content">
+                    <div class="chat-item-header">
+                      <strong>ModaTextil Sur</strong>
+                      <span>10:30</span>
+                    </div>
+                    <p>Laura, ¿sabemos algo del pedido?</p>
+                    <span class="chat-badge-primary">Asignado a ti</span>
+                  </div>
+                </div>
+
+                <!-- Chat 2 (Cobertura) -->
+                <div class="chat-item">
+                  <div class="chat-icon">✉️</div>
+                  <div class="chat-item-content">
+                    <div class="chat-item-header">
+                      <strong>Embalajes Levante</strong>
+                      <span>Ayer</span>
+                    </div>
+                    <p>Necesitamos duplicar la orden #400</p>
+                    <span class="chat-badge-warning">Cobertura (Marta de baja)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Col 2: El Chat Activo -->
+            <div class="chat-main">
+              <div class="chat-header">
+                <div>
+                  <h4 class="chat-header-title">ModaTextil Sur <span class="chat-header-subtitle">(WhatsApp Business)</span></h4>
+                  <span style="font-size: 0.75rem; color: #718096;">Contacto: Javier Ramírez</span>
+                </div>
+                <div><button class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 8px;">Cerrar Ticket</button></div>
+              </div>
+
+              <div class="chat-messages">
+                <div class="msg-wrapper">
+                  <div class="msg-bubble">
+                    Hola Laura, buenos días. Quería saber cómo va la orden OV-5021, la de las bobinas rojas. ¿Me confirmas que llega este viernes?
+                  </div>
+                </div>
+
+                <div class="msg-wrapper sent">
+                  <div class="msg-bubble">
+                    Hola Javier. Acabo de revisar el sistema. La materia prima está retenida en aduanas un día más, así que entrará en máquina el jueves. Te llegará el lunes a primera hora. ¡Disculpa el retraso logístico!
+                  </div>
+                </div>
+                
+                <div class="msg-note">
+                  <span>Nota interna añadida por Laura (No visible para el cliente)</span>
+                </div>
+              </div>
+
+              <div class="chat-input-area">
+                <input type="text" placeholder="Escribe al cliente (WhatsApp)..." />
+                <button class="btn btn-primary" onclick="showToast('Mensaje enviado al WhatsApp del cliente', 'success')">Enviar</button>
+              </div>
+            </div>
+
+            <!-- Col 3: Panel Lateral Conectado al ERP -->
+            <div class="chat-context">
+              <h3 class="context-title">Contexto ERP (Sincronizado)</h3>
+              
+              <div class="context-card">
+                <span class="context-card-title">Última Orden Activa</span>
+                <strong class="context-card-value">#OV-5021</strong>
+                <span class="tag tag-warning">Pausada (Falta Material)</span>
+                <button class="btn btn-outline" style="width: 100%; margin-top: 10px; font-size: 0.75rem; padding: 4px;">Ver Producción</button>
+              </div>
+
+              <div class="context-card">
+                <span class="context-card-title">Estado Financiero</span>
+                <div class="context-card-row">
+                  <span>Deuda vencida:</span>
+                  <strong style="color: #c53030;">1.250 €</strong>
+                </div>
+                <div class="context-card-row">
+                  <span>Condiciones:</span>
+                  <strong>30 Días f.f.</strong>
+                </div>
+              </div>
+
+              <div class="context-alert">
+                <span class="context-alert-title">Alerta de Compras (SRM)</span>
+                <p>El pedido de hilo rojo (#PO-9008) tiene un retraso reportado por Carlos Ferrándiz. Estimación llegada: Miércoles 16.</p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- VISTA: COMUNICACIONES INTERNAS (Hacia Compras/Fábrica) -->
+        <section id="comunicaciones" class="view-section">
+          <div class="card chat-card">
+            
+            <div class="chat-sidebar">
+              <div class="chat-search-header">
+                <input type="text" placeholder="Buscar trabajador o depto..." />
+              </div>
+              <div class="chat-list-category">Dpto. Compras y Aprovisionamiento</div>
+              
+              <div class="chat-item active">
+                <div class="avatar" style="width: 36px; height: 36px; font-size: 0.85rem;">CF</div>
+                <div class="chat-item-content">
+                  <div class="chat-item-header">
+                    <strong>Carlos Ferrándiz</strong>
+                    <span>11:42</span>
+                  </div>
+                  <p>Sí, Juan de calidad ya lo validó.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="chat-main">
+              <div class="chat-header">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div class="avatar" style="width: 40px; height: 40px;">CF</div>
+                  <h4 class="chat-header-title">Carlos Ferrándiz <span class="chat-header-subtitle">(Compras)</span></h4>
+                </div>
+              </div>
+              
+              <div class="chat-messages">
+                <div class="msg-wrapper sent">
+                  <div class="avatar avatar-purple" style="width: 32px; height: 32px; font-size: 0.75rem; flex-shrink: 0;">LB</div>
+                  <div>
+                    <div class="msg-bubble">
+                      Oye Carlos, ModaTextil me está apretando por el retraso de la orden OV-5021. ¿Me confirmas si el hilo de poliéster pasó la cuarentena y ya puede entrar a máquinas?
+                    </div>
+                    <div style="text-align: right;"><span class="msg-time">11:38</span></div>
+                  </div>
+                </div>
+                
+                <div class="msg-wrapper">
+                  <div class="avatar" style="width: 32px; height: 32px; font-size: 0.75rem; flex-shrink: 0;">CF</div>
+                  <div>
+                    <div class="msg-bubble">
+                      Sí, tranquilo el cliente. Juan de Calidad ya lo validó hace media hora. Pedro de Planta dice que lo mete en línea esta tarde sin falta.
+                    </div>
+                    <span class="msg-time">11:42</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="chat-input-area">
+                <input type="text" placeholder="Escribe a Compras..." />
+                <button class="btn btn-primary" onclick="showToast('Mensaje interno enviado', 'success')">Enviar</button>
+              </div>
+            </div>
+            
+          </div>
+        </section>
+
+        <!-- VISTA: ÓRDENES DE VENTA -->
+        <section id="ordenes" class="view-section">
+          <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <h3 class="card-title">Registro de Órdenes de Venta (OV)</h3>
+              <div style="display: flex; gap: 16px; align-items: center;">
+                <div class="search-box">
+                  <input type="text" placeholder="Buscar Nº Orden o Cliente..." style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md); min-width: 250px;" />
+                </div>
+                <div class="dropdown-container">
+                  <button class="btn btn-outline" onclick="toggleDropdown('filtrosDropdown')">Filtros ▾</button>
+                  <div id="filtrosDropdown" class="dropdown-menu">
+                    <div class="dropdown-header">Estado en Fábrica</div>
+                    <label class="dropdown-item"><input type="checkbox" checked> En Producción</label>
+                    <label class="dropdown-item"><input type="checkbox" checked> Pausado / Incidencias</label>
+                    <label class="dropdown-item"><input type="checkbox"> Pendiente de Lanzar</label>
+                    <label class="dropdown-item"><input type="checkbox"> Terminado (En Muelle)</label>
+                    <div style="padding: 12px; border-top: 1px solid var(--border-color);">
+                      <button class="btn btn-primary" style="width: 100%; font-size: 0.8rem;" onclick="toggleDropdown('filtrosDropdown'); showToast('Filtros aplicados correctamente', 'info')">Aplicar Filtros</button>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-primary" onclick="openModal('nuevaOrdenModal')">+ Nueva Orden</button>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table style="width: 100%; font-size: 0.85rem;">
+                <thead style="background-color: #f8fafc; border-bottom: 2px solid var(--border-color);">
+                  <tr>
+                    <th style="padding: 12px; text-align: left;">Nº Orden</th>
+                    <th style="padding: 12px; text-align: left;">Cliente</th>
+                    <th style="padding: 12px; text-align: left;">Artículos Clave</th>
+                    <th style="padding: 12px; text-align: right;">Importe</th>
+                    <th style="padding: 12px; text-align: center;">Entrega Prometida</th>
+                    <th style="padding: 12px; text-align: center;">Estado (Fábrica)</th>
+                    <th style="padding: 12px; text-align: right;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Orden Normal en Producción -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 6px;"><strong>#OV-5024</strong></td>
+                    <td style="padding: 6px; font-weight: 500;">Confecciones Aitana</td>
+                    <td style="padding: 6px; color: var(--text-muted);">Bobinas Hilo Blanco (500kg)</td>
+                    <td style="padding: 6px; text-align: right; font-weight: 600; white-space: nowrap;">12.450,00 €</td>
+                    <td style="padding: 6px; text-align: center;">25 Oct 2026</td>
+                    <td style="padding: 6px; text-align: center;"><span class="tag tag-info">En Telares (Línea 2)</span></td>
+                    <td style="padding: 12px; text-align: right;">
+                      <button class="btn btn-outline"  onclick="openModal('trazabilidadModal')">Trazabilidad</button>
+                    </td>
+                  </tr>
+
+                  <!-- Orden Terminada -->
+                  <tr style="border-bottom: 1px solid var(--border-color); background-color: #f8fafc;">
+                    <td style="padding: 12px;"><strong>#OV-5023</strong></td>
+                    <td style="padding: 12px; font-weight: 500;">Embalajes Levante</td>
+                    <td style="padding: 12px; color: var(--text-muted);">Cajas Doble Canal (10 Palets)</td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600; white-space: nowrap;">3.200,00 €</td>
+                    <td style="padding: 12px; text-align: center; color: var(--text-muted);">18 Oct 2026</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-success">Terminado (En Muelle)</span></td>
+                    <td style="padding: 12px; text-align: right;">
+                      <button class="btn btn-outline"  onclick="openModal('albaranSalidaModal')">Emitir Albarán</button>
+                    </td>
+                  </tr>
+
+                  <!-- Orden con Problemas (El núcleo de la demo) -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px;"><strong>#OV-5021</strong></td>
+                    <td style="padding: 12px; font-weight: 500;">ModaTextil Sur</td>
+                    <td style="padding: 12px; color: var(--text-muted);">Hilo Poliéster Rojo (200kg)</td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600; white-space: nowrap;">8.900,00 €</td>
+                    <td style="padding: 12px; text-align: center; color: var(--alert-text); font-weight: 600;">16 Oct 2026</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-warning" style="background-color: #fffaf0; color: #dd6b20; border: 1px solid #fbd38d;">Pausado (Falta Hilo)</span></td>
+                    <td style="padding: 12px; text-align: right; display: flex; justify-content: flex-end; gap: 8px;">
+                      <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem; color: #c53030; border-color: #feb2b2;" onclick="openModal('incidenciaModal')">⚠️ Reportar</button>
+                      <button class="btn btn-primary"  onclick="openModal('detalleOrdenModal')">Ver Origen</button>
+                    </td>
+                  </tr>
+
+                  <!-- Orden Nueva -->
+                  <tr>
+                    <td style="padding: 12px;"><strong>#OV-5020</strong></td>
+                    <td style="padding: 12px; font-weight: 500;">Plásticos Industriales SA</td>
+                    <td style="padding: 12px; color: var(--text-muted);">Granza PET Inyección (3000kg)</td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600; white-space: nowrap;">21.000,00 €</td>
+                    <td style="padding: 12px; text-align: center;">20 Oct 2026</td>
+                    <td style="padding: 12px; text-align: center;"><span class="tag tag-neutral">Pendiente Programación</span></td>
+                    <td style="padding: 12px; text-align: right;">
+                      <button class="btn btn-outline"  onclick="openModal('lanzarProduccionModal')">Lanzar Producción</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+        
+        <!-- VISTA: DIRECTORIO DE CLIENTES (CRM) -->
+        <section id="clientes" class="view-section">
+          <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <h3 class="card-title">Directorio de Clientes (CRM B2B)</h3>
+              <div style="display: flex; gap: 16px; align-items: center;">
+                <div class="search-box">
+                  <input type="text" placeholder="Buscar empresa, CIF o contacto..." style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md); min-width: 250px;" />
+                </div>
+                <button class="btn btn-outline" onclick="showToast('Exportando listado de clientes a Excel...', 'info')">Exportar ⬇</button>
+                <button class="btn btn-primary" onclick="openModal('nuevoClienteModal')">+ Nuevo Cliente</button>
+              </div>
+            </div>
+            
+            <ul class="score-list">
+              <!-- Cliente 1 -->
+              <li class="score-item" style="padding: 20px 0;">
+                <div class="score-info">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <h4 style="font-size: 1.1rem; color: var(--text-main); margin: 0;">ModaTextil Sur</h4>
+                    <span class="tag tag-success" style="font-size: 0.65rem; margin:0;">Cliente VIP (Tier 1)</span>
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">CIF: B-41999888 | Sector: Confección de Moda | Alta: 2021</p>
+                  <div style="font-size: 0.8rem; color: var(--primary);">Contacto: Javier Ramírez | j.ramirez@modatextilsur.com | Tel: 954 33 22 11</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                  <div style="display: flex; gap: 8px;">
+                    <span class="score-badge" style="background: var(--success-bg); color: var(--success-text); border-color: var(--success-border);">Riesgo Financiero: Muy Bajo</span>
+                    <span class="score-badge" style="background: #ebf8ff; color: #2b6cb0; border-color: #bee3f8;">Condiciones: 30 Días</span>
+                  </div>
+                  <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="activateNav({ classList: { add: () => {} }, getAttribute: () => 'ficha-cliente', innerText: 'Ficha 360º: ModaTextil Sur' })">Ver Ficha</button>
+                </div>
+              </li>
+              
+              <!-- Cliente 2 -->
+              <li class="score-item" style="padding: 20px 0;">
+                <div class="score-info">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <h4 style="font-size: 1.1rem; color: var(--text-main); margin: 0;">Plásticos Industriales SA</h4>
+                    <span class="tag tag-info" style="font-size: 0.65rem; margin:0;">Cliente Regular (Tier 2)</span>
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">CIF: A-28445566 | Sector: Envases y Transformación | Alta: 2023</p>
+                  <div style="font-size: 0.8rem; color: var(--primary);">Contacto: Elena Castro | compras@plasticosindustriales.es | Tel: 910 55 44 33</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                  <div style="display: flex; gap: 8px;">
+                    <span class="score-badge" style="background: var(--warning-bg); color: var(--warning-text); border-color: var(--warning-border);">Riesgo Financiero: Medio</span>
+                    <span class="score-badge" style="background: #ebf8ff; color: #2b6cb0; border-color: #bee3f8;">Condiciones: 60 Días f.f.</span>
+                  </div>
+                  <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="showToast('Simulación: Abriendo Ficha 360º de Plásticos Industriales', 'info')">Ver Ficha </button>
+                </div>
+              </li>
+
+              <!-- Cliente 3 -->
+              <li class="score-item" style="padding: 20px 0; border-bottom: none;">
+                <div class="score-info">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <h4 style="font-size: 1.1rem; color: var(--text-main); margin: 0;">Embalajes Levante</h4>
+                    <span class="tag tag-info" style="font-size: 0.65rem; margin:0;">Cliente Regular (Tier 2)</span>
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">CIF: B-46112233 | Sector: Distribución | Alta: 2024</p>
+                  <div style="font-size: 0.8rem; color: var(--primary);">Contacto: Marcos P. | pedidos@embalajeslevante.com | Tel: 962 33 44 55</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                  <div style="display: flex; gap: 8px;">
+                    <span class="score-badge" style="background: var(--success-bg); color: var(--success-text); border-color: var(--success-border);">Riesgo Financiero: Bajo</span>
+                    <span class="score-badge" style="background: #ebf8ff; color: #2b6cb0; border-color: #bee3f8;">Condiciones: Contado</span>
+                  </div>
+                  <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="showToast('Simulación: Abriendo Ficha 360º de Embalajes Levante', 'info')">Ver Ficha </button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- VISTA: FICHA 360º DEL CLIENTE -->
+        <section id="ficha-cliente" class="view-section">
+          <!-- Cabecera de Ficha -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+            <div style="display: flex; gap: 20px; align-items: center;">
+              <button class="btn btn-outline" onclick="document.querySelector('[data-target=\'clientes\']').click()" style="padding: 6px 12px">← Volver</button>
+              <div>
+                <h2 style="font-size: 1.8rem; color: var(--text-main); margin-bottom: 4px;">ModaTextil Sur</h2>
+                <span class="tag tag-success" style="font-size: 0.8rem;">Cliente VIP (Tier 1)</span>
+                <span class="tag tag-neutral" style="font-size: 0.8rem;">Sector: Confección</span>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <button class="btn btn-outline" onclick="showToast('Habilitando edición de ficha...', 'info')">Editar Datos</button>
+              <button class="btn btn-primary" onclick="openModal('nuevaOrdenModal')">+ Nueva Orden</button>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <!-- COLUMNA IZQUIERDA: Datos y Operativa (8 columnas) -->
+            <div class="col-span-8" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- KPIs Rápidos del Cliente (Rellena el espacio vacío superior) -->
+              <div class="kpi-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                <div class="kpi-card" style="padding: 12px 16px;">
+                  <div class="kpi-title">Facturado (YTD)</div>
+                  <div class="kpi-value" style="font-size: 1.4rem;">45.200 €</div>
+                  <div class="kpi-trend positive" style="font-size: 0.7rem;">↑ 8% vs 2025</div>
+                </div>
+                <div class="kpi-card" style="padding: 12px 16px;">
+                  <div class="kpi-title">Deuda Activa</div>
+                  <div class="kpi-value" style="font-size: 1.4rem; color: var(--alert-text);">3.150 €</div>
+                  <div class="kpi-trend negative" style="font-size: 0.7rem;">1 Fra. Vencida</div>
+                </div>
+                <div class="kpi-card" style="padding: 12px 16px;">
+                  <div class="kpi-title">Ticket Medio (OV)</div>
+                  <div class="kpi-value" style="font-size: 1.4rem;">8.700 €</div>
+                  <div class="kpi-trend neutral" style="font-size: 0.7rem;">Estable</div>
+                </div>
+              </div>
+
+              <!-- Tarjeta de Información General -->
+              <div class="card" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; padding: 20px;">
+                <div>
+                  <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 600;">Contacto Principal</p>
+                  <p style="font-weight: 500; font-size: 0.9rem; margin-top: 4px;">Javier Ramírez</p>
+                  <p style="font-size: 0.85rem; color: var(--primary);">j.ramirez@modatextilsur.com</p>
+                  <p style="font-size: 0.85rem;">Tel: +34 954 33 22 11</p>
+                </div>
+                <div>
+                  <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 600;">Datos Fiscales y Envío</p>
+                  <p style="font-weight: 500; font-size: 0.9rem; margin-top: 4px;">CIF: B-41999888</p>
+                  <p style="font-size: 0.85rem;">Pol. Ind. La Isla, Nave 14</p>
+                  <p style="font-size: 0.85rem;">41703 Dos Hermanas (Sevilla)</p>
+                </div>
+                <div>
+                  <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 600;">Condiciones Comerciales</p>
+                  <p style="font-size: 0.85rem; margin-top: 4px;"><strong>Pago:</strong> 30 días fecha factura</p>
+                  <p style="font-size: 0.85rem;"><strong>Tarifa:</strong> Mayorista B (15% Dto)</p>
+                  <p style="font-size: 0.85rem;"><strong>Riesgo:</strong> <span style="color: var(--success-text); font-weight:600;">Muy Bajo (100k€ Límite)</span></p>
+                </div>
+              </div>
+
+              <!-- Historial de Pedidos y Facturas -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Historial de Órdenes y Facturación</h3>
+                  <button class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 12px;" onclick="showToast('Descargando extracto...', 'info')">Exportar Extracto</button>
+                </div>
+                <div class="table-container">
+                  <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                    <thead style="border-bottom: 2px solid var(--border-color); background-color: #f8fafc;">
+                      <tr>
+                        <th style="padding: 12px 8px; text-align: left;">Nº Orden</th>
+                        <th style="padding: 12px 8px; text-align: left;">Fecha</th>
+                        <th style="padding: 12px 8px; text-align: right;">Importe</th>
+                        <th style="padding: 12px 8px; text-align: center;">Estado (Entrega)</th>
+                        <th style="padding: 12px 8px; text-align: center;">Factura / Pago</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Orden Activa -->
+                      <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 12px 8px; font-weight: 600; color: var(--primary);">#OV-5021</td>
+                        <td style="padding: 12px 8px; white-space: nowrap;">10 Oct 2026</td>
+                        <td style="padding: 12px 8px; text-align: right; font-weight: 600; white-space: nowrap;">8.900,00 €</td>
+                        <td style="padding: 12px 8px; text-align: center;"><span class="tag tag-warning" style="background: #fffaf0; color: #dd6b20; border-color: #fbd38d;">Pausado</span></td>
+                        <td style="padding: 12px 8px; text-align: center;"><span style="color: var(--text-muted); font-size: 0.8rem;">Pendiente emisión</span></td>
+                      </tr>
+                      <!-- Orden Completada y Pagada -->
+                      <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 12px 8px; font-weight: 600; color: var(--primary);">#OV-4890</td>
+                        <td style="padding: 12px 8px; white-space: nowrap;">15 Sep 2026</td>
+                        <td style="padding: 12px 8px; text-align: right; font-weight: 600; white-space: nowrap;">14.200,50 €</td>
+                        <td style="padding: 12px 8px; text-align: center;"><span class="tag tag-success">Entregado</span></td>
+                        <td style="padding: 12px 8px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                          <span style="font-size: 0.8rem; font-weight: 600;">FAC-26/1044</span>
+                          <span class="tag tag-success" style="background: #e6fffa; color: #234e52; border-color: #81e6d9;">Pagada</span>
+                        </td>
+                      </tr>
+                      <!-- Orden Completada, Factura Vencida -->
+                      <tr>
+                        <td style="padding: 12px 8px; font-weight: 600; color: var(--primary);">#OV-4755</td>
+                        <td style="padding: 12px 8px; white-space: nowrap;">02 Ago 2026</td>
+                        <td style="padding: 12px 8px; text-align: right; font-weight: 600; white-space: nowrap;">3.150,00 €</td>
+                        <td style="padding: 12px 8px; text-align: center;"><span class="tag tag-success">Entregado</span></td>
+                        <td style="padding: 12px 8px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                          <span style="font-size: 0.8rem; font-weight: 600;">FAC-26/0892</span>
+                          <span class="tag" style="background-color: #fff5f5; color: #c53030; border: 1px solid #feb2b2;">Impagada (Vencida)</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Enviar Correos / Plantillas -->
+              <div class="card" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                <div class="card-header"><h3 class="card-title">Centro de Comunicación Rápida</h3></div>
+                
+                <div class="form-group" style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px;">
+                  <label style="margin: 0; min-width: 100px;">Plantilla:</label>
+                  <select style="flex-grow: 1; padding: 8px;">
+                    <option>-- Mensaje en blanco --</option>
+                    <option>Notificación de Retraso en Entrega</option>
+                    <option>Reclamación Amistosa de Factura Vencida</option>
+                    <option>Envío de Nuevo Catálogo / Tarifas</option>
+                  </select>
+                  <button class="btn btn-outline" style="padding: 8px 16px;" onclick="showToast('Plantilla cargada en el editor', 'info')">Cargar</button>
+                </div>
+
+                <div class="form-group">
+                  <input type="text" placeholder="Asunto del correo" value="Información sobre su cuenta - SupplyConnect" style="margin-bottom: 12px;" />
+                  <textarea rows="4" placeholder="Escribe el mensaje para Javier Ramírez..."></textarea>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">El correo se enviará a j.ramirez@modatextilsur.com y se registrará en las notas.</span>
+                  <button class="btn btn-primary" onclick="showToast('Correo enviado correctamente y registrado en el historial', 'success')">Enviar Correo</button>
+                </div>
+              </div>
+              <!-- Historial de Correos Enviados -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Historial de Correos Enviados</h3></div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                  
+                  <!-- Correo 1 (Leído) -->
+                  <div style="border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden;">
+                    <div style="padding: 12px 16px; background-color: #f8fafc; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color);">
+                      <div>
+                        <strong style="font-size: 0.85rem; color: var(--text-main);">Asunto: Envío factura FAC-26/1044</strong>
+                        <span style="display: block; font-size: 0.75rem; color: var(--text-muted);">16 Sep 2026, 18:30h - Para: j.ramirez@modatextilsur.com</span>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 0.7rem; color: var(--success-text); font-weight: 600; background-color: var(--success-bg); padding: 4px 8px; border-radius: 12px;">👁️ Abierto (2 veces)</span>
+                        <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;" onclick="const el = document.getElementById('email1'); el.style.display = el.style.display === 'block' ? 'none' : 'block';">Ver / Ocultar</button>
+                      </div>
+                    </div>
+                    <div id="email1" style="padding: 16px; font-size: 0.85rem; color: var(--text-main); display: none; background-color: white;">
+                      <p style="margin-bottom: 8px;">Hola Javier,</p>
+                      <p style="margin-bottom: 8px;">Adjuntamos la factura correspondiente a la orden #OV-4890. El vencimiento es el 15 Oct 2026.</p>
+                      <p>Un saludo,<br><strong>Equipo de Administración</strong></p>
+                    </div>
+                  </div>
+
+                  <!-- Correo 2 (No Leído) -->
+                  <div style="border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden;">
+                    <div style="padding: 12px 16px; background-color: #f8fafc; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color);">
+                      <div>
+                        <strong style="font-size: 0.85rem; color: var(--text-main);">Asunto: Nuevo Catálogo de Hilos 2027</strong>
+                        <span style="display: block; font-size: 0.75rem; color: var(--text-muted);">10 Sep 2026, 09:15h - Para: j.ramirez@modatextilsur.com</span>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; background-color: #edf2f7; padding: 4px 8px; border-radius: 12px;">✉️ Entregado (No abierto)</span>
+                        <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;" onclick="const el = document.getElementById('email2'); el.style.display = el.style.display === 'block' ? 'none' : 'block';">Ver / Ocultar</button>
+                      </div>
+                    </div>
+                    <div id="email2" style="padding: 16px; font-size: 0.85rem; color: var(--text-main); display: none; background-color: white;">
+                      <p style="margin-bottom: 8px;">Buenos días Javier,</p>
+                      <p style="margin-bottom: 8px;">Te enviamos en primicia el catálogo de colores de poliéster para la próxima temporada. Avísame si queréis muestras.</p>
+                      <p>Saludos,<br><strong>Laura Beltrán</strong></p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            <!-- COLUMNA DERECHA: Notas y CRM Cronológico (4 columnas) -->
+            <div class="col-span-4" style="display: flex; flex-direction: column; gap: 24px;">
+              <div class="card" style="height: 100%; display: flex; flex-direction: column;">
+                <h3 class="card-title" style="margin-bottom: 16px;">Registro de Actividad (CRM)</h3>
+                
+                <!-- Añadir nota rápida Tipificada -->
+                <div style="background-color: #f8fafc; border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; margin-bottom: 24px;">
+                  <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <select style="width: 120px; padding: 6px; font-size: 0.8rem; border-radius: 4px; border: 1px solid var(--border-color);">
+                      <option value="llamada">Llamada</option>
+                      <option value="reunion">Reunión</option>
+                      <option value="whatsapp">WhatsApp</option>
+                      <option value="nota">Nota Interna</option>
+                    </select>
+                    <select style="flex-grow: 1; padding: 6px; font-size: 0.8rem; border-radius: 4px; border: 1px solid var(--border-color);">
+                      <option value="ventas">Seguimiento Comercial</option>
+                      <option value="incidencia">Incidencia / Queja</option>
+                      <option value="cobro">Reclamación de Cobro</option>
+                    </select>
+                  </div>
+                  <div style="display: flex; gap: 8px;">
+                    <input type="text" placeholder="Detalles de la interacción..." style="flex-grow: 1; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.85rem;" />
+                    <button class="btn btn-primary" style="padding: 8px 12px;" onclick="showToast('Registro añadido al historial', 'success')">Añadir</button>
+                  </div>
+                </div>
+
+                <!-- Timeline de Notas con tracking de lectura -->
+                <!-- Contenedor envolvente para que la línea no se estire -->
+                <div style="overflow-y: auto; flex-grow: 1; padding-right: 8px;">
+                  <div class="timeline" style="margin-left: 8px;">
+                    <div class="timeline-item completed">
+                      <div class="timeline-dot" style="background-color: #ecc94b; border-color: #ecc94b;"></div>
+                      <div class="timeline-text">
+                        <strong style="color: #975a16;">Llamada Entrante (Seguimiento)</strong>
+                        <span style="color: var(--text-main);">Javier pregunta por la OV-5021. Le confirmo que estamos esperando hilo rojo.</span>
+                        <span>Hoy, 10:30h - Por: Laura B.</span>
+                      </div>
+                    </div>
+                    
+                    <!-- Email con Tracking -->
+                    <div class="timeline-item completed">
+                      <div class="timeline-dot" style="background-color: var(--primary); border-color: var(--primary);"></div>
+                      <div class="timeline-text">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                          <strong style="color: var(--primary);">Email Automatizado</strong>
+                          <span style="font-size: 0.65rem; color: var(--success-text); font-weight: 600; background-color: var(--success-bg); padding: 2px 6px; border-radius: 4px;">👁️ Leído (17 Sep - 09:15h)</span>
+                        </div>
+                        <span style="color: var(--text-main); margin-top: 4px;">Envío automático de factura FAC-26/1044.</span>
+                        <span>16 Sep 2026 - Por: Sistema</span>
+                      </div>
+                    </div>
+                    
+                    <div class="timeline-item completed">
+                      <div class="timeline-dot" style="background-color: var(--success-bg); border-color: var(--success-text);"></div>
+                      <div class="timeline-text">
+                        <strong style="color: var(--success-text);">Reunión Comercial</strong>
+                        <span style="color: var(--text-main);">Visita a las instalaciones en Sevilla. Renovamos acuerdo tarifa Mayorista B para 2027.</span>
+                        <span>05 Sep 2026 - Por: Laura B.</span>
+                      </div>
+                    </div>
+                    <div class="timeline-item completed">
+                      <div class="timeline-dot" style="background-color: #e53e3e; border-color: #e53e3e;"></div>
+                      <div class="timeline-text">
+                        <strong style="color: #c53030;">Alerta de Finanzas</strong>
+                        <span style="color: var(--text-main);">Factura FAC-26/0892 pasa a estado vencido (Impagada).</span>
+                        <span>02 Sep 2026 - Por: Finanzas ERP</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <!-- VISTA: FACTURACIÓN Y COBROS (VENTAS) -->
+        <section id="facturacion" class="view-section">
+          <!-- KPIs Financieros (Enfoque en Cobros) -->
+          <div class="kpi-container col-span-12" style="margin-bottom: 24px;">
+            <div class="kpi-card">
+              <div class="kpi-title">Facturado (Mes Actual)</div>
+              <div class="kpi-value">185.400 €</div>
+              <div class="kpi-trend positive">↑ 12% vs mes anterior</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Cobros Recibidos</div>
+              <div class="kpi-value">142.100 €</div>
+              <div class="kpi-trend positive">Flujo de caja sano</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Deuda Vencida (Impagos)</div>
+              <div class="kpi-value" style="color: var(--alert-text);">8.450 €</div>
+              <div class="kpi-trend negative">3 Facturas reclamadas</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Periodo Medio Cobro</div>
+              <div class="kpi-value">38 Días</div>
+              <div class="kpi-trend neutral">Objetivo: 30 Días</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <h3 class="card-title">Facturas Emitidas y Estado de Cobros</h3>
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <div class="search-box">
+                  <input type="text" placeholder="Buscar Factura o Cliente..." style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md); min-width: 250px;" />
+                </div>
+                <div class="dropdown-container">
+                  <button class="btn btn-outline" onclick="toggleDropdown('filtrosFacturasVentas')">Filtros ▾</button>
+                  <div id="filtrosFacturasVentas" class="dropdown-menu">
+                    <div class="dropdown-header">Estado de Cobro</div>
+                    <label class="dropdown-item"><input type="checkbox" checked> Pendiente Cobro</label>
+                    <label class="dropdown-item"><input type="checkbox" checked> Impagada (Vencida)</label>
+                    <label class="dropdown-item"><input type="checkbox"> Cobrado (Pagado)</label>
+                    <div style="padding: 12px; border-top: 1px solid var(--border-color);">
+                      <button class="btn btn-primary" style="width: 100%; font-size: 0.8rem;" onclick="toggleDropdown('filtrosFacturasVentas'); showToast('Filtros aplicados correctamente', 'info')">Aplicar Filtros</button>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-outline" onclick="showToast('Sincronizando estado de cobros con ERP Finanzas...', 'info')">Sincronizar Cobros</button>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table style="width: 100%; font-size: 0.85rem;">
+                <thead style="background-color: #f8fafc; border-bottom: 2px solid var(--border-color);">
+                  <tr>
+                    <th style="padding: 12px; text-align: left;">Nº Factura</th>
+                    <th style="padding: 12px; text-align: left;">Cliente</th>
+                    <th style="padding: 12px; text-align: left;">Origen (Orden)</th>
+                    <th style="padding: 12px; text-align: right;">Importe</th>
+                    <th style="padding: 12px; text-align: center;">Vencimiento</th>
+                    <th style="padding: 12px; text-align: center;">Estado Cobro</th>
+                    <th style="padding: 12px; text-align: right;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Factura Pagada -->
+                  <tr style="border-bottom: 1px solid var(--border-color); background-color: #f8fafc;">
+                    <td style="padding: 12px;"><strong>FAC-26/1044</strong></td>
+                    <td style="padding: 12px; font-weight: 500;">ModaTextil Sur</td>
+                    <td style="padding: 12px;"><span style="font-family: monospace; color: var(--text-muted);">#OV-4890</span></td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600; white-space: nowrap;">14.200,50 €</td>
+                    <td style="padding: 12px; text-align: center; color: var(--text-muted);">15 Oct 2026</td>
+                    <td style="padding: 12px; text-align: center;">
+                      <span class="tag tag-success" style="background-color: #e6fffa; color: #234e52; border-color: #81e6d9;">Cobrado (Transferencia)</span>
+                    </td>
+                    <td style="padding: 12px; text-align: right; vertical-align: middle;">
+                      <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="openModal('visorPDFModal')">📄 PDF</button>
+                    </td>
+                  </tr>
+
+                  <!-- Factura Pendiente (Aún en plazo) -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px;"><strong>FAC-26/1102</strong></td>
+                    <td style="padding: 12px; font-weight: 500;">Embalajes Levante</td>
+                    <td style="padding: 12px;"><span style="font-family: monospace; color: var(--text-muted);">#OV-5023</span></td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600; white-space: nowrap;">3.200,00 €</td>
+                    <td style="padding: 12px; text-align: center;">18 Nov 2026</td>
+                    <td style="padding: 12px; text-align: center;">
+                      <span class="tag tag-neutral" style="background-color: #fff5f5; color: #dd6b20; border-color: #fbd38d;">Pendiente Cobro</span>
+                    </td>
+                    <td style="padding: 12px; text-align: right; vertical-align: middle; display: flex; justify-content: flex-end; gap: 8px;">
+                      <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="openModal('visorPDFModal')">📄 PDF</button>
+                      <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="openModal('reenviarEmailModal')">Reenviar Email</button>
+                    </td>
+                  </tr>
+
+                  <!-- Factura Vencida / Impagada -->
+                  <tr>
+                    <td style="padding: 12px;"><strong>FAC-26/0892</strong></td>
+                    <td style="padding: 12px; font-weight: 500;">Plásticos Industriales SA</td>
+                    <td style="padding: 12px;"><span style="font-family: monospace; color: var(--text-muted);">#OV-4755</span></td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600; white-space: nowrap;">3.150,00 €</td>
+                    <td style="padding: 12px; text-align: center; color: var(--alert-text); font-weight: 600;">02 Sep 2026</td>
+                    <td style="padding: 12px; text-align: center;">
+                      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                        <span class="tag" style="background-color: #fff5f5; color: #c53030; border: 1px solid #feb2b2;">Impagada (Vencida)</span>
+                        <span style="font-size: 0.7rem; color: var(--text-muted);">+20 días retraso</span>
+                      </div>
+                    </td>
+                    <td style="padding: 12px; text-align: right; vertical-align: middle; display: flex; justify-content: flex-end; gap: 8px;">
+                      <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="activateNav({ classList: { add: () => {} }, getAttribute: () => 'ficha-cliente', innerText: 'Ficha 360º: Plásticos Industriales' })">Ver CRM</button>
+                      <button class="btn btn-primary" style="background-color: #c53030; border-color: #c53030; padding: 8px 16px; font-size: 0.875rem;" onclick="openModal('reclamarCobroModal')">Reclamar Pago</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+        
+        <!-- VISTA: MI PERFIL (VENTAS) -->
+        <section id="mi-perfil" class="view-section">
+          <div class="dashboard-grid">
+            
+            <!-- Columna Izquierda (8) -->
+            <div class="col-span-8" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Tarjeta de Identificación y Avatar -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Identificación de Usuario</h3></div>
+                <div style="display: flex; gap: 24px; align-items: flex-start;">
+                  <!-- Zona de Avatar -->
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                    <div style="width: 100px; height: 100px; background-color: #805ad5; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 600; box-shadow: var(--shadow-md);">
+                      LB
+                    </div>
+                    <button class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 12px;" onclick="showToast('Abriendo explorador de archivos...', 'info')">Cambiar Foto</button>
+                    <span style="font-size: 0.7rem; color: var(--text-muted);">JPG o PNG. Máx 2MB.</span>
+                  </div>
+                  
+                  <!-- Datos Personales -->
+                  <div style="flex-grow: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group" style="margin: 0;">
+                      <label>Nombre Completo</label>
+                      <input type="text" value="Laura Beltrán" />
+                    </div>
+                    <div class="form-group" style="margin: 0;">
+                      <label>Teléfono Directo / Móvil</label>
+                      <input type="tel" value="+34 600 333 444 (Ext. 12)" />
+                    </div>
+                    <div class="form-group" style="grid-column: span 2; margin: 0;">
+                      <label>Correo Electrónico Corporativo</label>
+                      <input type="email" value="l.beltran@fabrica-alcoy.es" />
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-color); text-align: right;">
+                  <button class="btn btn-primary" onclick="showToast('Datos personales actualizados correctamente', 'success')">Guardar Datos Personales</button>
+                </div>
+              </div>
+
+              <!-- Preferencias de Notificaciones -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Preferencias de Alertas Comerciales</h3></div>
+                <div style="display: flex; flex-direction: column; gap: 16px; font-size: 0.85rem;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+                    <div>
+                      <strong style="color: var(--text-main);">Nuevas Órdenes y Presupuestos</strong>
+                      <p style="color: var(--text-muted); margin-top: 4px;">Recibir aviso cuando un cliente firme un presupuesto o envíe un pedido.</p>
+                    </div>
+                    <div style="display: flex; gap: 16px;">
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> En la app</label>
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> Email</label>
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+                    <div>
+                      <strong style="color: var(--text-main);">Alertas de Riesgo Financiero</strong>
+                      <p style="color: var(--text-muted); margin-top: 4px;">Avisar cuando una factura de cliente pase a estado vencido (Impago).</p>
+                    </div>
+                    <div style="display: flex; gap: 16px;">
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> En la app</label>
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox"> Email</label>
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                      <strong style="color: var(--text-main);">Retrasos en Producción (SGA/Compras)</strong>
+                      <p style="color: var(--text-muted); margin-top: 4px;">Notificar si un pedido en curso va a retrasarse por falta de materia prima.</p>
+                    </div>
+                    <div style="display: flex; gap: 16px;">
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> En la app</label>
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> Email</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Columna Derecha (4) -->
+            <div class="col-span-4" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Rol y Permisos (Toque B2B Pro) -->
+              <div class="card" style="background-color: #faf5ff; border: 1px solid #d6bcfa;">
+                <div class="card-header" style="margin-bottom: 12px;"><h3 class="card-title" style="color: #553c9a;">Rol y Permisos</h3></div>
+                <div style="font-size: 0.85rem;">
+                  <div style="margin-bottom: 12px;">
+                    <span style="color: var(--text-muted); display: block; font-size: 0.75rem; text-transform: uppercase;">Nivel de Acceso</span>
+                    <span style="font-weight: 600; color: var(--text-main);">Dirección Comercial (Admin CRM)</span>
+                  </div>
+                  <div style="margin-bottom: 12px;">
+                    <span style="color: var(--text-muted); display: block; font-size: 0.75rem; text-transform: uppercase;">Límite de Descuento Autorizado</span>
+                    <span style="font-weight: 700; color: var(--primary); font-size: 1.1rem;">Máximo 20% / Orden</span>
+                  </div>
+                  <div>
+                    <span style="color: var(--text-muted); display: block; font-size: 0.75rem; margin-bottom: 5px; text-transform: uppercase;">Firma Autorizada</span>
+                    <span class="tag tag-success">Contratos y Acuerdos Marco</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Preferencias Regionales -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Preferencias</h3></div>
+                <div class="form-group">
+                  <label>Idioma del Portal</label>
+                  <select>
+                    <option selected>Español</option>
+                    <option>English</option>
+                    <option>Valencià</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Zona Horaria</label>
+                  <select>
+                    <option selected>(GMT+01:00) Madrid</option>
+                    <option>(GMT+00:00) Londres</option>
+                    <option>(GMT+08:00) Shanghai</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Seguridad -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Seguridad</h3></div>
+                <div class="form-group">
+                  <label>Contraseña Actual</label>
+                  <input type="password" placeholder="••••••••" />
+                </div>
+                <div class="form-group">
+                  <label>Nueva Contraseña</label>
+                  <input type="password" placeholder="••••••••" />
+                </div>
+                <button class="btn btn-outline" style="width: 100%; margin-top: 12px;" onclick="showToast('Contraseña modificada con éxito', 'success')">Actualizar Contraseña</button>
+              </div>
+
+            </div>
+          </div>
+        </section>
+        
+        <!-- VISTA: CONFIGURACIÓN CRM Y ERP (VENTAS) -->
+        <section id="configuracion-crm" class="view-section">
+          <div class="dashboard-grid">
+            
+            <!-- Columna Izquierda (8) -->
+            <div class="col-span-8" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Integración ERP Core -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Sincronización Core (Sistemas Base)</h3></div>
+                
+                <div style="background-color: #f0fff4; border: 1px solid #9ae6b4; padding: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+                  <div>
+                    <h4 style="color: #276749; margin-bottom: 4px;">Conexión Activa</h4>
+                    <p style="font-size: 0.85rem; color: #2f855a;">Enlazado correctamente al <strong>ERP Corporativo Nativo</strong> (API Interna v3.0)</p>
+                  </div>
+                  <div style="font-size: 2rem;">🟢</div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+                    <div>
+                      <strong style="font-size: 0.9rem;">Sincronización de Base de Datos de Clientes</strong>
+                      <p style="font-size: 0.8rem; color: var(--text-muted);">Actualiza altas, bajas y límites de crédito desde Finanzas.</p>
+                    </div>
+                    <select style="padding: 6px; border-radius: 4px; border: 1px solid var(--border-color);"><option selected>Tiempo Real</option><option>Cada 12 horas</option><option>Manual</option></select>
+                  </div>
+                  
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+                    <div>
+                      <strong style="font-size: 0.9rem;">Volcado de Facturación y Cobros</strong>
+                      <p style="font-size: 0.8rem; color: var(--text-muted);">Envía las facturas emitidas por Ventas a la contabilidad general.</p>
+                    </div>
+                    <select style="padding: 6px; border-radius: 4px; border: 1px solid var(--border-color);"><option selected>Tiempo Real</option><option>Al cierre del día</option></select>
+                  </div>
+                </div>
+
+                <div style="margin-top: 24px;">
+                  <button class="btn btn-primary" onclick="showToast('Sincronización forzada completada con ERP Core', 'success')">🔄 Forzar Sincronización Ahora</button>
+                </div>
+              </div>
+
+              <!-- Integración con Otros Módulos (Compras y Almacén) -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Reglas de Conexión Interservicios</h3></div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Configura qué información de otros departamentos (Compras y Almacén) es visible para el equipo Comercial.</p>
+
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+                    <div style="padding-right: 20px;">
+                      <strong style="font-size: 0.9rem;">Visibilidad de Pedidos a Proveedores (Sincronización SRM)</strong>
+                      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Permite que Ventas vea los retrasos en materia prima reportados por Compras para ajustar plazos a clientes.</p>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" checked onclick="showToast('Visibilidad del SRM habilitada para Comerciales', 'info')">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+                    <div style="padding-right: 20px;">
+                      <strong style="font-size: 0.9rem;">Conexión Directa con Muelles de Carga (Sincronización SGA)</strong>
+                      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Enlaza las Órdenes de Venta (OV) con el estado de los palets en almacén y la asignación de agencias de transporte.</p>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" checked onclick="showToast('Rastreo logístico en vivo activado', 'info')">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Columna Derecha (4) -->
+            <div class="col-span-4" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Datos de Empresa Emisora -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Datos Fiscales Emisor (Facturas)</h3></div>
+                <div style="font-size: 0.85rem; color: var(--text-main); display: flex; flex-direction: column; gap: 12px;">
+                  <p><strong>Razón Social:</strong> Fábrica Industrial Levantina S.A.</p>
+                  <p><strong>CIF:</strong> A-03009988</p>
+                  <p><strong>Dirección:</strong> Polígono Cotes Baixes, Nave Principal</p>
+                  <p><strong>Localidad:</strong> 03804 - Alcoy (Alicante)</p>
+                  <div style="height: 1px; background-color: var(--border-color); margin: 8px 0;"></div>
+                  <button class="btn btn-outline" style="width: 100%;" onclick="showToast('Solo Finanzas puede modificar el CIF emisor', 'error')">Solicitar Cambio de Datos</button>
+                </div>
+              </div>
+
+              <!-- Webhooks y API -->
+              <div class="card" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                <div class="card-header" style="margin-bottom: 8px;"><h3 class="card-title">API Ventas B2B</h3></div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">Webhooks para enviar notificaciones de estado de pedido directamente a la intranet del cliente final.</p>
+                <div class="form-group" style="margin-bottom: 12px;">
+                  <label style="font-size: 0.75rem;">Token de Lectura Activo (CRM)</label>
+                  <input type="password" value="tkn_crm_948bxn202m1aa" disabled style="background-color: #e2e8f0; text-align: center; letter-spacing: 3px; font-family: monospace;" />
+                </div>
+                <button class="btn btn-outline" style="width: 100%; font-size: 0.75rem;" onclick="showToast('Se requiere autenticación 2FA para regenerar el token', 'error')">Regenerar Token</button>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- Modal: Nueva Orden de Venta (Con Asistente de Stock) -->
+    <div class="modal-overlay" id="nuevaOrdenModal">
+      <div class="modal-content" style="max-width: 700px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Generar Orden de Venta</h3>
+          <button class="modal-close" onclick="closeModal('nuevaOrdenModal')">&times;</button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+          <div class="form-group" style="margin: 0;">
+            <label>Cliente</label>
+            <select><option>Selecciona un cliente...</option><option>ModaTextil Sur</option><option>Confecciones Aitana</option></select>
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label>Fecha de Entrega Solicitada</label>
+            <input type="date" />
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--border-color); padding-top: 16px; margin-bottom: 16px;">
+          <h4 style="font-size: 0.9rem; margin-bottom: 12px;">Líneas de Pedido</h4>
+          <div style="display: flex; gap: 12px; align-items: flex-end;">
+            <div class="form-group" style="flex-grow: 1; margin: 0;">
+              <label>Artículo a fabricar</label>
+              <select style="background-color: #fffaf0; border-color: #fbd38d;">
+                <option>Bobinas Hilo Poliéster Rojo (200kg)</option>
+                <option>Granza PET Transparente (1000kg)</option>
+              </select>
+            </div>
+            <div class="form-group" style="width: 100px; margin: 0;">
+              <label>Cant.</label>
+              <input type="number" value="1" />
+            </div>
+          </div>
+
+          <!-- ASISTENTE DE PLAZOS (Superpoder ERP) -->
+          <div style="background-color: #fff5f5; border: 1px dashed #feb2b2; padding: 12px; border-radius: 8px; margin-top: 12px; display: flex; gap: 12px; align-items: flex-start;">
+            <span style="font-size: 1.5rem;">⚠️</span>
+            <div>
+              <strong style="color: #c53030; font-size: 0.85rem; display: block;">Aviso de Producción: Material Insuficiente</strong>
+              <p style="font-size: 0.75rem; color: #c53030; margin: 4px 0 0 0;">No hay stock de tinte rojo en almacén para fabricar este artículo. Depende de la <strong>Orden de Compra #PO-9008</strong> (Retrasada). Fecha estimada real de entrega al cliente: <strong>22 Oct 2026</strong>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('nuevaOrdenModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('nuevaOrdenModal'); showToast('Orden registrada. Se ha notificado al cliente el nuevo plazo.', 'success')">Guardar Orden</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Detalle de Orden y Trazabilidad (El Puente SRM) -->
+    <div class="modal-overlay" id="detalleOrdenModal">
+      <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main);">Trazabilidad: Orden #OV-5021</h3>
+          <button class="modal-close" onclick="closeModal('detalleOrdenModal')">&times;</button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+          <div>
+            <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Cliente</p>
+            <p style="font-weight: 600;">ModaTextil Sur</p>
+          </div>
+          <div>
+            <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Estado Planta</p>
+            <span class="tag tag-warning" style="background-color: #fffaf0; color: #dd6b20; border: 1px solid #fbd38d;">Línea 3 Parada (Falta Material)</span>
+          </div>
+        </div>
+
+        <h4 style="font-size: 0.9rem; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Dependencias de Compras (SRM)</h4>
+        <div style="background-color: #f8fafc; border: 1px solid var(--border-color); padding: 12px; border-radius: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <strong style="color: var(--primary);">Orden de Compra: #PO-9008</strong>
+            <span class="tag tag-neutral">En Tránsito</span>
+          </div>
+          <p style="font-size: 0.8rem; margin-bottom: 4px;"><strong>Proveedor:</strong> Hilaturas Alcoyanas</p>
+          <p style="font-size: 0.8rem; margin-bottom: 8px;"><strong>Material:</strong> Bobinas Poliéster (Base para tintar)</p>
+          <div style="background-color: white; padding: 8px; border: 1px dashed var(--border-color); font-size: 0.75rem; color: var(--text-muted);">
+            Nota del Jefe de Compras (Carlos F.): "El proveedor ha confirmado que el camión llega el miércoles 16 a primera hora. Prioridad máxima para descarga."
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('detalleOrdenModal')">Cerrar</button>
+          <button class="btn btn-primary" onclick="closeModal('detalleOrdenModal'); openModal('incidenciaModal')">Contactar a Compras</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Apertura de Incidencia Rápida -->
+    <div class="modal-overlay" id="incidenciaModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 style="color: #c53030;">Apertura de Incidencia Comercial</h3>
+          <button class="modal-close" onclick="closeModal('incidenciaModal')">&times;</button>
+        </div>
+        
+        <p style="font-size: 0.85rem; margin-bottom: 16px;">Abre un ticket prioritario que llegará automáticamente al departamento responsable en fábrica.</p>
+        
+        <div class="form-group">
+          <label>Departamento de Destino</label>
+          <select>
+            <option>Compras y Aprovisionamiento (Carlos F.)</option>
+            <option>Planta y Producción (Pedro R.)</option>
+            <option>Calidad (Juan M.)</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Mensaje / Reclamación del Cliente</label>
+          <textarea rows="4">El cliente ModaTextil Sur amenaza con penalización por contrato si el pedido no sale el viernes. Por favor, confirmad si podemos agilizar el tintado en cuanto llegue el material.</textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('incidenciaModal')">Cancelar</button>
+          <button class="btn btn-primary" style="background-color: #c53030;" onclick="closeModal('incidenciaModal'); showToast('Incidencia escalada a Compras. Prioridad Alta.', 'success')">Escalar Incidencia 🚨</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Trazabilidad en Planta -->
+    <div class="modal-overlay" id="trazabilidadModal">
+      <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main);">Estado en Planta: #OV-5024</h3>
+          <button class="modal-close" onclick="closeModal('trazabilidadModal')">&times;</button>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Cliente: Confecciones Aitana | Material: Bobinas Hilo Blanco</p>
+        
+        <div class="timeline" style="margin-left: 8px; margin-bottom: 24px;">
+          <div class="timeline-item completed">
+            <div class="timeline-dot"></div>
+            <div class="timeline-text">
+              <strong>Orden Lanzada a Planta</strong>
+              <span>18 Oct - Aprobado por Planificación</span>
+            </div>
+          </div>
+          <div class="timeline-item completed">
+            <div class="timeline-dot"></div>
+            <div class="timeline-text">
+              <strong>Materia Prima Asignada (Lote L-2023-99)</strong>
+              <span>19 Oct - Extraído de Almacén Central</span>
+            </div>
+          </div>
+          <div class="timeline-item completed">
+            <div class="timeline-dot" style="background-color: var(--primary); border-color: var(--primary);"></div>
+            <div class="timeline-text">
+              <strong style="color: var(--primary);">En Producción (Tejeduría)</strong>
+              <span style="color: var(--text-main);">Actualmente en la <strong>Línea 2</strong>. Progreso: 65%.</span>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background-color: white; border-color: var(--border-color);"></div>
+            <div class="timeline-text">
+              <strong style="color: var(--text-muted);">Control de Calidad Final</strong>
+              <span>Estimado: Mañana, 16:00h</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end;">
+          <button class="btn btn-outline" onclick="closeModal('trazabilidadModal')">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Emitir Albarán -->
+    <div class="modal-overlay" id="albaranSalidaModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 style="color: var(--success-text);">Emitir Albarán de Salida</h3>
+          <button class="modal-close" onclick="closeModal('albaranSalidaModal')">&times;</button>
+        </div>
+        
+        <div style="background-color: #f0fff4; padding: 12px; border-radius: 6px; border: 1px solid #9ae6b4; margin-bottom: 20px; font-size: 0.85rem; color: #276749;">
+          El pedido #OV-5023 (Embalajes Levante) está terminado y ubicado en el <strong>Muelle 1</strong>.
+        </div>
+
+        <div class="form-group">
+          <label>Bultos Confirmados</label>
+          <input type="text" value="10 Palets Europeos (Plastificados)" disabled style="background-color: #f8fafc;" />
+        </div>
+
+        <div class="form-group">
+          <label>Agencia de Transporte</label>
+          <select>
+            <option>TransAlicante Express (Habitual)</option>
+            <option>Logística del Sur</option>
+            <option>Recogida por el propio cliente</option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('albaranSalidaModal')">Cancelar</button>
+          <button class="btn btn-primary" style="background-color: var(--success-text); border-color: var(--success-text);" onclick="closeModal('albaranSalidaModal'); showToast('Albarán ALB-S-102 generado e impreso en muelle.', 'success')">Emitir y Notificar a Logística</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Lanzar Producción -->
+    <div class="modal-overlay" id="lanzarProduccionModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Lanzar Orden de Fabricación (OF)</h3>
+          <button class="modal-close" onclick="closeModal('lanzarProduccionModal')">&times;</button>
+        </div>
+        
+        <p style="font-size: 0.85rem; margin-bottom: 16px;">Vas a enviar el pedido <strong>#OV-5020</strong> (Plásticos Industriales SA) a la cola de fabricación de la planta.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label>Máquina / Línea Asignada</label>
+            <select>
+              <option>Extrusora 1 (Libre)</option>
+              <option>Extrusora 2 (Ocupada - En cola)</option>
+              <option>Inyectora Principal</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Prioridad</label>
+            <select>
+              <option>Normal (Por orden de llegada)</option>
+              <option style="color: #dd6b20;">Alta (Adelantar en cola)</option>
+              <option style="color: #c53030;">Urgente (Parar máquina actual)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('lanzarProduccionModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('lanzarProduccionModal'); showToast('Orden de Fabricación enviada a los terminales de planta.', 'success')">🚀 Lanzar a Planta</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Nuevo Cliente (CRM) -->
+    <div class="modal-overlay" id="nuevoClienteModal">
+      <div class="modal-content" style="max-width: 650px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Alta de Nuevo Cliente</h3>
+          <button class="modal-close" onclick="closeModal('nuevoClienteModal')">&times;</button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Razón Social (Empresa)</label>
+            <input type="text" placeholder="Ej: Confecciones del Norte SL" />
+          </div>
+          <div class="form-group">
+            <label>CIF / NIF</label>
+            <input type="text" placeholder="Ej: B-12345678" />
+          </div>
+          <div class="form-group">
+            <label>Sector / Actividad</label>
+            <select>
+              <option>Textil y Confección</option>
+              <option>Plásticos y Envases</option>
+              <option>Distribución Mayorista</option>
+              <option>Otros</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Persona de Contacto</label>
+            <input type="text" placeholder="Nombre completo" />
+          </div>
+          <div class="form-group">
+            <label>Teléfono Directo</label>
+            <input type="tel" placeholder="+34..." />
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Email de Facturación / Pedidos</label>
+            <input type="email" placeholder="administracion@empresa.com" />
+          </div>
+          <div class="form-group">
+            <label>Condiciones de Pago (Autorizadas por Finanzas)</label>
+            <select>
+              <option>Pago Anticipado (Nuevo Cliente)</option>
+              <option>Contado a la entrega</option>
+              <option>30 días fecha factura</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Categoría (Tier)</label>
+            <select>
+              <option>Cliente Regular (Tier 2)</option>
+              <option>Cliente VIP (Tier 1)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('nuevoClienteModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('nuevoClienteModal'); showToast('Cliente guardado en la base de datos', 'success')">Guardar Cliente</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Visor PDF Simulado -->
+    <div class="modal-overlay" id="visorPDFModal">
+      <div class="modal-content" style="max-width: 700px; height: 80vh; display: flex; flex-direction: column;">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main);">Visor de Factura (PDF)</h3>
+          <button class="modal-close" onclick="closeModal('visorPDFModal')">&times;</button>
+        </div>
+        <div style="flex-grow: 1; background-color: #525659; display: flex; align-items: center; justify-content: center; border-radius: 4px;">
+          <div style="background-color: white; width: 80%; height: 90%; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 16px;">
+             <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px;">
+                <h2 style="color: #2d3748; margin: 0;">FACTURA</h2>
+                <div style="text-align: right;">
+                   <strong style="display: block;">Fábrica Demo S.L.</strong>
+                   <span style="font-size: 0.75rem; color: #718096;">B-12345678</span>
+                </div>
+             </div>
+             <div style="text-align: center; color: #a0aec0; margin-top: auto; margin-bottom: auto;">[Previsualización interactiva del PDF de la Factura]</div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('visorPDFModal')">Cerrar Visor</button>
+          <button class="btn btn-primary" onclick="showToast('Descargando archivo PDF...', 'success')">Descargar Original</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Reenviar Email -->
+    <div class="modal-overlay" id="reenviarEmailModal">
+      <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main);">Reenviar Factura al Cliente</h3>
+          <button class="modal-close" onclick="closeModal('reenviarEmailModal')">&times;</button>
+        </div>
+        <p style="font-size: 0.85rem; margin-bottom: 16px;">Se enviará una copia en PDF de la factura seleccionada.</p>
+        <div class="form-group">
+          <label>Enviar a:</label>
+          <input type="email" value="pedidos@embalajeslevante.com" />
+        </div>
+        <div class="form-group">
+          <label>Añadir nota al correo (Opcional):</label>
+          <textarea rows="3">Hola, adjunto la factura pendiente para su revisión. Quedamos a la espera del pago. Un saludo.</textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('reenviarEmailModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('reenviarEmailModal'); showToast('Factura reenviada por email con éxito', 'success')">Enviar Email 📤</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Reclamación de Cobro (Ventas) -->
+    <div class="modal-overlay" id="reclamarCobroModal">
+      <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+          <h3 style="color: #c53030;">Reclamación de Cobro (Factura Vencida)</h3>
+          <button class="modal-close" onclick="closeModal('reclamarCobroModal')">&times;</button>
+        </div>
+        <div style="background-color: #fff5f5; padding: 12px; border-radius: 6px; border: 1px dashed #feb2b2; margin-bottom: 20px; font-size: 0.85rem;">
+          Vas a enviar una notificación formal de impago a <strong>Plásticos Industriales SA</strong> por la factura <strong style="color: #c53030;">FAC-26/0892</strong> (3.150,00 €).
+        </div>
+        <div class="form-group">
+          <label>Nivel de Reclamación</label>
+          <select>
+            <option>1º Aviso Amistoso (Recordatorio)</option>
+            <option>2º Aviso (Bloqueo de nuevos pedidos)</option>
+            <option style="color: #c53030;">Aviso Pre-Contencioso (Dpto. Legal)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Añadir nota interna para Finanzas</label>
+          <textarea rows="3" placeholder="Ej: He hablado con el cliente, prometen transferencia el viernes..."></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('reclamarCobroModal')">Cancelar</button>
+          <button class="btn btn-primary" style="background-color: #c53030;" onclick="closeModal('reclamarCobroModal'); showToast('Notificación enviada al cliente y a Finanzas.', 'success')">Enviar Reclamación</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts y Notificaciones compartidas -->
+    <div class="toast-container" id="toastContainer"></div>
+    <div class="notification-drawer" id="notifDrawer">
+      <div class="drawer-header"><h3>Notificaciones Ventas</h3><button class="drawer-close" onclick="toggleNotificaciones()">&times;</button></div>
+      <div class="drawer-body" style="padding: 20px; color: var(--text-muted);">No hay alertas nuevas.</div>
+    </div>
+
+    <script>
+      function activateNav(clickedElement) {
+        document.querySelectorAll(".nav-item").forEach(item => item.classList.remove("active"));
+        clickedElement.classList.add("active");
+        
+        const targetId = clickedElement.getAttribute("data-target");
+        document.querySelectorAll(".view-section").forEach(section => section.classList.remove("active"));
+        
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) targetSection.classList.add("active");
+        
+        let cleanText = clickedElement.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '').replace(/[0-9]/g, '').trim();
+        document.getElementById("topbar-title-text").textContent = cleanText;
+      }
+
+      function toggleNotificaciones() {
+        document.getElementById('notifDrawer').classList.toggle('active');
+      }
+
+      function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️');
+        toast.innerHTML = `<span style="font-size: 1.2rem;">${icon}</span> <p style="font-weight: 500; font-size: 0.9rem; margin:0;">${message}</p>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
+      }
+
+      // Funciones universales para abrir y cerrar modales
+      function openModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.classList.add('active');
+      }
+
+      function closeModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.classList.remove('active');
+      }
+
+      // Cerrar modales clicando fuera del recuadro
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal-overlay')) {
+          e.target.classList.remove('active');
+        }
+      });
+
+      // Función para el Desplegable de Filtros
+      function toggleDropdown(id) {
+        const dropdown = document.getElementById(id);
+        if (dropdown) {
+          dropdown.classList.toggle('active');
+        }
+      }
+      
+      // Cerrar el desplegable si se hace clic fuera de él
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.dropdown-container')) {
+          document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            menu.classList.remove('active');
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

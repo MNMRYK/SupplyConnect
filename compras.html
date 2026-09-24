@@ -1,0 +1,2463 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portal de Gestión de Proveedores - Demo</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <!-- Icon placeholder -->
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          style="color: var(--primary)"
+        >
+          <path
+            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+          ></path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
+        <h2>SupplyConnect</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <a
+          class="nav-item active"
+          data-target="dashboard"
+          onclick="activateNav(this)"
+        >
+          Dashboard
+        </a>
+        <a class="nav-item" data-target="pedidos" onclick="activateNav(this)">
+          Gestión de Pedidos
+        </a>
+        <a
+          class="nav-item"
+          data-target="proveedores"
+          onclick="activateNav(this)"
+        >
+          Directorio Proveedores
+        </a>
+        <a class="nav-item" data-target="calidad" onclick="activateNav(this)">
+          Control de Calidad
+        </a>
+        <a class="nav-item" data-target="comunicaciones" onclick="activateNav(this)">
+          Comunicaciones <span style="margin-left: auto; background-color: #e53e3e; color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; font-weight: 700;">3</span>
+        </a>
+        <a
+          class="nav-item"
+          data-target="facturacion"
+          onclick="activateNav(this)"
+        >
+          Facturación y Pagos
+        </a>
+        <div style="height: 1px; background-color: var(--border-color); margin: 24px 24px 16px 24px;"></div>
+        
+        <a class="nav-item" data-target="mi-perfil" onclick="activateNav(this)">
+          Mi Perfil
+        </a>
+        <a class="nav-item" data-target="configuracion-erp" onclick="activateNav(this)">
+          Configuración ERP
+        </a>
+        <a class="nav-item" style="color: var(--alert-text); margin-top: auto;" href="index.html">
+          Cerrar Sesión
+        </a>
+      </nav>
+    </aside>
+
+    <div class="main-content">
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1 id="topbar-title-text">Panel de Control Principal</h1>
+        </div>
+        <div class="user-profile">
+          
+          <!-- Campana -->
+          <div class="notification-bell" onclick="toggleNotificaciones()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <div class="notification-dot"></div>
+          </div>
+
+          <!-- Perfil Fijo (Sin desplegable) -->
+          <div style="display: flex; align-items: center; gap: 12px; margin-left: 8px;">
+            <div class="avatar">CF</div>
+            <div class="user-info">
+              <span class="user-name">Carlos Ferrándiz</span>
+              <span class="user-role">Jefe de Compras</span>
+            </div>
+          </div>
+
+        </div>
+      </header>
+
+      <main class="dashboard-container">
+        <section id="dashboard" class="view-section active">
+          <div class="dashboard-grid">
+            <!-- KPIs Rápidos -->
+            <div class="kpi-container col-span-12">
+              <div class="kpi-card">
+                <div class="kpi-title">Pedidos Activos</div>
+                <div class="kpi-value">18</div>
+                <div class="kpi-trend positive">↑ 2 desde ayer</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-title">Incidencias Calidad</div>
+                <div class="kpi-value" style="color: var(--alert-text)">2</div>
+                <div class="kpi-trend negative">↓ Revisión urgente</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-title">Entregas a Tiempo</div>
+                <div class="kpi-value">94%</div>
+                <div class="kpi-trend positive">↑ Óptimo</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-title">Presupuesto Mensual</div>
+                <div class="kpi-value">68%</div>
+                <div class="kpi-trend neutral">Gastado (120k €)</div>
+              </div>
+            </div>
+
+            <!-- Gráfico visual de presupuesto (CSS puro) -->
+            <div class="card col-span-12">
+              <div class="card-header">
+                <h3 class="card-title">
+                  Distribución de Gasto por Material (Mes actual)
+                </h3>
+              </div>
+              <div class="chart-container">
+                <div class="chart-row">
+                  <span class="chart-label">Textil (Algodón/Poliéster)</span>
+                  <div class="chart-bar-bg">
+                    <div
+                      class="chart-bar-fill"
+                      style="width: 65%; background-color: #4299e1"
+                    ></div>
+                  </div>
+                  <span class="chart-value">65%</span>
+                </div>
+                <div class="chart-row">
+                  <span class="chart-label">Plásticos (Granza PE/PET)</span>
+                  <div class="chart-bar-bg">
+                    <div
+                      class="chart-bar-fill"
+                      style="width: 25%; background-color: #48bb78"
+                    ></div>
+                  </div>
+                  <span class="chart-value">25%</span>
+                </div>
+                <div class="chart-row">
+                  <span class="chart-label">Químicos y Tintes</span>
+                  <div class="chart-bar-bg">
+                    <div
+                      class="chart-bar-fill"
+                      style="width: 10%; background-color: #ecc94b"
+                    ></div>
+                  </div>
+                  <span class="chart-value">10%</span>
+                </div>
+              </div>
+            </div>
+            <!-- Alertas Widget -->
+            <div class="card col-span-12">
+              <div class="card-header">
+                <h3 class="card-title">
+                  Alertas de Suministro (Roturas y Retrasos)
+                </h3>
+              </div>
+              <div class="alert-box">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-content">
+                  <p>
+                    ¡Atención! El contenedor de Hilo de Poliéster de Asia
+                    (Pedido #8842) lleva 5 días de retraso.
+                  </p>
+                  <span
+                    >Impacto estimado en producción: Línea 3 (Tejeduría) en
+                    riesgo de paro para el jueves.</span
+                  >
+                </div>
+              </div>
+              <div
+                class="alert-box"
+                style="
+                  background-color: var(--warning-bg);
+                  border-color: var(--warning-border);
+                "
+              >
+                <div class="alert-icon" style="color: var(--warning-text)">
+                  ⏱️
+                </div>
+                <div class="alert-content">
+                  <p style="color: var(--warning-text)">
+                    Stock de Colorante Azul (Cód. 45-B) por debajo del mínimo de
+                    seguridad.
+                  </p>
+                  <span style="color: var(--warning-text)"
+                    >Consumo mensual: 200kg | Stock actual: 45kg.</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Scoring Proveedores -->
+            <div class="card col-span-8">
+              <div class="card-header">
+                <h3 class="card-title">Top Proveedores (Scoring Mensual)</h3>
+                <button
+                  class="btn btn-outline"
+                  onclick="
+                    document
+                      .querySelector('[data-target=\'proveedores\']')
+                      .click()
+                  "
+                >
+                  Ver Directorio Completo
+                </button>
+              </div>
+              <ul class="score-list">
+                <li class="score-item">
+                  <div class="score-info">
+                    <h4>Plásticos Paco SL</h4>
+                    <p>Granza de Polietileno (PE) y Cajas</p>
+                  </div>
+                  <div style="display: flex; gap: 8px">
+                    <span class="score-badge">98% Entregas a tiempo</span>
+                    <span class="score-badge">100% Calidad</span>
+                  </div>
+                </li>
+                <li class="score-item">
+                  <div class="score-info">
+                    <h4>Textiles Aitana SA</h4>
+                    <p>Bobinas de Algodón Peinado</p>
+                  </div>
+                  <div style="display: flex; gap: 8px">
+                    <span class="score-badge">95% Entregas a tiempo</span>
+                    <span
+                      class="score-badge"
+                      style="
+                        background: var(--warning-bg);
+                        color: var(--warning-text);
+                        border-color: var(--warning-border);
+                      "
+                      >92% Calidad</span
+                    >
+                  </div>
+                </li>
+                <li class="score-item">
+                  <div class="score-info">
+                    <h4>Químicas Levantinas</h4>
+                    <p>Tintes y Productos Auxiliares</p>
+                  </div>
+                  <div style="display: flex; gap: 8px">
+                    <span class="score-badge">99% Entregas a tiempo</span>
+                    <span class="score-badge">98% Calidad</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Conciliación Albaranes -->
+            <div
+              class="card col-span-4"
+              style="
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+              "
+            >
+              <div>
+                <div class="card-header">
+                  <h3 class="card-title">Estado de Facturación</h3>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem">
+                  Albaranes recibidos pendientes de facturar este mes:
+                </p>
+                <div class="summary-number">12</div>
+                <p
+                  style="
+                    color: var(--text-muted);
+                    font-size: 0.85rem;
+                    margin-bottom: 24px;
+                  "
+                >
+                  Valor estimado: 24.500 €
+                </p>
+              </div>
+              <button
+                class="btn btn-primary"
+                style="width: 100%"
+                onclick="
+                  document
+                    .querySelector('[data-target=\'facturacion\']')
+                    .click()
+                "
+              >
+                Revisar Conciliación
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section id="pedidos" class="view-section">
+          <!-- Gestión de Pedidos Recientes -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                Últimas Recepciones e Inspecciones de Calidad
+              </h3>
+              <button
+                class="btn btn-primary"
+                onclick="
+                  document
+                    .getElementById('nuevoPedidoModal')
+                    .classList.add('active')
+                "
+              >
+                Nuevo Pedido
+              </button>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID Pedido / Lote</th>
+                    <th>Proveedor</th>
+                    <th>Material</th>
+                    <th>Estado de Recepción</th>
+                    <th>Trazabilidad / Certificado</th>
+                    <th style="text-align: right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  </tr>
+                    <td>
+                      <strong>#9021</strong><br />
+                      <span style="font-size: 0.8rem; color: var(--text-muted)"
+                        >Lote: L-2023-99</span
+                      >
+                    </td>
+                    <td>Textiles Aitana SA</td>
+                    <td>Bobinas Algodón 100%</td>
+                    <td>
+                      <span style="color: var(--success-text); font-weight: 500"
+                        >✓ Recibido y Validado</span
+                      >
+                    </td>
+                    <td>
+                      <span class="tag tag-success">OEKO-TEX</span>
+                      <span class="tag tag-neutral">GOTS</span>
+                    </td>
+                    <td style="text-align: right">
+                      <button
+                        class="btn btn-outline"
+                        onclick="
+                          activateNav({
+                            classList: { add: () => {} },
+                            getAttribute: () => 'detalle-pedido',
+                            textContent: 'Detalle de Pedido',
+                          })
+                        "
+                      >
+                        Ver Detalle
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <strong>#9010</strong><br />
+                      <span style="font-size: 0.8rem; color: var(--text-muted)"
+                        >Lote: P-CART-01</span
+                      >
+                    </td>
+                    <td>Cartonajes Levante</td>
+                    <td>Cajas de Embalaje Doble Canal (500 uds)</td>
+                    <td>
+                      <span style="color: #3182ce; font-weight: 500"
+                        >🚚 En Tránsito</span
+                      >
+                    </td>
+                    <td>
+                      <span
+                        class="tag tag-success"
+                        style="
+                          background-color: #d1fae5;
+                          color: #065f46;
+                          border-color: #34d399;
+                        "
+                        >FSC Maderas</span
+                      >
+                    </td>
+                    <td style="text-align: right">
+                      <button
+                        class="btn btn-outline"
+                        onclick="
+                          activateNav({
+                            classList: { add: () => {} },
+                            getAttribute: () => 'detalle-pedido',
+                            textContent: 'Detalle de Pedido',
+                          })
+                        "
+                      >
+                        Ver Detalle
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>#9008</strong><br />
+                      <span style="font-size: 0.8rem; color: var(--text-muted)"
+                        >Lote: POL-33X</span
+                      >
+                    </td>
+                    <td>Hilaturas Alcoyanas</td>
+                    <td>Bobinas Poliéster Alta Tenacidad</td>
+                    <td>
+                      <span style="color: #dd6b20; font-weight: 500"
+                        >Pendiente Control Calidad</span
+                      >
+                    </td>
+                    <td>
+                      <span
+                        class="tag tag-neutral"
+                        style="
+                          background-color: #e0e7ff;
+                          color: #3730a3;
+                          border-color: #a5b4fc;
+                        "
+                        >GRS (Reciclado)</span
+                      >
+                    </td>
+                    <td style="text-align: right">
+                      <button
+                        class="btn btn-outline"
+                        onclick="
+                          activateNav({
+                            classList: { add: () => {} },
+                            getAttribute: () => 'detalle-pedido',
+                            textContent: 'Detalle de Pedido',
+                          })
+                        "
+                      >
+                        Ver Detalle
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>#8995</strong><br />
+                      <span style="font-size: 0.8rem; color: var(--text-muted)"
+                        >Lote: TINT-R4</span
+                      >
+                    </td>
+                    <td>Colorantes del Sur SL</td>
+                    <td>Colorante Textil Rojo Fuego (20 Bidones)</td>
+                    <td>
+                      <span style="color: var(--success-text); font-weight: 500"
+                        >✓ Recibido y Validado</span
+                      >
+                    </td>
+                    <td>
+                      <span
+                        class="tag tag-info"
+                        style="
+                          background-color: #fce7f3;
+                          color: #9d174d;
+                          border-color: #fbcfe8;
+                        "
+                        >Norma REACH</span
+                      >
+                    </td>
+                    <td style="text-align: right">
+                      <button
+                        class="btn btn-outline"
+                        onclick="
+                          activateNav({
+                            classList: { add: () => {} },
+                            getAttribute: () => 'detalle-pedido',
+                            textContent: 'Detalle de Pedido',
+                          })
+                        "
+                      >
+                        Ver Detalle
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <strong>#9022</strong><br />
+                      <span style="font-size: 0.8rem; color: var(--text-muted)"
+                        >Lote: P-450-XZ</span
+                      >
+                    </td>
+                    <td>Plásticos Paco SL</td>
+                    <td>Granza PET Transparente (2000kg)</td>
+                    <td>
+                      <span style="color: #dd6b20; font-weight: 500"
+                        >Pendiente Control Calidad</span
+                      >
+                    </td>
+                    <td>
+                      <span class="tag tag-info">ISO-9001</span>
+                      <span class="tag tag-neutral">Ficha Seguridad</span>
+                    </td>
+                    <td style="text-align: right">
+                      <button
+                        class="btn btn-outline"
+                        onclick="
+                          activateNav({
+                            classList: { add: () => {} },
+                            getAttribute: () => 'detalle-pedido',
+                            textContent: 'Detalle de Pedido',
+                          })
+                        "
+                      >
+                        Ver Detalle
+                      </button>
+                    </td>
+                  </tr>
+                  <tr style="background-color: var(--alert-bg)">
+                    <td>
+                      <strong>#9015</strong><br />
+                      <span style="font-size: 0.8rem; color: var(--text-muted)"
+                        >Lote: Q-90-BB</span
+                      >
+                    </td>
+                    <td>Químicas Unidas</td>
+                    <td>Decolorante Industrial (Palet)</td>
+                    <td>
+                      <span style="color: var(--alert-text); font-weight: 600"
+                        >Defectuoso (Rotura)</span
+                      >
+                    </td>
+                    <td>
+                      <span class="tag tag-neutral">ISO-14001</span>
+                    </td>
+                    <td style="text-align: right">
+                      <button
+                        class="btn btn-warning"
+                        onclick="
+                          openRMAModal(
+                            '#9015',
+                            'Químicas Unidas',
+                            'Decolorante Industrial',
+                          )
+                        "
+                      >
+                        ⚠️ Abrir Incidencia (RMA)
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+        
+        <section id="proveedores" class="view-section">
+          <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <h3 class="card-title">Directorio y Scoring de Proveedores</h3>
+              <div style="display: flex; gap: 16px; align-items: center;">
+                <div class="search-box">
+                  <input type="text" placeholder="Buscar proveedor, CIF o email..." style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md); min-width: 250px;" />
+                </div>
+                <button class="btn btn-primary" onclick="openModal('nuevoProveedorModal')">+ Nuevo Proveedor</button>
+              </div>
+            </div>
+            
+            <ul class="score-list">
+              <!-- Textiles Aitana (El que abriremos) -->
+              <li class="score-item" style="padding: 20px 0">
+                <div class="score-info">
+                  <h4 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 4px;">Textiles Aitana SA</h4>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">CIF: A-03000000 | Suministro: Bobinas de Algodón Peinado y Mezclas</p>
+                  <div style="font-size: 0.8rem; color: var(--primary);">pedidos@textilesaitana.es | Tel: 965 11 22 33</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                  <div style="display: flex; gap: 8px;">
+                    <span class="score-badge">92% Entregas a tiempo</span>
+                    <span class="score-badge" style="background: var(--warning-bg); color: var(--warning-text); border-color: var(--warning-border);">88% Calidad Lotes</span>
+                  </div>
+                  <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="activateNav({classList: { add: () => {} }, getAttribute: () => 'ficha-proveedor', textContent: 'Ficha Proveedor'})">Ver Ficha</button>
+                </div>
+              </li>
+              
+              <!-- Plásticos Paco -->
+              <li class="score-item" style="padding: 20px 0">
+                <div class="score-info">
+                  <h4 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 4px;">Plásticos Paco SL</h4>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">CIF: B-03445566 | Suministro: Granza de Polietileno (PE) y Cajas</p>
+                  <div style="font-size: 0.8rem; color: var(--primary);">logistica@plasticospaco.com | Tel: 965 55 55 55</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                  <div style="display: flex; gap: 8px;">
+                    <span class="score-badge">95% Entregas a tiempo</span>
+                    <span class="score-badge">100% Calidad Lotes</span>
+                  </div>
+                  <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="showToast('Simulación: Ficha de Plásticos Paco', 'info')">Ver Ficha</button>
+                </div>
+              </li>
+
+              <!-- Cartonajes Levante -->
+              <li class="score-item" style="padding: 20px 0">
+                <div class="score-info">
+                  <h4 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 4px;">Cartonajes Levante</h4>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">CIF: B-46112233 | Suministro: Cajas, Tubos y Embalaje de Cartón</p>
+                  <div style="font-size: 0.8rem; color: var(--primary);">ventas@cartonajeslevante.com | Tel: 962 33 44 55</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                  <div style="display: flex; gap: 8px;">
+                    <span class="score-badge">98% Entregas a tiempo</span>
+                    <span class="score-badge">99% Calidad Lotes</span>
+                  </div>
+                  <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="showToast('Simulación: Ficha de Cartonajes Levante', 'info')">Ver Ficha</button>
+                </div>
+              </li>
+
+              <!-- Hilaturas Alcoyanas -->
+              <li class="score-item" style="padding: 20px 0">
+                <div class="score-info">
+                  <h4 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 4px;">Hilaturas Alcoyanas</h4>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">CIF: A-03556677 | Suministro: Hilos Sintéticos y Refuerzos</p>
+                  <div style="font-size: 0.8rem; color: var(--primary);">comercial@hilaturasalcoyanas.es | Tel: 965 54 32 10</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                  <div style="display: flex; gap: 8px;">
+                    <span class="score-badge" style="background: var(--warning-bg); color: var(--warning-text); border-color: var(--warning-border);">85% Entregas a tiempo</span>
+                    <span class="score-badge">95% Calidad Lotes</span>
+                  </div>
+                  <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="showToast('Simulación: Ficha de Hilaturas Alcoyanas', 'info')">Ver Ficha</button>
+                </div>
+              </li>
+
+              <!-- Colorantes del Sur SL -->
+              <li class="score-item" style="padding: 20px 0">
+                <div class="score-info">
+                  <h4 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 4px;">Colorantes del Sur SL</h4>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">CIF: B-41998877 | Suministro: Tintes Industriales y Aditivos</p>
+                  <div style="font-size: 0.8rem; color: var(--primary);">pedidos@colorantessur.com | Tel: 954 11 22 33</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                  <div style="display: flex; gap: 8px;">
+                    <span class="score-badge">99% Entregas a tiempo</span>
+                    <span class="score-badge">100% Calidad Lotes</span>
+                  </div>
+                  <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="showToast('Simulación: Ficha de Colorantes del Sur', 'info')">Ver Ficha</button>
+                </div>
+              </li>
+
+              <!-- Químicas Unidas -->
+              <li class="score-item" style="padding: 20px 0">
+                <div class="score-info">
+                  <h4 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 4px;">Químicas Unidas</h4>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">CIF: A-28443322 | Suministro: Decolorantes y Químicos Base</p>
+                  <div style="font-size: 0.8rem; color: var(--primary);">suministros@quimicasunidas.es | Tel: 910 55 44 33</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                  <div style="display: flex; gap: 8px;">
+                    <span class="score-badge">96% Entregas a tiempo</span>
+                    <span class="score-badge" style="background: var(--alert-bg); color: var(--alert-text); border-color: var(--alert-border);">75% Calidad Lotes</span>
+                  </div>
+                  <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="showToast('Simulación: Ficha de Químicas Unidas', 'info')">Ver Ficha</button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Vista de Ficha de Proveedor (Expediente) -->
+        <section id="ficha-proveedor" class="view-section">
+          <!-- Cabecera de Ficha -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+            <div style="display: flex; gap: 20px; align-items: center;">
+              <button class="btn btn-outline" onclick="document.querySelector('[data-target=\'proveedores\']').click()" style="padding: 6px 12px">← Volver al Directorio</button>
+              <div>
+                <h2 style="font-size: 1.8rem; color: var(--text-main); margin-bottom: 4px;">Textiles Aitana SA</h2>
+                <span class="tag tag-success" style="font-size: 0.8rem;">Proveedor Homologado (Nivel A)</span>
+                <span class="tag tag-neutral" style="font-size: 0.8rem;">Desde 2018</span>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <button class="btn btn-outline" onclick="openModal('enviarMensajeModal')">Enviar Mensaje</button>
+              <button class="btn btn-outline" onclick="openModal('editarProveedorModal')">Editar Datos</button>
+              <button class="btn btn-primary" onclick="openModal('nuevoPedidoModal')">+ Nuevo Pedido</button>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <!-- Columna Izquierda: Datos e Historial de Pedidos -->
+            <div class="col-span-8" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Info de Contacto -->
+              <div class="card" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                <div>
+                  <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 600;">Contacto Comercial</p>
+                  <p style="font-weight: 500; font-size: 0.9rem; margin-top: 4px;">María López</p>
+                  <p style="font-size: 0.85rem; color: var(--primary);">pedidos@textilesaitana.es</p>
+                  <p style="font-size: 0.85rem;">Tel: +34 965 11 22 33</p>
+                </div>
+                <div>
+                  <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 600;">Datos Fiscales</p>
+                  <p style="font-weight: 500; font-size: 0.9rem; margin-top: 4px;">CIF: A-03000000</p>
+                  <p style="font-size: 0.85rem;">Pol. Ind. Cotes Altes, Nave 4</p>
+                  <p style="font-size: 0.85rem;">03804 Alcoy (Alicante)</p>
+                </div>
+                <div>
+                  <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 600;">Condiciones Pactadas</p>
+                  <p style="font-size: 0.85rem; margin-top: 4px;"><strong>Pago:</strong> 60 días f.f.</p>
+                  <p style="font-size: 0.85rem;"><strong>Incoterm:</strong> DDP (Portes pagados)</p>
+                  <p style="font-size: 0.85rem;"><strong>Rappel:</strong> 2% anual > 100k€</p>
+                </div>
+              </div>
+
+              <!-- Historial de Pedidos -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Historial Reciente de Pedidos (PO)</h3>
+                </div>
+                <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                  <thead style="border-bottom: 2px solid var(--border-color);">
+                    <tr>
+                      <th style="padding: 12px 8px; text-align: left;">Nº Pedido</th>
+                      <th style="padding: 12px 8px; text-align: left;">Fecha</th>
+                      <th style="padding: 12px 8px; text-align: left;">Artículos Clave</th>
+                      <th style="padding: 12px 8px; text-align: right;">Total</th>
+                      <th style="padding: 12px 8px; text-align: center;">Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 12px 8px; font-weight: 600; color: var(--primary);">#9021</td>
+                      <td style="padding: 12px 8px;">10/10/2023</td>
+                      <td style="padding: 12px 8px; color: var(--text-muted);">Bobinas Algodón 100% Peinado...</td>
+                      <td style="padding: 12px 8px; text-align: right; font-weight: 600;">3.049,20 €</td>
+                      <td style="padding: 12px 8px; text-align: center;"><span class="tag tag-success">Recibido</span></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 12px 8px; font-weight: 600; color: var(--primary);">#8850</td>
+                      <td style="padding: 12px 8px;">15/09/2023</td>
+                      <td style="padding: 12px 8px; color: var(--text-muted);">Hilo Sintético Refuerzo...</td>
+                      <td style="padding: 12px 8px; text-align: right; font-weight: 600;">1.250,00 €</td>
+                      <td style="padding: 12px 8px; text-align: center;"><span class="tag tag-success">Recibido</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 12px 8px; font-weight: 600; color: var(--primary);">#8722</td>
+                      <td style="padding: 12px 8px;">02/08/2023</td>
+                      <td style="padding: 12px 8px; color: var(--text-muted);">Bobinas Algodón Mezcla...</td>
+                      <td style="padding: 12px 8px; text-align: right; font-weight: 600;">4.100,50 €</td>
+                      <td style="padding: 12px 8px; text-align: center;"><span class="tag tag-success">Recibido</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Columna Derecha: Finanzas y Comunicaciones -->
+            <div class="col-span-4" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Estado Financiero -->
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px;">Estado de Pagos y Facturas</h3>
+                
+                <div style="background-color: #fff5f5; border: 1px solid #feb2b2; padding: 16px; border-radius: var(--radius-md); margin-bottom: 16px;">
+                  <p style="color: #c53030; font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Deuda Pendiente (Vencida)</p>
+                  <p style="font-size: 1.8rem; font-weight: 700; color: #c53030;">0,00 €</p>
+                </div>
+
+                <div style="background-color: #f8fafc; border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px;">
+                  <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Facturas por pagar (No vencidas)</p>
+                  <p style="font-size: 1.5rem; font-weight: 700; color: var(--text-main);">4.299,20 €</p>
+                </div>
+
+                <h4 style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: var(--text-muted);">Últimas Facturas</h4>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.85rem; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px;">
+                    <span>📄 FAC-23/901 (10 Oct)</span>
+                    <span style="font-weight: 600; color: #dd6b20;">Pend. Vencimiento</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.85rem; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background-color: #f0fff4;">
+                    <span>📄 FAC-23/850 (15 Sep)</span>
+                    <span style="font-weight: 600; color: var(--success-text);">Pagada</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Historial de Comunicaciones -->
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px;">Registro de Comunicaciones</h3>
+                <div class="timeline" style="margin-left: 8px;">
+                  <div class="timeline-item completed">
+                    <div class="timeline-dot" style="background-color: var(--primary); border-color: var(--primary);"></div>
+                    <div class="timeline-text">
+                      <strong style="color: var(--primary);">✉️ Email Enviado</strong>
+                      <span style="color: var(--text-main);">Reclamación retraso lote #8722</span>
+                      <span>05 Ago - Por: Carlos F.</span>
+                    </div>
+                  </div>
+                  <div class="timeline-item completed">
+                    <div class="timeline-dot" style="background-color: #ecc94b; border-color: #ecc94b;"></div>
+                    <div class="timeline-text">
+                      <strong style="color: #975a16;">📞 Llamada Telefónica</strong>
+                      <span style="color: var(--text-main);">Renegociación tarifas 2024</span>
+                      <span>20 Sep - Atendido por: María L.</span>
+                    </div>
+                  </div>
+                  <div class="timeline-item completed">
+                    <div class="timeline-dot" style="background-color: var(--primary); border-color: var(--primary);"></div>
+                    <div class="timeline-text">
+                      <strong style="color: var(--primary);">✉️ Email Enviado</strong>
+                      <span style="color: var(--text-main);">Envío de Orden de Compra #9021</span>
+                      <span>10 Oct - Por: Sistema Automático</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <section id="calidad" class="view-section">
+          <!-- KPIs de Calidad -->
+          <div class="kpi-container col-span-12" style="margin-bottom: 24px;">
+            <div class="kpi-card">
+              <div class="kpi-title">Pendientes de Revisión</div>
+              <div class="kpi-value">3</div>
+              <div class="kpi-trend neutral">En muelle de cuarentena</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Tasa de Aprobación (Mes)</div>
+              <div class="kpi-value">96.5%</div>
+              <div class="kpi-trend positive">↑ 1.2% vs mes anterior</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Lotes Rechazados</div>
+              <div class="kpi-value" style="color: var(--alert-text);">2</div>
+              <div class="kpi-trend negative">↓ RMA Abiertos</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Inspecciones con "Tara"</div>
+              <div class="kpi-value">1</div>
+              <div class="kpi-trend neutral">Aprobados con desviación menor</div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            
+            <!-- Cola de Trabajo: Inspecciones Pendientes -->
+            <div class="card col-span-12">
+              <div class="card-header">
+                <h3 class="card-title">Muelle de Cuarentena (Lotes pendientes de inspección)</h3>
+              </div>
+              <table style="width: 100%; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden;">
+                <thead style="background: #ebf8ff; border-bottom: 2px solid #bee3f8;">
+                  <tr>
+                    <th style="padding: 12px; color: #2b6cb0;">Prioridad</th>
+                    <th style="padding: 12px; color: #2b6cb0;">Pedido / Proveedor</th>
+                    <th style="padding: 12px; color: #2b6cb0;">Material a Inspeccionar</th>
+                    <th style="padding: 12px; color: #2b6cb0;">Lote Proveedor</th>
+                    <th style="padding: 12px; text-align: right; color: #2b6cb0;">Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px; text-align: center;"><span style="color: var(--alert-text); font-weight: 700;">ALTA</span></td>
+                    <td style="padding: 12px;"><strong>#9008</strong><br><span style="font-size: 0.8rem; color: var(--text-muted);">Hilaturas Alcoyanas</span></td>
+                    <td style="padding: 12px;">Bobinas Poliéster Alta Tenacidad (Palet)</td>
+                    <td style="padding: 12px; font-family: monospace;">POL-33X</td>
+                    <td style="padding: 12px; text-align: right;">
+                      <button class="btn btn-primary" onclick="openModal('inspeccionModal')">Iniciar Check</button>
+                    </td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px; text-align: center;"><span style="color: var(--warning-text); font-weight: 700;">MEDIA</span></td>
+                    <td style="padding: 12px;"><strong>#9022</strong><br><span style="font-size: 0.8rem; color: var(--text-muted);">Plásticos Paco SL</span></td>
+                    <td style="padding: 12px;">Granza PET Transparente (2 Sacas)</td>
+                    <td style="padding: 12px; font-family: monospace;">P-450-XZ</td>
+                    <td style="padding: 12px; text-align: right;">
+                      <button class="btn btn-primary" onclick="openModal('inspeccionModal')">Iniciar Check</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Historial de Auditorías (Últimas 48h) -->
+            <div class="card col-span-12">
+              <div class="card-header">
+                <h3 class="card-title">Registro de Auditorías (Últimas 48h)</h3>
+                <button class="btn btn-outline" style="font-size: 0.8rem; padding: 4px 12px;" onclick="showToast('Exportando informe a Excel...', 'info')">⬇ Exportar a Excel</button>
+              </div>
+              <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                <thead>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <th style="padding: 10px; text-align: left;">Fecha/Hora</th>
+                    <th style="padding: 10px; text-align: left;">Lote</th>
+                    <th style="padding: 10px; text-align: left;">Inspector</th>
+                    <th style="padding: 10px; text-align: center;">Resultado</th>
+                    <th style="padding: 10px; text-align: right;">Certificado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 10px;">14 Oct - 13:00h</td>
+                    <td style="padding: 10px;">L-2023-99 (Textiles Aitana)</td>
+                    <td style="padding: 10px;">Juan M.</td>
+                    <td style="padding: 10px; text-align: center;"><span class="tag tag-success">Apto (Conforme)</span></td>
+                    <td style="padding: 10px; text-align: right;"> <!-- ¡ESTE ES EL TD QUE FALTABA! -->
+                      <button class="btn btn-outline" style="font-size: 0.875rem; padding: 8px 16px;" onclick="openModal('verInformeModal')">Ver Informe</button>
+                    </td>
+                  </tr>
+                  <tr style="background-color: #fff5f5; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 10px;">13 Oct - 09:15h</td>
+                    <td style="padding: 10px;">Q-90-BB (Químicas Unidas)</td>
+                    <td style="padding: 10px;">Carlos F.</td>
+                    <td style="padding: 10px; text-align: center;"><span class="tag" style="background: var(--alert-text); color: white;">Rechazado (Rotura)</span></td>
+                    <td style="padding: 10px; text-align: right;">
+                    <button class="btn btn-outline" style="font-size: 0.875rem; padding: 8px 16px;" onclick="openModal('verRmaDetalleModal')">Ver RMA</button></td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px;">12 Oct - 16:45h</td>
+                    <td style="padding: 10px;">TINT-R4 (Colorantes Sur)</td>
+                    <td style="padding: 10px;">Juan M.</td>
+                    <td style="padding: 10px; text-align: center;"><span class="tag tag-warning" style="background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border);">Apto con Desviación Menor</span></td>
+                    <td style="padding: 10px; text-align: right;"> <!-- ¡ESTE ES EL TD QUE FALTABA! -->
+                      <button class="btn btn-outline" style="font-size: 0.875rem; padding: 8px 16px;" onclick="openModal('verInformeModal')">Ver Informe</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </section>
+
+        <section id="comunicaciones" class="view-section">
+          <div class="card" style="padding: 0; overflow: hidden; display: flex; height: calc(100vh - 160px); min-height: 550px;">
+            
+            <!-- Columna Izquierda: Lista de Contactos / Departamentos -->
+            <div style="width: 320px; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; background-color: #f8fafc;">
+              
+              <!-- Cabecera del Buscador -->
+              <div style="padding: 16px; border-bottom: 1px solid var(--border-color);">
+                <input type="text" placeholder="Buscar trabajador o depto..." style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 0.85rem;" />
+              </div>
+
+              <!-- Listado de Conversaciones -->
+              <div style="flex-grow: 1; overflow-y: auto;">
+                
+                <!-- Departamento Calidad -->
+                <div style="padding: 8px 16px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; background-color: #edf2f7;">
+                  Departamento de Calidad
+                </div>
+                
+                <div style="padding: 12px 16px; display: flex; gap: 12px; align-items: center; background-color: #ebf8ff; border-left: 4px solid var(--primary); cursor: pointer;">
+                  <div style="width: 36px; height: 36px; background-color: #2b6cb0; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85rem;">JM</div>
+                  <div style="flex-grow: 1; overflow: hidden;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                      <strong style="font-size: 0.85rem; color: var(--text-main);">Juan Martínez</strong>
+                      <span style="font-size: 0.7rem; color: var(--text-muted);">11:45</span>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Revisión del lote POL-33X en muelle...</p>
+                  </div>
+                  <span style="width: 8px; height: 8px; background-color: var(--primary); border-radius: 50%;"></span>
+                </div>
+
+                <!-- Departamento Producción / Fábrica -->
+                <div style="padding: 8px 16px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; background-color: #edf2f7; margin-top: 4px;">
+                  Planta y Producción
+                </div>
+
+                <div style="padding: 12px 16px; display: flex; gap: 12px; align-items: center; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
+                  <div style="width: 36px; height: 36px; background-color: #dd6b20; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85rem;">PR</div>
+                  <div style="flex-grow: 1; overflow: hidden;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                      <strong style="font-size: 0.85rem; color: var(--text-main);">Pedro Ruiz (Jefe Planta)</strong>
+                      <span style="font-size: 0.7rem; color: var(--text-muted);">Ayer</span>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Línea 3 parada por falta de hilo...</p>
+                  </div>
+                </div>
+
+                <!-- Departamento Logística y Almacén -->
+                <div style="padding: 8px 16px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; background-color: #edf2f7; margin-top: 4px;">
+                  Logística y Almacén
+                </div>
+
+                <div style="padding: 12px 16px; display: flex; gap: 12px; align-items: center; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
+                  <div style="width: 36px; height: 36px; background-color: #38a169; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85rem;">AN</div>
+                  <div style="flex-grow: 1; overflow: hidden;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                      <strong style="font-size: 0.85rem; color: var(--text-main);">Ana Navarro (Almacén)</strong>
+                      <span style="font-size: 0.7rem; color: var(--text-muted);">12 Oct</span>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Palet de cajas descargado ok.</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Columna Derecha: El Chat Activo -->
+            <div style="flex-grow: 1; display: flex; flex-direction: column; background-color: white;">
+              
+              <!-- Cabecera del Chat -->
+              <div style="padding: 16px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div style="width: 40px; height: 40px; background-color: #2b6cb0; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;">JM</div>
+                  <div>
+                    <h4 style="font-size: 1rem; color: var(--text-main); margin: 0;">Juan Martínez <span style="font-weight: normal; font-size: 0.8rem; color: var(--text-muted);">(Control de Calidad)</span></h4>
+                    <span style="font-size: 0.75rem; color: #38a169;">● En línea en planta</span>
+                  </div>
+                </div>
+                
+                <!-- Etiqueta de Prioridad de la Conversación -->
+                <div>
+                  <span class="tag" style="background-color: #fff5f5; color: #c53030; border: 1px solid #feb2b2; font-weight: 700;">🔥 Prioridad: Urgente</span>
+                </div>
+              </div>
+
+              <!-- Cuerpo de Mensajes -->
+              <div style="flex-grow: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; background-color: #fafbfc;">
+                
+                <!-- Mensaje recibido -->
+                <div style="display: flex; gap: 12px; max-width: 70%;">
+                  <div style="width: 32px; height: 32px; background-color: #2b6cb0; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0;">JM</div>
+                  <div>
+                    <div style="background-color: white; border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 0 12px 12px 12px; font-size: 0.85rem; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                      Hola Carlos, oye una consulta sobre el pedido de Hilaturas Alcoyanas (Lote POL-33X). ¿Les exigimos el certificado GRS antes de meterlo en producción o vale con la ficha técnica?
+                    </div>
+                    <span style="font-size: 0.65rem; color: var(--text-muted); margin-top: 4px; display: inline-block;">11:30h</span>
+                  </div>
+                </div>
+
+                <!-- Mensaje enviado (Carlos) -->
+                <div style="display: flex; gap: 12px; max-width: 70%; align-self: flex-end; flex-direction: row-reverse;">
+                  <div style="width: 32px; height: 32px; background-color: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0;">CF</div>
+                  <div style="text-align: right;">
+                    <div style="background-color: #ebf8ff; border: 1px solid #bee3f8; color: #2b6cb0; padding: 12px 16px; border-radius: 12px 0 12px 12px; font-size: 0.85rem; text-align: left;">
+                      Hola Juan. Con el material de poliéster de este proveedor, el certificado GRS es <strong>obligatorio</strong> según normativa interna. No lo liberes hasta que lo suban al portal.
+                    </div>
+                    <span style="font-size: 0.65rem; color: var(--text-muted); margin-top: 4px; display: inline-block;">11:38h</span>
+                  </div>
+                </div>
+
+                <!-- Mensaje recibido -->
+                <div style="display: flex; gap: 12px; max-width: 70%;">
+                  <div style="width: 32px; height: 32px; background-color: #2b6cb0; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0;">JM</div>
+                  <div>
+                    <div style="background-color: white; border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 0 12px 12px 12px; font-size: 0.85rem; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                      Entendido. Lo dejo retenido en cuarentena y les mando un aviso automático desde calidad. ¡Gracias!
+                    </div>
+                    <span style="font-size: 0.65rem; color: var(--text-muted); margin-top: 4px; display: inline-block;">11:45h</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Pie de Escritura del Chat -->
+              <div style="padding: 16px 24px; border-top: 1px solid var(--border-color); background-color: white; display: flex; gap: 12px; align-items: center;">
+                <input type="text" placeholder="Escribe un mensaje interno a Juan Martínez..." style="flex-grow: 1; padding: 10px 16px; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 0.85rem;" />
+                <button class="btn btn-outline" style="padding: 10px 14px;" onclick="showToast('Archivo adjuntado al chat', 'info')">📎</button>
+                <button class="btn btn-primary" onclick="showToast('Mensaje interno enviado con éxito', 'success')">Enviar</button>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+        <section id="facturacion" class="view-section">
+          <!-- KPIs Financieros -->
+          <div class="kpi-container col-span-12" style="margin-bottom: 24px;">
+            <div class="kpi-card">
+              <div class="kpi-title">Pendiente de Pago (Deuda)</div>
+              <div class="kpi-value">12.450 €</div>
+              <div class="kpi-trend negative">3 facturas próximas a vencer</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Albaranes sin Factura</div>
+              <div class="kpi-value">5</div>
+              <div class="kpi-trend neutral">Valor est. 8.200 €</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Pendientes de Conciliar</div>
+              <div class="kpi-value" style="color: var(--primary);">2</div>
+              <div class="kpi-trend positive">Facturas recibidas hoy</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Pagado este mes</div>
+              <div class="kpi-value">45.200 €</div>
+              <div class="kpi-trend positive">Presupuesto OK</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <h3 class="card-title">Conciliación y Registro de Facturas</h3>
+              <div style="display: flex; gap: 12px;">
+                <button class="btn btn-outline" onclick="showToast('Exportando datos a SAP/Navision...', 'info')">⬇ Exportar ERP</button>
+                <button class="btn btn-primary" onclick="openModal('nuevaFacturaModal')">+ Registrar Factura</button>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table style="width: 100%; font-size: 0.85rem;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--border-color); background-color: #f8fafc;">
+                    <th style="padding: 12px; text-align: left;">Factura Prov.</th>
+                    <th style="padding: 12px; text-align: left;">Proveedor</th>
+                    <th style="padding: 12px; text-align: left;">Albaranes Asoc.</th>
+                    <th style="padding: 12px; text-align: right;">Importe</th>
+                    <th style="padding: 12px; text-align: center;">Vencimiento</th>
+                    <th style="padding: 12px; text-align: center;">Estado (Conciliación)</th>
+                    <th style="padding: 12px; text-align: right;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Factura Conciliada y Pendiente de Pago -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px;"><strong>FAC-99201</strong></td>
+                    <td style="padding: 12px;">Textiles Aitana SA</td>
+                    <td style="padding: 12px;"><span style="font-family: monospace; color: var(--text-muted);">ALB-2023-441</span></td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600;">3.049,20 €</td>
+                    <td style="padding: 12px; text-align: center;">10/12/2023</td>
+                    <td style="padding: 12px; text-align: center;">
+                      <!-- Cambio aquí: display flex con column y align-items center para que no se expandan -->
+                      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                        <span class="tag tag-success">✓ Conciliada OK</span>
+                        <span class="tag tag-neutral" style="background-color: #fff5f5; color: #c53030; border-color: #feb2b2;">Pendiente Pago</span>
+                      </div>
+                    </td>
+                    <td style="padding: 12px; text-align: right; vertical-align: middle;">
+                      <!-- Cambio aquí: Eliminado el display flex complejo y sustituido por alineación natural -->
+                      <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="showToast('Descargando PDF factura...', 'info')">📄 PDF</button>
+                      <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem; margin-left: 4px;" onclick="showToast('Marcando como pagada en ERP...', 'success')">Marcar Pagada</button>
+                    </td>
+                  </tr>
+
+                  <!-- Factura Pagada -->
+                  <tr style="border-bottom: 1px solid var(--border-color); background-color: #f8fafc;">
+                    <td style="padding: 12px;"><strong>F-23-449</strong></td>
+                    <td style="padding: 12px;">Cartonajes Levante</td>
+                    <td style="padding: 12px;"><span style="font-family: monospace; color: var(--text-muted);">ALB-23-09, ALB-23-11</span></td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600;">1.200,00 €</td>
+                    <td style="padding: 12px; text-align: center; color: var(--text-muted);">15/10/2023</td>
+                    <td style="padding: 12px; text-align: center;">
+                      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                        <span class="tag tag-success">✓ Conciliada OK</span>
+                        <span class="tag tag-success" style="background-color: #e6fffa; color: #234e52; border-color: #81e6d9;">Pagada</span>
+                      </div>
+                    </td>
+                    <td style="padding: 12px; text-align: right; vertical-align: middle;">
+                      <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.875rem;" onclick="showToast('Descargando PDF factura...', 'info')">📄 PDF</button>
+                    </td>
+                  </tr>
+
+                  <!-- Albarán sin factura -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px; color: var(--text-muted);">-- (Esperando)</td>
+                    <td style="padding: 12px;">Plásticos Paco SL</td>
+                    <td style="padding: 12px;"><span style="font-family: monospace; color: var(--text-main); font-weight: 600;">ALB-2023-455</span></td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600; color: var(--text-muted);">~850,00 € (Est.)</td>
+                    <td style="padding: 12px; text-align: center;">--</td>
+                    <td style="padding: 12px; text-align: center;">
+                      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                        <span class="tag tag-warning" style="background-color: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border);">Falta Factura Prov.</span>
+                      </div>
+                    </td>
+                    <td style="padding: 12px; text-align: right; vertical-align: middle;">
+                      <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.875rem;" onclick="openModal('nuevaFacturaModal')">Vincular Factura</button>
+                    </td>
+                  </tr>
+
+                  <!-- Factura con descuadre (Problema) -->
+                  <tr>
+                    <td style="padding: 12px;"><strong>A/4499-B</strong></td>
+                    <td style="padding: 12px;">Químicas Unidas</td>
+                    <td style="padding: 12px;"><span style="font-family: monospace; color: var(--text-muted);">ALB-90-BB</span></td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600;">4.500,00 €</td>
+                    <td style="padding: 12px; text-align: center;">30/11/2023</td>
+                    <td style="padding: 12px; text-align: center;">
+                      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                        <span class="tag" style="background-color: #fff5f5; color: #c53030; border: 1px solid #feb2b2;">Descuadre Importe</span>
+                      </div>
+                    </td>
+                    <td style="padding: 12px; text-align: right; vertical-align: middle;">
+                      <button class="btn btn-outline" style="color: #c53030;" onclick="showToast('Abriendo incidencia financiera...', 'error')">⚠️ Reclamar</button>
+                      <button class="btn btn-outline" style="margin-top: 5px;" onclick="openModal('conciliarModal')">Conciliar Manual</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="detalle-pedido" class="view-section">
+          <!-- Cabecera de Acciones Rápidas -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <button class="btn btn-outline" onclick="document.querySelector('[data-target=\'pedidos\']').click()" style="padding: 6px 12px">
+                ← Volver
+              </button>
+              <h2 style="font-size: 1.5rem; color: var(--text-main); margin: 0;">Pedido #9021</h2>
+              <span class="tag tag-success" style="font-size: 0.9rem; padding: 6px 12px">Recibido y Validado</span>
+            </div>
+            
+            <!-- Botonera de acciones -->
+            <div style="display: flex; gap: 12px;">
+              <button class="btn btn-outline" style="background-color: white;" onclick="showToast('Enviando orden a la impresora principal...', 'info')">Imprimir Orden</button>
+              <button class="btn btn-outline" style="background-color: white;" onclick="openModal('editarPedidoModal')">Editar Pedido</button>
+              <button class="btn btn-primary" onclick="showToast('Estado cambiado a: Procesando Pago', 'success')">Actualizar Estado ⬇</button>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <!-- Bloque Central: Datos principales, Logística y Líneas -->
+            <div class="col-span-8" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Ficha de Datos Generales y Logística -->
+              <div class="card">
+                <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+                  <h3 class="card-title">Información General de Compra</h3>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;">
+                  <!-- Columna Proveedor -->
+                  <div>
+                    <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">Proveedor Destino</p>
+                    <p style="font-weight: 600; color: var(--text-main);">Textiles Aitana SA</p>
+                    <p style="font-size: 0.85rem;">CIF: A-03000000</p>
+                    <p style="font-size: 0.85rem; color: var(--primary);">pedidos@textilesaitana.es</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Contacto: María L. (Tel: 965112233)</p>
+                  </div>
+                  
+                  <!-- Columna Empresa Solicitante -->
+                  <div style="border-left: 1px solid var(--border-color); padding-left: 24px;">
+                    <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">Entidad Solicitante</p>
+                    <p style="font-weight: 600; color: var(--text-main);">Fábrica Alcoy (Planta Principal)</p>
+                    <p style="font-size: 0.85rem;">C/ Industria, 45. Pol. Cotes Baixes</p>
+                    <p style="font-size: 0.85rem;">03804 Alcoy (Alicante)</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Atn: Carlos Ferrándiz</p>
+                  </div>
+
+                  <!-- Columna Logística -->
+                  <div style="background-color: #f8fafc; padding: 12px; border-radius: var(--radius-md); border: 1px dashed #cbd5e1;">
+                    <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">Datos de Logística</p>
+                    <p style="font-size: 0.85rem; margin-bottom: 4px;"><strong>Transportista:</strong> TransAlicante Express</p>
+                    <p style="font-size: 0.85rem; margin-bottom: 4px;"><strong>Teléfono:</strong> +34 657 845 934</p>
+                    <p style="font-size: 0.85rem; margin-bottom: 4px;"><strong>Matrícula:</strong> 4499-LKJ</p>
+                    <p style="font-size: 0.85rem; margin-bottom: 8px;"><strong>Tracking:</strong> TX-9988211</p>
+                    <button class="btn btn-outline" style="width: 100%; font-size: 0.75rem; padding: 4px;" onclick="openModal('albaranModal')">Ver Albarán Transportista</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tabla de Líneas de Material -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Líneas de Material Solicitado</h3>
+                  <button class="btn btn-outline" style="font-size: 0.8rem; padding: 4px 12px;" onclick="openModal('addArticuloModal')">+ Añadir Artículo</button>
+                </div>
+                
+                <table style="width: 100%; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 16px;">
+                  <thead style="background: #f8fafc">
+                    <tr>
+                      <th style="padding: 10px; width: 40%;">Artículo / Descripción</th>
+                      <th style="padding: 10px">Lote Asignado</th>
+                      <th style="padding: 10px; text-align: right;">Cant.</th>
+                      <th style="padding: 10px; text-align: right;">Precio/Ud.</th>
+                      <th style="padding: 10px; text-align: right;">Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="padding: 10px">
+                        <strong>Bobinas Algodón 100% Peinado</strong><br>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">Calidad Premium - Blanco Óptico</span>
+                      </td>
+                      <td style="padding: 10px; font-family: monospace; font-size: 0.85rem;">L-2023-99</td>
+                      <td style="padding: 10px; text-align: right;">500 kg</td>
+                      <td style="padding: 10px; text-align: right;">4,20 €</td>
+                      <td style="padding: 10px; text-align: right; font-weight: 500;">2.100,00 €</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 10px">
+                        <strong>Hilo Sintético Refuerzo (Poliéster)</strong><br>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">Grosor 20/2 - Bobina Industrial</span>
+                      </td>
+                      <td style="padding: 10px; font-family: monospace; font-size: 0.85rem;">L-2023-102</td>
+                      <td style="padding: 10px; text-align: right;">150 kg</td>
+                      <td style="padding: 10px; text-align: right;">2,80 €</td>
+                      <td style="padding: 10px; text-align: right; font-weight: 500;">420,00 €</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <!-- Resumen Financiero -->
+                <div style="display: flex; justify-content: flex-end;">
+                  <div style="width: 300px; background-color: #f8fafc; padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
+                      <span style="color: var(--text-muted);">Base Imponible:</span>
+                      <span>2.520,00 €</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem;">
+                      <span style="color: var(--text-muted);">IVA (21%):</span>
+                      <span>529,20 €</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 12px; font-size: 1.1rem; font-weight: 700;">
+                      <span>Total Pedido:</span>
+                      <span style="color: var(--primary);">3.049,20 €</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Bloque Derecho: Trazabilidad y Documentos (Mantenemos la base pero ajustada) -->
+            <div class="col-span-4" style="display: flex; flex-direction: column; gap: 24px;">
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Trazabilidad de la Orden</h3></div>
+                
+                <!-- Timeline simple con CSS -->
+                <div class="timeline" style="margin-left: 8px;">
+                  <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-text">
+                      <strong>Orden Emitida</strong>
+                      <span>10 Oct - 09:30h (Por: Carlos F.)</span>
+                    </div>
+                  </div>
+                  <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-text">
+                      <strong>Confirmada por Proveedor</strong>
+                      <span>10 Oct - 11:45h</span>
+                    </div>
+                  </div>
+                  <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-text">
+                      <strong>En tránsito</strong>
+                      <span>12 Oct - Salida almacén origen</span>
+                    </div>
+                  </div>
+                  <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-text">
+                      <strong>Recibido en Muelle</strong>
+                      <span>14 Oct - 11:15h (Muelle 4)</span>
+                    </div>
+                  </div>
+                  <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-text">
+                      <strong style="color: var(--success-text)">Calidad Validada</strong>
+                      <span>14 Oct - 13:00h (Lote conforme)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <h4 style="font-size: 0.9rem; margin-bottom: 16px; font-weight: 600">Documentación Adjunta</h4>
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <button class="btn btn-outline" style="justify-content: flex-start; gap: 8px; font-size: 0.85rem;">
+                    📄 Albarán_Entrega_T90.pdf
+                  </button>
+                  <button class="btn btn-outline" style="justify-content: flex-start; gap: 8px; font-size: 0.85rem;">
+                    🏆 Certificado_OEKOTEX.pdf
+                  </button>
+                  <button class="btn btn-outline" style="justify-content: flex-start; gap: 8px; font-size: 0.85rem; border-style: dashed;" onclick="openModal('uploadDocModal')">
+                    + Subir documento adicional
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="mi-perfil" class="view-section">
+          <div class="dashboard-grid">
+            
+            <!-- Columna Izquierda (8) -->
+            <div class="col-span-8" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Tarjeta de Identificación y Avatar -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Identificación de Usuario</h3></div>
+                <div style="display: flex; gap: 24px; align-items: flex-start;">
+                  <!-- Zona de Avatar -->
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                    <div style="width: 100px; height: 100px; background-color: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 600; box-shadow: var(--shadow-md);">
+                      CF
+                    </div>
+                    <button class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 12px;" onclick="showToast('Abriendo explorador de archivos...', 'info')">Cambiar Foto</button>
+                    <span style="font-size: 0.7rem; color: var(--text-muted);">JPG o PNG. Máx 2MB.</span>
+                  </div>
+                  
+                  <!-- Datos Personales -->
+                  <div style="flex-grow: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group" style="margin: 0;">
+                      <label>Nombre Completo</label>
+                      <input type="text" value="Carlos Ferrándiz" />
+                    </div>
+                    <div class="form-group" style="margin: 0;">
+                      <label>Teléfono Directo / Extensión</label>
+                      <input type="tel" value="+34 600 111 222 (Ext. 45)" />
+                    </div>
+                    <div class="form-group" style="grid-column: span 2; margin: 0;">
+                      <label>Correo Electrónico Corporativo</label>
+                      <input type="email" value="carlos@fabrica-alcoy.es" />
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-color); text-align: right;">
+                  <button class="btn btn-primary" onclick="showToast('Datos personales actualizados correctamente', 'success')">Guardar Datos Personales</button>
+                </div>
+              </div>
+
+              <!-- Preferencias de Notificaciones -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Preferencias de Alertas y Notificaciones</h3></div>
+                <div style="display: flex; flex-direction: column; gap: 16px; font-size: 0.85rem;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+                    <div>
+                      <strong>Alertas de Retraso de Proveedores</strong>
+                      <p style="color: var(--text-muted); margin-top: 4px;">Recibir aviso si un proveedor excede la fecha de entrega pactada.</p>
+                    </div>
+                    <div style="display: flex; gap: 16px;">
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> En la app</label>
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> Email</label>
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+                    <div>
+                      <strong>Nuevas Facturas Recibidas</strong>
+                      <p style="color: var(--text-muted); margin-top: 4px;">Avisar cuando llegue una factura al buzón o se detecte un descuadre.</p>
+                    </div>
+                    <div style="display: flex; gap: 16px;">
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> En la app</label>
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox"> Email</label>
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                      <strong>Avisos de Calidad (Cuarentena)</strong>
+                      <p style="color: var(--text-muted); margin-top: 4px;">Notificar cuando un lote sea rechazado por el equipo de calidad.</p>
+                    </div>
+                    <div style="display: flex; gap: 16px;">
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> En la app</label>
+                      <label style="display: flex; align-items: center; gap: 6px;"><input type="checkbox" checked> Email</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Columna Derecha (4) -->
+            <div class="col-span-4" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Rol y Permisos (Toque B2B Pro) -->
+              <div class="card" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                <div class="card-header" style="margin-bottom: 12px;"><h3 class="card-title">Rol y Permisos</h3></div>
+                <div style="font-size: 0.85rem;">
+                  <div style="margin-bottom: 12px;">
+                    <span style="color: var(--text-muted); display: block; font-size: 0.75rem; text-transform: uppercase;">Nivel de Acceso</span>
+                    <span style="font-weight: 600; color: var(--text-main);">Jefatura de Compras (Admin)</span>
+                  </div>
+                  <div style="margin-bottom: 12px;">
+                    <span style="color: var(--text-muted); display: block; font-size: 0.75rem; text-transform: uppercase;">Límite de Aprobación de Pedido</span>
+                    <span style="font-weight: 700; color: var(--success-text); font-size: 1.1rem;">50.000 € / orden</span>
+                  </div>
+                  <div>
+                    <span style="color: var(--text-muted); display: block; font-size: 0.75rem; margin-bottom: 5px; text-transform: uppercase;">Firma Autorizada</span>
+                    <span class="tag tag-info">Firma Digital Activa</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Preferencias Regionales -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Preferencias</h3></div>
+                <div class="form-group">
+                  <label>Idioma del Portal</label>
+                  <select>
+                    <option selected>Español</option>
+                    <option>English</option>
+                    <option>Valencià</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Zona Horaria</label>
+                  <select>
+                    <option selected>(GMT+01:00) Madrid</option>
+                    <option>(GMT+00:00) Londres</option>
+                    <option>(GMT+08:00) Shanghai</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Seguridad -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Seguridad</h3></div>
+                <div class="form-group">
+                  <label>Contraseña Actual</label>
+                  <input type="password" placeholder="••••••••" />
+                </div>
+                <div class="form-group">
+                  <label>Nueva Contraseña</label>
+                  <input type="password" placeholder="••••••••" />
+                </div>
+                <button class="btn btn-outline" style="width: 100%; margin-top: 12px;" onclick="showToast('Contraseña modificada con éxito', 'success')">Actualizar Contraseña</button>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- Vista: Configuración ERP -->
+        <section id="configuracion-erp" class="view-section">
+          <div class="dashboard-grid">
+            
+            <!-- Columna Izquierda (8) -->
+            <div class="col-span-8" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Integración ERP Core -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Sincronización Core (ERP / Entorno Base)</h3></div>
+                
+                <div style="background-color: #f0fff4; border: 1px solid #9ae6b4; padding: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+                  <div>
+                    <h4 style="color: #276749; margin-bottom: 4px;">Conexión Activa</h4>
+                    <p style="font-size: 0.85rem; color: #2f855a;">Enlazado correctamente al entorno <strong>Shopify Liquid</strong> (Pruebas API v2.1)</p>
+                  </div>
+                  <div style="font-size: 2rem;">🟢</div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+                    <div>
+                      <strong style="font-size: 0.9rem;">Sincronización de Proveedores</strong>
+                      <p style="font-size: 0.8rem; color: var(--text-muted);">Actualiza altas y bajas desde el ERP central.</p>
+                    </div>
+                    <select style="padding: 6px; border-radius: 4px; border: 1px solid var(--border-color);"><option>Tiempo Real</option><option selected>Cada 12 horas</option><option>Manual</option></select>
+                  </div>
+                  
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+                    <div>
+                      <strong style="font-size: 0.9rem;">Volcado de Facturas Conciliadas</strong>
+                      <p style="font-size: 0.8rem; color: var(--text-muted);">Envía las facturas aprobadas a contabilidad.</p>
+                    </div>
+                    <select style="padding: 6px; border-radius: 4px; border: 1px solid var(--border-color);"><option selected>Tiempo Real</option><option>Al cierre del día</option></select>
+                  </div>
+                </div>
+
+                <div style="margin-top: 24px;">
+                  <button class="btn btn-primary" onclick="showToast('Sincronización forzada completada', 'success')">🔄 Forzar Sincronización Ahora</button>
+                </div>
+              </div>
+
+              <!-- Integración CRM (Ventas) -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Módulo CRM (Conexión con Ventas)</h3></div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Configura qué datos de Compras se comparten con el equipo Comercial para mejorar la información al cliente final.</p>
+
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+                    <div style="padding-right: 20px;">
+                      <strong style="font-size: 0.9rem;">Visibilidad de Stock Entrante (Albaranes)</strong>
+                      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Permite que Ventas vea cuándo llega la materia prima para dar plazos exactos de fabricación a los clientes.</p>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" checked onclick="showToast('Previsión de stock compartida con CRM', 'info')">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+                    <div style="padding-right: 20px;">
+                      <strong style="font-size: 0.9rem;">Asignación de Compras a Clientes (Trazabilidad)</strong>
+                      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Habilita la opción de etiquetar un pedido a proveedor con el ID de un cliente del CRM (ej: Producción exclusiva).</p>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" checked onclick="showToast('Trazabilidad Compras-Ventas activada', 'info')">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Columna Derecha (4) -->
+            <div class="col-span-4" style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Datos de Empresa -->
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Datos Fiscales (ERP)</h3></div>
+                <div style="font-size: 0.85rem; color: var(--text-main); display: flex; flex-direction: column; gap: 12px;">
+                  <p><strong>Razón Social:</strong> Fábrica Alcoy S.A.</p>
+                  <p><strong>CIF:</strong> A-03009988</p>
+                  <p><strong>Dirección:</strong> Polígono Cotes Baixes, 45</p>
+                  <p><strong>Localidad:</strong> 03804 - Alcoy (Alicante)</p>
+                  <div style="height: 1px; background-color: var(--border-color); margin: 8px 0;"></div>
+                  <button class="btn btn-outline" style="width: 100%;">Solicitar Cambio de Datos</button>
+                </div>
+              </div>
+
+              <!-- Webhooks y API (Toque muy PRO) -->
+              <div class="card" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                <div class="card-header" style="margin-bottom: 8px;"><h3 class="card-title">Desarrolladores / API</h3></div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">Credenciales para integraciones externas y Webhooks de estado.</p>
+                <div class="form-group" style="margin-bottom: 12px;">
+                  <label style="font-size: 0.75rem;">API Key Activa (Entorno Producción)</label>
+                  <input type="password" value="sk_live_884jdu391mzn1" disabled style="background-color: #e2e8f0; text-align: center; letter-spacing: 3px; font-family: monospace;" />
+                </div>
+                <button class="btn btn-outline" style="width: 100%; font-size: 0.75rem;" onclick="showToast('Se requiere autenticación 2FA para esta acción', 'error')">Regenerar API Key</button>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Contenedor para las notificaciones Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Modal: Editar Pedido -->
+    <div class="modal-overlay" id="editarPedidoModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main)">Editar Pedido #9021</h3>
+          <button class="modal-close" onclick="closeModal('editarPedidoModal')">&times;</button>
+        </div>
+        <div class="form-group">
+          <label>Cambiar Proveedor</label>
+          <select><option>Textiles Aitana SA</option><option>Plásticos Paco SL</option></select>
+        </div>
+        <div class="form-group">
+          <label>Notas de entrega</label>
+          <textarea rows="2">Entregar por el Muelle 4. Avisar al transportista.</textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('editarPedidoModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('editarPedidoModal'); showToast('Pedido actualizado correctamente', 'success')">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Ver Albarán Transportista -->
+    <div class="modal-overlay" id="albaranModal">
+      <div class="modal-content" style="max-width: 700px;">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main)">Albarán: TransAlicante Express</h3>
+          <button class="modal-close" onclick="closeModal('albaranModal')">&times;</button>
+        </div>
+        <!-- Simulamos un PDF con un recuadro gris y un icono -->
+        <div style="width: 100%; height: 400px; background-color: #f1f5f9; border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted);">
+          <span style="font-size: 3rem;">📄</span>
+          <p style="margin-top: 16px; font-weight: 500;">Vista previa del documento PDF</p>
+          <p style="font-size: 0.8rem;">ALB-TX9988211.pdf</p>
+        </div>
+        <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+          <button class="btn btn-primary" onclick="closeModal('albaranModal')">Cerrar Visor</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Añadir Artículo -->
+    <div class="modal-overlay" id="addArticuloModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main)">Añadir nueva línea</h3>
+          <button class="modal-close" onclick="closeModal('addArticuloModal')">&times;</button>
+        </div>
+        <div class="form-group">
+          <label>Artículo / Descripción</label>
+          <input type="text" placeholder="Ej: Conos de cartón para hilatura" />
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label>Cantidad</label>
+            <input type="number" placeholder="0" />
+          </div>
+          <div class="form-group">
+            <label>Precio Unitario (€)</label>
+            <input type="number" step="0.01" placeholder="0.00" />
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('addArticuloModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('addArticuloModal'); showToast('Línea añadida al pedido', 'success')">Añadir</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Subir Documento Adicional -->
+    <div class="modal-overlay" id="uploadDocModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main)">Adjuntar Documentación</h3>
+          <button class="modal-close" onclick="closeModal('uploadDocModal')">&times;</button>
+        </div>
+        <div class="form-group">
+          <label>Tipo de Documento</label>
+          <select><option>Certificado de Calidad</option><option>Ficha Técnica</option><option>Albarán Escaneado</option><option>Fotografía de Daños</option></select>
+        </div>
+        <div class="file-drop" style="margin-top: 16px;">
+          📁 Arrastra tu PDF o JPG aquí o haz clic para buscar
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('uploadDocModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('uploadDocModal'); showToast('Documento subido con éxito', 'success')">Subir Archivo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Incidencias (RMA) -->
+    <div class="modal-overlay" id="rmaModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Abrir Incidencia (RMA)</h3>
+          <button class="modal-close" onclick="closeRMAModal()">&times;</button>
+        </div>
+
+        <div
+          style="
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #fffaf0;
+            border: 1px solid #fbd38d;
+            border-radius: 6px;
+          "
+        >
+          <p style="font-size: 0.85rem; margin: 0">
+            <strong>Pedido:</strong> <span id="modalPedido"></span>
+          </p>
+          <p style="font-size: 0.85rem; margin: 4px 0 0 0">
+            <strong>Material:</strong> <span id="modalMaterial"></span>
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de Incidencia</label>
+          <select
+            style="
+              width: 100%;
+              padding: 10px;
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-md);
+              font-family: inherit;
+            "
+          >
+            <option>Mercancía dañada/manchada</option>
+            <option>Falta de cantidad (Merma)</option>
+            <option>Lote no coincide con certificado</option>
+            <option>Retraso en entrega</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Descripción del problema</label>
+          <textarea
+            rows="3"
+            placeholder="Describe qué ha ocurrido con el material al recibirlo..."
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Pruebas gráficas (Fotos del albarán, palet dañado...)</label>
+          <div class="file-drop">
+            📷 Arrastra una foto aquí o haz clic para subir
+          </div>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+          "
+        >
+          <button class="btn btn-outline" onclick="closeRMAModal()">
+            Cancelar
+          </button>
+          <button class="btn btn-primary" onclick="submitRMA()">
+            Enviar Reclamación
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Nuevo Pedido (V2 - Avanzado) -->
+    <div class="modal-overlay" id="nuevoPedidoModal">
+      <div class="modal-content" style="max-width: 750px;">
+        <div class="modal-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px;">
+          <h3 style="color: var(--primary); font-size: 1.3rem;">Generar Orden de Compra (PO)</h3>
+          <button class="modal-close" onclick="closeModal('nuevoPedidoModal')">&times;</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          
+          <!-- Bloque Izquierdo: Proveedor y Fechas -->
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="form-group" style="margin: 0;">
+              <label>Proveedor Destino</label>
+              <select>
+                <option>Selecciona un proveedor...</option>
+                <option>Plásticos Paco SL</option>
+                <option>Textiles Aitana SA</option>
+                <option>Químicas Levantinas</option>
+                <option>Cartonajes Levante</option>
+              </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group" style="margin: 0;">
+                <label>Fecha Emisión</label>
+                <input type="date" value="2023-10-24" disabled style="background-color: #f8fafc;" />
+              </div>
+              <div class="form-group" style="margin: 0;">
+                <label>Entrega Requerida</label>
+                <input type="date" />
+              </div>
+            </div>
+
+            <div class="form-group" style="margin: 0;">
+              <label>Condiciones de Envío (Incoterm)</label>
+              <select>
+                <option>EXW - En fábrica (Portes debidos)</option>
+                <option>DDP - Entregado derechos pagados (Portes pagados)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Bloque Derecho: Calidad y Notas -->
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="form-group" style="margin: 0;">
+              <label style="margin-bottom: 12px;">Exigencias de Calidad en Recepción</label>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; background-color: #f8fafc; padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; margin:0;"><input type="checkbox" checked /> Adjuntar Ficha de Seguridad (FDS)</label>
+                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; margin:0;"><input type="checkbox" /> Certificado de Lote ISO-9001</label>
+                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; margin:0;"><input type="checkbox" /> Certificado OEKO-TEX Standard 100</label>
+                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; margin:0;"><input type="checkbox" /> Certificado GRS (Reciclado)</label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bloque Inferior: Líneas de Pedido Simuladas -->
+        <div style="margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h4 style="font-size: 0.95rem; font-weight: 600;">Líneas de Artículo</h4>
+            <button class="btn btn-outline" style="font-size: 0.75rem; padding: 8px 16px;" onclick="showToast('Simulación: Fila añadida', 'info')">+ Añadir Fila</button>
+          </div>
+          
+          <table style="width: 100%; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden;">
+            <thead style="background-color: #f1f5f9;">
+              <tr>
+                <th style="padding: 8px; text-align: left;">Referencia / Descripción</th>
+                <th style="padding: 8px; text-align: center; width: 80px;">Cant.</th>
+                <th style="padding: 8px; text-align: left; width: 100px;">Ud. Medida</th>
+                <th style="padding: 8px; text-align: right; width: 100px;">Precio Ud.</th>
+                <th style="padding: 8px; text-align: center; width: 40px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 8px;"><input type="text" placeholder="Ej: Bobina Hilo..." style="width: 100%; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px;"></td>
+                <td style="padding: 8px;"><input type="number" placeholder="0" style="width: 100%; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
+                <td style="padding: 8px;">
+                  <select style="width: 100%; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px;">
+                    <option>Kg</option><option>Uds</option><option>Palets</option>
+                  </select>
+                </td>
+                <td style="padding: 8px;"><input type="number" placeholder="0.00" style="width: 100%; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: right;"></td>
+                <td style="padding: 8px; text-align: center; color: var(--alert-text); cursor: pointer;">✖</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <div style="display: flex; justify-content: flex-end; margin-top: 12px; font-weight: 600; font-size: 1.1rem; color: var(--primary);">
+            Total Estimado: 0,00 €
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+          <button class="btn btn-outline" onclick="closeModal('nuevoPedidoModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('nuevoPedidoModal'); showToast('Orden de Compra PO-9055 emitida y enviada al proveedor', 'success')">Emitir Orden Definitiva</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Nuevo Proveedor -->
+    <div class="modal-overlay" id="nuevoProveedorModal">
+      <div class="modal-content" style="max-width: 650px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Alta de Nuevo Proveedor</h3>
+          <button class="modal-close" onclick="closeModal('nuevoProveedorModal')">&times;</button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Razón Social (Empresa)</label>
+            <input type="text" placeholder="Ej: Plásticos y Derivados SL" />
+          </div>
+          <div class="form-group">
+            <label>CIF / NIF</label>
+            <input type="text" placeholder="Ej: B-12345678" />
+          </div>
+          <div class="form-group">
+            <label>Tipo de Suministro Principal</label>
+            <input type="text" placeholder="Ej: Granza, Hilos, Tintes..." />
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Email de Pedidos</label>
+            <input type="email" placeholder="pedidos@empresa.com" />
+          </div>
+          <div class="form-group">
+            <label>Teléfono de Contacto</label>
+            <input type="tel" placeholder="+34..." />
+          </div>
+          <div class="form-group">
+            <label>Condiciones de Pago Homologadas</label>
+            <select>
+              <option>Contado (Transferencia previa)</option>
+              <option>30 días fecha factura</option>
+              <option selected>60 días fecha factura</option>
+              <option>90 días (Pagaré)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('nuevoProveedorModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('nuevoProveedorModal'); showToast('Proveedor registrado y pendiente de validación', 'success')">Guardar Proveedor</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Editar Proveedor (Pre-rellenado con Aitana) -->
+    <div class="modal-overlay" id="editarProveedorModal">
+      <div class="modal-content" style="max-width: 650px;">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main);">Editar: Textiles Aitana SA</h3>
+          <button class="modal-close" onclick="closeModal('editarProveedorModal')">&times;</button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Razón Social (Empresa)</label>
+            <input type="text" value="Textiles Aitana SA" />
+          </div>
+          <div class="form-group">
+            <label>Persona de Contacto</label>
+            <input type="text" value="María López" />
+          </div>
+          <div class="form-group">
+            <label>Teléfono Comercial</label>
+            <input type="tel" value="+34 965 11 22 33" />
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Notas Internas (Solo visibles por Compras)</label>
+            <textarea rows="3">Proveedor estratégico. Aplicar rappel del 2% si superamos los 100.000€ anuales.</textarea>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('editarProveedorModal')">Descartar</button>
+          <button class="btn btn-primary" onclick="closeModal('editarProveedorModal'); showToast('Datos del proveedor actualizados', 'success')">Actualizar Ficha</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Enviar Mensaje -->
+    <div class="modal-overlay" id="enviarMensajeModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main);">Nueva Comunicación</h3>
+          <button class="modal-close" onclick="closeModal('enviarMensajeModal')">&times;</button>
+        </div>
+        
+        <div class="form-group">
+          <label>Para:</label>
+          <input type="email" value="pedidos@textilesaitana.es" disabled style="background-color: #f8fafc;" />
+        </div>
+        <div class="form-group">
+          <label>Asunto:</label>
+          <input type="text" placeholder="Ej: Consulta sobre el pedido #9021..." />
+        </div>
+        <div class="form-group">
+          <label>Mensaje:</label>
+          <textarea rows="5" placeholder="Escribe tu mensaje aquí..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Adjuntar archivo (Opcional)</label>
+          <input type="file" style="padding: 4px;" />
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('enviarMensajeModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('enviarMensajeModal'); showToast('Mensaje enviado. Quedará registrado en el historial.', 'success')">📤 Enviar Correo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Formulario de Inspección de Calidad -->
+    <div class="modal-overlay" id="inspeccionModal">
+      <div class="modal-content" style="max-width: 700px;">
+        <div class="modal-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px;">
+          <h3 style="color: var(--primary);">Checklist de Recepción: Lote POL-33X</h3>
+          <button class="modal-close" onclick="closeModal('inspeccionModal')">&times;</button>
+        </div>
+        
+        <div style="background-color: #f8fafc; padding: 12px; border-radius: 6px; border: 1px dashed var(--border-color); margin-bottom: 20px; font-size: 0.85rem;">
+          <strong>Material:</strong> Bobinas Poliéster Alta Tenacidad | <strong>Proveedor:</strong> Hilaturas Alcoyanas | <strong>Inspector:</strong> Carlos F.
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <!-- Columna 1: Checklist Visual -->
+          <div>
+            <h4 style="font-size: 0.9rem; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">1. Inspección Visual / Documental</h4>
+            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.85rem;">
+              <label style="display: flex; align-items: center; justify-content: space-between;">
+                <span>Estado del embalaje / Palet:</span>
+                <select style="padding: 4px; border: 1px solid var(--border-color); border-radius: 4px;"><option>Perfecto</option><option>Dañado Menor</option><option>Roto (Rechazo)</option></select>
+              </label>
+              <label style="display: flex; align-items: center; justify-content: space-between;">
+                <span>Etiquetado de proveedor:</span>
+                <select style="padding: 4px; border: 1px solid var(--border-color); border-radius: 4px;"><option>Conforme</option><option>Falta Información</option></select>
+              </label>
+              <label style="display: flex; align-items: center; justify-content: space-between;">
+                <span>Certificado de origen (GRS):</span>
+                <select style="padding: 4px; border: 1px solid var(--border-color); border-radius: 4px;"><option>Adjunto</option><option>Pendiente</option></select>
+              </label>
+            </div>
+          </div>
+
+          <!-- Columna 2: Parámetros Técnicos -->
+          <div>
+            <h4 style="font-size: 0.9rem; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">2. Parámetros Técnicos (Muestreo)</h4>
+            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.85rem;">
+              <label style="display: flex; align-items: center; justify-content: space-between;">
+                <span>Peso neto comprobado (Kg):</span>
+                <input type="number" placeholder="Ej: 150" style="width: 80px; padding: 4px; text-align: center; border: 1px solid var(--border-color); border-radius: 4px;">
+              </label>
+              <label style="display: flex; align-items: center; justify-content: space-between;">
+                <span>Prueba de color / Tonalidad:</span>
+                <select style="padding: 4px; border: 1px solid var(--border-color); border-radius: 4px;"><option>Pasa (Delta E < 1)</option><option>Falla</option></select>
+              </label>
+              <label style="display: flex; align-items: center; justify-content: space-between;">
+                <span>Humedad (%):</span>
+                <input type="number" placeholder="%" style="width: 80px; padding: 4px; text-align: center; border: 1px solid var(--border-color); border-radius: 4px;">
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 20px;">
+          <label>Observaciones o anomalías encontradas:</label>
+          <textarea rows="3" placeholder="Si hay alguna desviación, detállala aquí..."></textarea>
+        </div>
+
+        <!-- Dictamen Final -->
+        <div style="margin-top: 24px; padding: 16px; background-color: #f1f5f9; border-radius: var(--radius-md); border: 1px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-weight: 600;">Veredicto de Calidad:</span>
+          <div style="display: flex; gap: 12px;">
+            <button class="btn btn-outline" style="color: var(--alert-text); border-color: var(--alert-border); background-color: white;" onclick="closeModal('inspeccionModal'); showToast('Lote Rechazado. Iniciando protocolo RMA.', 'error')">❌ Rechazar Lote</button>
+            <button class="btn btn-primary" style="background-color: var(--success-text); border-color: var(--success-text);" onclick="closeModal('inspeccionModal'); showToast('Inspección aprobada. Lote liberado para producción.', 'success')">✅ Aprobar Lote (Apto)</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Modal: Ver Informe de Calidad (Apto) -->
+    <div class="modal-overlay" id="verInformeModal">
+      <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px;">
+          <h3 style="color: var(--text-main);">Informe de Inspección #INSP-8842</h3>
+          <button class="modal-close" onclick="closeModal('verInformeModal')">&times;</button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+          <div>
+            <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Lote Inspeccionado</p>
+            <p style="font-weight: 600;">L-2023-99 (Textiles Aitana)</p>
+            <p style="font-size: 0.85rem;">Bobinas Algodón 100% Peinado</p>
+          </div>
+          <div>
+            <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Datos Auditoría</p>
+            <p style="font-size: 0.85rem;"><strong>Fecha:</strong> 14 Oct 2026 - 13:00h</p>
+            <p style="font-size: 0.85rem;"><strong>Inspector:</strong> Juan M.</p>
+          </div>
+        </div>
+
+        <h4 style="font-size: 0.9rem; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Resultados del Muestreo</h4>
+        <ul style="list-style: none; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; padding: 0;">
+          <li style="display: flex; justify-content: space-between; padding: 8px; background: #f8fafc; border-radius: 4px;"><span>Estado Embalaje:</span> <strong>Conforme</strong></li>
+          <li style="display: flex; justify-content: space-between; padding: 8px; background: #f8fafc; border-radius: 4px;"><span>Peso Comprobado:</span> <strong>500 Kg (Sin merma)</strong></li>
+          <li style="display: flex; justify-content: space-between; padding: 8px; background: #f8fafc; border-radius: 4px;"><span>Prueba Tonalidad (Delta E):</span> <strong>0.8 (Pasa)</strong></li>
+          <li style="display: flex; justify-content: space-between; padding: 8px; background: #f8fafc; border-radius: 4px;"><span>Humedad:</span> <strong>6.5% (En rango)</strong></li>
+        </ul>
+
+        <div style="padding: 12px; background-color: var(--success-bg); border: 1px solid var(--success-border); border-radius: 6px; color: var(--success-text); text-align: center; font-weight: 600;">
+          DICTAMEN: APTO (Lote liberado para Producción)
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('verInformeModal')">Cerrar</button>
+          <button class="btn btn-primary" onclick="showToast('Descargando PDF del informe...', 'info'); closeModal('verInformeModal')">📄 Descargar PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Ver Detalle RMA (Rechazado) -->
+    <div class="modal-overlay" id="verRmaDetalleModal">
+      <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px;">
+          <h3 style="color: var(--alert-text);">Expediente RMA-2023-089</h3>
+          <button class="modal-close" onclick="closeModal('verRmaDetalleModal')">&times;</button>
+        </div>
+        
+        <div style="background-color: #fff5f5; padding: 12px; border-radius: 6px; border: 1px dashed var(--alert-border); margin-bottom: 20px; font-size: 0.85rem;">
+          <strong style="color: var(--alert-text);">Estado:</strong> Esperando retirada de mercancía por parte del proveedor y abono correspondiente.
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+          <div>
+            <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Proveedor y Lote</p>
+            <p style="font-weight: 600;">Químicas Unidas</p>
+            <p style="font-size: 0.85rem;">Lote: Q-90-BB (Decolorante)</p>
+          </div>
+          <div>
+            <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Detalles Reclamación</p>
+            <p style="font-size: 0.85rem;"><strong>Fecha Alta:</strong> 13 Oct 2026</p>
+            <p style="font-size: 0.85rem;"><strong>Reclama:</strong> Carlos F.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Motivo del Rechazo / Incidencia</label>
+          <textarea rows="3" disabled style="background-color: #f8fafc; color: var(--text-main); font-family: inherit; width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px;">Palet recibido con rotura estructural. 2 bidones de decolorante derramados en la base. Material contaminado, se rechaza la partida completa por seguridad.</textarea>
+        </div>
+
+        <div style="margin-top: 16px;">
+          <p style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Pruebas Gráficas Adjuntas</p>
+          <div style="display: flex; gap: 8px;">
+            <div style="width: 60px; height: 60px; background-color: #e2e8f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer;" title="Ver foto">📷</div>
+            <div style="width: 60px; height: 60px; background-color: #e2e8f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer;" title="Ver foto">📷</div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('verRmaDetalleModal')">Cerrar</button>
+          <button class="btn btn-primary" style="background-color: var(--warning-text); border-color: var(--warning-text);" onclick="showToast('Reclamación enviada de nuevo por email al proveedor', 'success'); closeModal('verRmaDetalleModal')">✉️ Reclamar de nuevo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Registrar Nueva Factura -->
+    <div class="modal-overlay" id="nuevaFacturaModal">
+      <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+          <h3 style="color: var(--primary);">Registrar Factura de Proveedor</h3>
+          <button class="modal-close" onclick="closeModal('nuevaFacturaModal')">&times;</button>
+        </div>
+        
+        <div style="background-color: #ebf8ff; padding: 12px; border-radius: 6px; border: 1px dashed #bee3f8; margin-bottom: 20px; font-size: 0.85rem; color: #2b6cb0;">
+          Sube el PDF de la factura. El sistema OCR extraerá los datos automáticamente si es posible.
+        </div>
+
+        <div class="file-drop" style="margin-bottom: 20px;">
+          📁 Arrastra el PDF de la Factura aquí o haz clic
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Proveedor</label>
+            <select><option>Selecciona un proveedor...</option><option>Plásticos Paco SL</option><option>Químicas Unidas</option></select>
+          </div>
+          <div class="form-group">
+            <label>Nº Factura Proveedor</label>
+            <input type="text" placeholder="Ej: F-2023-..." />
+          </div>
+          <div class="form-group">
+            <label>Importe Total (€)</label>
+            <input type="number" step="0.01" placeholder="0.00" />
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Vincular a Albaranes de Recepción (Para Conciliar)</label>
+            <input type="text" placeholder="Escribe el código del albarán (Ej: ALB-2023-455)..." />
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button class="btn btn-outline" onclick="closeModal('nuevaFacturaModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('nuevaFacturaModal'); showToast('Factura registrada y enviada a proceso de conciliación', 'success')">Registrar Factura</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Conciliar Manualmente -->
+    <div class="modal-overlay" id="conciliarModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 style="color: var(--text-main);">Conciliación Manual</h3>
+          <button class="modal-close" onclick="closeModal('conciliarModal')">&times;</button>
+        </div>
+        
+        <p style="font-size: 0.9rem; margin-bottom: 16px;">Se ha detectado un descuadre entre el albarán de recepción y la factura emitida por el proveedor.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; background-color: #f8fafc; padding: 16px; border: 1px solid var(--border-color); border-radius: 6px;">
+          <div>
+            <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Según Recepción (Albarán ALB-90-BB)</p>
+            <p style="font-weight: 600; font-size: 1.2rem;">4.200,00 €</p>
+          </div>
+          <div style="border-left: 1px solid var(--border-color); padding-left: 16px;">
+            <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Según Factura Prov. (A/4499-B)</p>
+            <p style="font-weight: 600; font-size: 1.2rem; color: #c53030;">4.500,00 €</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Acción de Resolución</label>
+          <select>
+            <option>Forzar conciliación (Asumir diferencia como cargo extra)</option>
+            <option>Bloquear factura (Requerir abono al proveedor)</option>
+            <option>Aprobar pago parcial (Solo importe de albarán)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-outline" onclick="closeModal('conciliarModal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="closeModal('conciliarModal'); showToast('Resolución aplicada. ERP actualizado.', 'success')">Aplicar Resolución</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drawer de Notificaciones (Panel Lateral) -->
+    <div class="notification-drawer" id="notifDrawer">
+      <div class="drawer-header">
+        <h3>Notificaciones (3)</h3>
+        <button class="drawer-close" onclick="toggleNotificaciones()">&times;</button>
+      </div>
+      <div class="drawer-body">
+        
+        <div class="notif-item unread">
+          <div class="notif-icon" style="background-color: #ebf8ff; color: #2b6cb0;">📦</div>
+          <div class="notif-content">
+            <p><strong>Pedido #9022 recibido</strong></p>
+            <span>Plásticos Paco SL ha entregado la mercancía en el Muelle 2.</span>
+            <small>Hace 10 min</small>
+          </div>
+        </div>
+
+        <div class="notif-item unread">
+          <div class="notif-icon" style="background-color: #fff5f5; color: #c53030;">⚠️</div>
+          <div class="notif-content">
+            <p><strong>Alerta de Stock Crítico</strong></p>
+            <span>Colorante Textil Azul (Cód. 45-B) por debajo del mínimo.</span>
+            <small>Hace 2 horas</small>
+          </div>
+        </div>
+
+        <div class="notif-item">
+          <div class="notif-icon" style="background-color: #f0fff4; color: #276749;">✅</div>
+          <div class="notif-content">
+            <p><strong>Factura Conciliada</strong></p>
+            <span>La factura FAC-99201 coincide perfectamente con el albarán.</span>
+            <small>Ayer a las 16:45h</small>
+          </div>
+        </div>
+
+      </div>
+      <div class="drawer-footer">
+        <button class="btn btn-outline" style="width: 100%;" onclick="showToast('Marcando todas como leídas', 'success'); toggleNotificaciones()">Marcar todas como leídas</button>
+      </div>
+    </div>
+
+    <script>
+      function activateNav(clickedElement) {
+        // 1. Gestionar estado activo del menú
+        const items = document.querySelectorAll(".nav-item");
+        items.forEach((item) => item.classList.remove("active"));
+        clickedElement.classList.add("active");
+
+        // 2. Ocultar todas las secciones y mostrar la elegida
+        const targetId = clickedElement.getAttribute("data-target");
+        const sections = document.querySelectorAll(".view-section");
+        sections.forEach((section) => section.classList.remove("active"));
+
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          targetSection.classList.add("active");
+        }
+
+        // 3. Cambiar el título superior dinámicamente
+        const viewTitle = clickedElement.textContent.trim();
+        document.getElementById("topbar-title-text").textContent = viewTitle;
+      }
+
+      // Modal Logic
+      const modal = document.getElementById("rmaModal");
+      const modalPedido = document.getElementById("modalPedido");
+      const modalMaterial = document.getElementById("modalMaterial");
+
+      function openRMAModal(pedidoId, proveedor, material) {
+        modalPedido.textContent = pedidoId + " - " + proveedor;
+        modalMaterial.textContent = material;
+        modal.classList.add("active");
+      }
+
+      function closeRMAModal() {
+        modal.classList.remove("active");
+      }
+
+      function submitRMA() {
+        // Instead of an alert (which is forbidden), we simulate a success state
+        // by closing the modal and updating the UI temporarily.
+
+        const btn = document.querySelector(".modal-content .btn-primary");
+        const originalText = btn.textContent;
+
+        btn.textContent = "¡Enviado!";
+        btn.style.backgroundColor = "var(--success-bg)";
+        btn.style.color = "var(--success-text)";
+        btn.style.borderColor = "var(--success-border)";
+
+        setTimeout(() => {
+          closeRMAModal();
+          // Reset button for next time
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style = ""; // Clear inline styles
+          }, 300);
+        }, 1000);
+      }
+
+      // Close modal if clicked outside of content
+      modal.addEventListener("click", function (e) {
+        if (e.target === modal) {
+          closeRMAModal();
+        }
+      });
+
+      // ESTO VA EN EL HTML (Dentro de la etiqueta <script>)
+      const modalNuevo = document.getElementById("nuevoPedidoModal");
+
+      function closeNuevoPedidoModal() {
+        modalNuevo.classList.remove("active");
+      }
+
+      // Cerrar modal de nuevo pedido si haces clic fuera del recuadro
+      modalNuevo.addEventListener("click", function (e) {
+        if (e.target === modalNuevo) {
+          closeNuevoPedidoModal();
+        }
+      });
+
+      // Función universal para abrir modales
+      function openModal(id) {
+        document.getElementById(id).classList.add('active');
+      }
+
+      // Función universal para cerrar modales
+      function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+      }
+
+      // Cerrar modales clicando fuera del recuadro (Aplicable a todos)
+      document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+          if(e.target === this) {
+            this.classList.remove('active');
+          }
+        });
+      });
+
+      // Función para mostrar cartelitos de notificación (Toast)
+      function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️');
+        toast.innerHTML = `<span style="font-size: 1.2rem;">${icon}</span> <p style="font-weight: 500; font-size: 0.9rem; margin:0;">${message}</p>`;
+        
+        container.appendChild(toast);
+        
+        // Disparar animación de entrada
+        setTimeout(() => toast.classList.add('show'), 10);
+        
+        // Eliminar después de 3 segundos
+        setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => toast.remove(), 300); // Esperar a que termine la animación
+        }, 3000);
+      }
+
+      // Función para deslizar el panel de notificaciones
+      function toggleNotificaciones() {
+        document.getElementById('notifDrawer').classList.toggle('active');
+      }
+
+      // Función para mostrar el menú de usuario
+      function toggleUserMenu() {
+        document.getElementById('userDropdownMenu').classList.toggle('active');
+      }
+
+      // Cerrar el menú de usuario si haces clic en cualquier otro lado de la pantalla
+      document.addEventListener('click', function(event) {
+        const userContainer = document.querySelector('.user-dropdown-container');
+        const userMenu = document.getElementById('userDropdownMenu');
+        
+        // Si el clic no fue dentro del contenedor del usuario, forzamos el cierre
+        if (!userContainer.contains(event.target)) {
+          userMenu.classList.remove('active');
+        }
+      });
+    </script>
+    <script>
+      // Detectar qué usuario ha entrado por la URL (ej: compras.html?user=laura)
+      const urlParams = new URLSearchParams(window.location.search);
+      const user = urlParams.get('user');
+
+      if (user === 'laura') {
+        document.querySelector('.user-name').textContent = 'Laura Beltrán';
+        document.querySelector('.user-role').textContent = 'Directora de Ventas';
+        document.querySelectorAll('.avatar').forEach(el => el.textContent = 'LB');
+      } else if (user === 'miguel') {
+        document.querySelector('.user-name').textContent = 'Miguel Ángel S.';
+        document.querySelector('.user-role').textContent = 'Director Financiero';
+        document.querySelectorAll('.avatar').forEach(el => el.textContent = 'MA');
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acceso Corporativo - SupplyConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      /* ========================================================
+        ESTILIZACIÓN DE LA BARRA DE DESPLAZAMIENTO (SCROLLBAR)
+        ======================================================== */
+
+      /* 1. Anchura y altura general de la barra */
+      ::-webkit-scrollbar {
+        width: 8px; /* Más fina que la de Windows (suele ser 16px) */
+        height: 8px; /* Para los scrolls horizontales en tablas */
+      }
+
+      /* 2. El "carril" o fondo por donde se desliza la barra */
+      ::-webkit-scrollbar-track {
+        background-color: transparent; /* Transparente para que no ensucie el diseño */
+        border-radius: 10px;
+      }
+
+      /* 3. La "píldora" (el pulgar) que el usuario arrastra */
+      ::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1; /* Un gris muy suave y elegante (var(--border-color)) */
+        border-radius: 10px;       /* Bordes redondeados */
+        border: 2px solid transparent; /* Truco para darle un poco de "margen" invisible */
+        background-clip: padding-box;  /* Hace que el borde transparente se respete */
+      }
+
+      /* 4. La píldora cuando pasas el ratón por encima (Hover) */
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: #94a3b8; /* Un gris un poco más oscuro al interactuar */
+      }
+
+      /* Soporte para Firefox (usa un estándar diferente, más limitado) */
+      * {
+        scrollbar-width: thin;          /* Barra más fina */
+        scrollbar-color: #cbd5e1 transparent; /* Color del thumb y del track */
+      }
+      
+      body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        box-sizing: border-box;
+      }
+
+      .login-wrapper {
+        display: flex;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        border: 1px solid #e2e8f0;
+        max-width: 1000px;
+        width: 100%;
+        overflow: hidden;
+        flex-direction: row;
+      }
+
+      .login-col-left {
+        width: 400px;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+
+      .login-col-right {
+        flex-grow: 1;
+        background-color: #f8fafc;
+        padding: 40px;
+        border-left: 1px solid #e2e8f0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Hover Effects para los botones de Demo */
+      .demo-card {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        padding: 16px;
+        gap: 16px;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        background: white;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      }
+      .demo-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border-color: #cbd5e1;
+      }
+
+      /* Botón Consultoría Animado */
+      .cta-consultoria {
+        background: linear-gradient(to right, #3182ce, #2b6cb0);
+        color: white;
+        padding: 16px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        margin-top: 24px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .cta-consultoria:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 15px -3px rgba(49, 130, 206, 0.3);
+      }
+
+      /* Responsive (Móviles) */
+      @media (max-width: 850px) {
+        .login-wrapper {
+          flex-direction: column;
+        }
+        .login-col-left {
+          width: 100%;
+          border-bottom: 1px solid #e2e8f0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="login-wrapper">
+      
+      <!-- COLUMNA IZQUIERDA (Formulario y CTA) -->
+      <div class="login-col-left">
+        <div>
+          <!-- Logo y Título -->
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 32px;">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #3182ce;">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            </svg>
+            <h2 style="font-size: 1.6rem; color: #1a202c; margin: 0; font-weight: 700;">SupplyConnect</h2>
+          </div>
+
+          <h3 style="font-size: 1.1rem; color: #2d3748; margin-bottom: 8px;">Acceso Corporativo</h3>
+          <p style="font-size: 0.85rem; color: #718096; margin-bottom: 24px;">Introduce tus credenciales para acceder al ERP.</p>
+
+          <!-- Formulario -->
+          <form onsubmit="event.preventDefault(); window.location.href='compras.html?user=carlos';" style="display: flex; flex-direction: column; gap: 16px;">
+            <div>
+              <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #4a5568; margin-bottom: 6px;">Correo Electrónico</label>
+              <input type="email" placeholder="usuario@fabrica-alcoy.es" required style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.9rem; box-sizing: border-box;" />
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #4a5568; margin-bottom: 6px;">Contraseña</label>
+              <input type="password" placeholder="••••••••" required style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.9rem; box-sizing: border-box;" />
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem;">
+              <label style="display: flex; align-items: center; gap: 6px; color: #4a5568; cursor: pointer;">
+                <input type="checkbox" /> Recordarme
+              </label>
+              <a href="#" style="color: #3182ce; text-decoration: none;">¿Olvidaste tu clave?</a>
+            </div>
+
+            <button type="submit" style="background-color: #3182ce; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: background 0.2s; margin-top: 8px;" onmouseover="this.style.backgroundColor='#2b6cb0'" onmouseout="this.style.backgroundColor='#3182ce'">Iniciar Sesión</button>
+          </form>
+        </div>
+
+        <!-- Call To Action (Consultoría) -->
+        <div style="margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 24px;">
+          <h4 style="font-size: 0.95rem; color: #2d3748; margin: 0 0 8px 0;">¿Buscando un ERP para tu fábrica?</h4>
+          <p style="font-size: 0.8rem; color: #718096; margin: 0 0 16px 0; line-height: 1.4;">Descubre cómo SupplyConnect puede digitalizar tu producción, ventas y finanzas en la zona de Alcoy/Cocentaina.</p>
+          <a href="#" onclick="alert('Aquí abrirías Calendly o redirigirías a tu página de contacto')" class="cta-consultoria">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Agenda una Consultoría Gratuita
+          </a>
+        </div>
+      </div>
+
+      <!-- COLUMNA DERECHA (Banner y Demo) -->
+      <div class="login-col-right">
+        
+        <!-- Banner Explicativo -->
+        <div style="background: linear-gradient(135deg, #2c3e50 0%, #1a202c 100%); border-radius: 12px; padding: 24px; color: white; margin-bottom: 32px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
+          <span style="background-color: rgba(255,255,255,0.2); font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 16px; text-transform: uppercase; letter-spacing: 1px;">Entorno de Demostración</span>
+          <h2 style="font-size: 1.4rem; margin: 12px 0 8px 0;">La Suite "All-in-One" Industrial</h2>
+          <p style="font-size: 0.9rem; color: #a0aec0; margin: 0; line-height: 1.5;">
+            Explora libremente los 4 módulos principales de nuestro ERP. Experimenta cómo interactúan las Compras, el CRM de Ventas, la Logística en planta y la Contabilidad en tiempo real sin salir del navegador.
+          </p>
+        </div>
+
+        <h3 style="font-size: 1rem; color: #4a5568; margin: 0 0 16px 0;">Selecciona un perfil para la demostración interactiva:</h3>
+
+        <!-- Grid 2x2 para Accesos de Demo -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          
+          <!-- COMPRAS -->
+          <a href="compras.html?user=carlos" class="demo-card">
+            <div style="background-color: #ebf8ff; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2b6cb0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+            </div>
+            <div>
+              <strong style="display: block; font-size: 0.9rem; color: #2d3748; margin-bottom: 2px;">Departamento Compras</strong>
+              <span style="font-size: 0.75rem; color: #718096; display: block; line-height: 1.3;">Compras & Aprovisionamiento (SRM). Autorizaciones y stock base.</span>
+            </div>
+          </a>
+
+          <!-- VENTAS -->
+          <a href="ventas.html" class="demo-card">
+            <div style="background-color: #f0fff4; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#276749" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+              </svg>
+            </div>
+            <div>
+              <strong style="display: block; font-size: 0.9rem; color: #2d3748; margin-bottom: 2px;">Departamento Ventas</strong>
+              <span style="font-size: 0.75rem; color: #718096; display: block; line-height: 1.3;">Ventas & CRM (Customer Connect). Pedidos y facturación.</span>
+            </div>
+          </a>
+
+          <!-- ALMACÉN -->
+          <a href="almacen.html" class="demo-card">
+            <div style="background-color: #fff5f5; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c53030" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+            </div>
+            <div>
+              <strong style="display: block; font-size: 0.9rem; color: #2d3748; margin-bottom: 2px;">Logística & Almacén</strong>
+              <span style="font-size: 0.75rem; color: #718096; display: block; line-height: 1.3;">Control de Stock, Entradas (SGA) y control de Transportistas.</span>
+            </div>
+          </a>
+
+          <!-- FINANZAS -->
+          <a href="finanzas.html" class="demo-card">
+            <div style="background-color: #fffff0; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d69e2e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+              </svg>
+            </div>
+            <div>
+              <strong style="display: block; font-size: 0.9rem; color: #2d3748; margin-bottom: 2px;">Administración & Finanzas</strong>
+              <span style="font-size: 0.75rem; color: #718096; display: block; line-height: 1.3;">Contabilidad, Tesorería, RRHH e Impuestos (ERP Core).</span>
+            </div>
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+
+  </body>
+</html>
